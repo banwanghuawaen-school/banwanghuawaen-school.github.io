@@ -52,6 +52,26 @@ export default function NewsCard({ item, onClick }) {
   const firstGalleryImg = item.galleryUrls ? item.galleryUrls.split(',')[0]?.trim() : '';
   const displayImage = item.imageUrl || firstGalleryImg;
 
+  // Helper to clean raw HTML, markdown symbols, and Facebook scraped footer metadata
+  const cleanTextExcerpt = (text) => {
+    if (!text) return '';
+    let cleaned = String(text);
+    // Remove HTML tags
+    cleaned = cleaned.replace(/<[^>]*>/g, ' ');
+    // Remove Facebook scraped page footer boilerplate text
+    cleaned = cleaned.replace(/(?:รูปภาพ|ความเป็นส่วนตัว|ข้อกำหนด|ลงโฆษณา|ตัวเลือกโฆษณา|คุกกี้|\s·\s)+.*/gi, '');
+    // Remove markdown symbols
+    cleaned = cleaned.replace(/[*#_`]/g, '');
+    // Collapse spaces
+    cleaned = cleaned.replace(/\s+/g, ' ').trim();
+    return cleaned;
+  };
+
+  const cleanSubtitle = cleanTextExcerpt(item.subtitle);
+  const cleanContent = cleanTextExcerpt(item.content);
+  const excerpt = cleanSubtitle || cleanContent;
+  const displayExcerpt = excerpt ? (excerpt.length > 95 ? excerpt.slice(0, 95) + '...' : excerpt) : 'ไม่มีรายละเอียดเพิ่มเติม';
+
   return (
     <article className="news-card" onClick={onClick}>
       {/* Cover Image or Dynamic Formal Placeholder */}
@@ -98,7 +118,7 @@ export default function NewsCard({ item, onClick }) {
         </h3>
         
         <p className="card-description">
-          {item.subtitle || (item.content ? item.content.slice(0, 80) + '...' : '')}
+          {displayExcerpt}
         </p>
         
         <div className="card-footer-action">
@@ -228,16 +248,19 @@ export default function NewsCard({ item, onClick }) {
         }
 
         .card-title {
-          font-size: 1.15rem;
-          font-weight: 600;
+          font-size: 1.1rem;
+          font-weight: 700;
           color: var(--color-text-heading);
-          margin-bottom: 10px;
-          line-height: 1.4;
+          margin-bottom: 8px;
+          line-height: 1.5;
           display: -webkit-box;
           -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
           overflow: hidden;
-          height: 3.2em; /* Ensure uniform title height */
+          max-height: 3em; /* Exactly 2 lines at 1.5 line-height */
+          min-height: 3em;
+          padding-bottom: 2px;
+          word-break: break-word;
         }
 
         .news-card:hover .card-title {
@@ -245,15 +268,17 @@ export default function NewsCard({ item, onClick }) {
         }
 
         .card-description {
-          font-size: 0.9rem;
-          color: var(--color-text-main);
-          margin-bottom: 20px;
+          font-size: 0.875rem;
+          color: var(--color-text-muted);
+          margin-bottom: 16px;
           line-height: 1.5;
           display: -webkit-box;
-          -webkit-line-clamp: 3;
+          -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
           overflow: hidden;
-          height: 4.5em; /* Ensure uniform height */
+          max-height: 3em; /* Exactly 2 lines at 1.5 line-height */
+          min-height: 3em;
+          word-break: break-word;
         }
 
         .card-footer-action {

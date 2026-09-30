@@ -383,15 +383,31 @@ export const dbService = {
     initializeStorage();
     try {
       const news = JSON.parse(localStorage.getItem(STORAGE_KEYS.NEWS)) || [];
-      const sanitized = news.map(item => ({
-        views: 0,
-        status: 'published',
-        isPinned: false,
-        attachmentName: '',
-        attachmentUrl: '',
-        galleryUrls: '',
-        ...item
-      }));
+      const sanitized = news.map(item => {
+        let cleanSubtitle = item.subtitle || '';
+        let cleanContent = item.content || '';
+
+        // Clean Facebook post footer boilerplate text if present
+        const fbJunkRegex = /(?:รูปภาพ|ความเป็นส่วนตัว|ข้อกำหนด|ลงโฆษณา|ตัวเลือกโฆษณา|คุกกี้|\s·\s)+.*/gi;
+        if (cleanSubtitle && fbJunkRegex.test(cleanSubtitle)) {
+          cleanSubtitle = cleanSubtitle.replace(fbJunkRegex, '').trim();
+        }
+        if (cleanContent && fbJunkRegex.test(cleanContent)) {
+          cleanContent = cleanContent.replace(fbJunkRegex, '').trim();
+        }
+
+        return {
+          views: 0,
+          status: 'published',
+          isPinned: false,
+          attachmentName: '',
+          attachmentUrl: '',
+          galleryUrls: '',
+          ...item,
+          subtitle: cleanSubtitle,
+          content: cleanContent
+        };
+      });
       return sanitized.sort((a, b) => {
         if (a.isPinned && !b.isPinned) return -1;
         if (!a.isPinned && b.isPinned) return 1;

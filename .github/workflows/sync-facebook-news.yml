@@ -1,0 +1,29 @@
+name: Auto Sync Facebook News to Website
+
+on:
+  schedule:
+    # รันอัตโนมัติทุกๆ 2 ชั่วโมง (นาทีที่ 15 ของทุกคู่ชั่วโมง)
+    - cron: '15 */2 * * *'
+  workflow_dispatch: # เปิดให้กดรันด่วนได้ด้วยตนเองจากหน้าเว็บ GitHub Actions
+
+jobs:
+  sync-news:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run Facebook Sync Script
+        env:
+          SUPABASE_URL: https://rsukgfvutcagkpcfatfw.supabase.co
+          SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzdWtnZnZ1dGNhZ2twY2ZhdGZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM0NzQwODEsImV4cCI6MjA5OTA1MDA4MX0.YoIDvfwtSM-jO32vbRvsmV7mRzNd3UEB0epIAeAxyZ0
+          FB_TARGET_ID: "100057502268064"
+          FB_COOKIE: ${{ secrets.FB_COOKIE }}
+        run: |
+          node scripts/sync-facebook.js

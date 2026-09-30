@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Calendar, User, ArrowLeft, Newspaper, ChevronRight, Download, Eye, Pin, Image as ImageIcon } from 'lucide-react';
+import { Calendar, User, ArrowLeft, Newspaper, ChevronRight, Download, Eye, Pin, Image as ImageIcon, ExternalLink } from 'lucide-react';
 import { dbService } from '../services/db';
 
 export default function NewsDetail({ newsItem, setView, setCurrentNewsItem }) {
@@ -203,6 +203,30 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem }) {
                   </div>
                 ))}
               </div>
+            </div>
+          )}
+
+          {/* Facebook Source Link Banner (ถ้าข่าวนำมาจาก Facebook) */}
+          {newsItem.fbUrl && (
+            <div className="fb-source-banner" style={{ marginTop: '28px', padding: '16px 20px', borderRadius: '12px', background: 'rgba(24, 119, 242, 0.08)', border: '1px solid rgba(24, 119, 242, 0.25)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="#1877F2" style={{ flexShrink: 0 }}>
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+                <div>
+                  <strong style={{ fontSize: '0.95rem', color: '#1877F2', display: 'block' }}>ข่าวและภาพจาก Facebook เพจโรงเรียน</strong>
+                  <span style={{ fontSize: '0.84rem', color: 'var(--color-text-muted)' }}>สามารถเข้าชม ร่วมแสดงความคิดเห็น หรือแชร์โพสต์ต้นฉบับได้</span>
+                </div>
+              </div>
+              <a 
+                href={newsItem.fbUrl} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="btn"
+                style={{ backgroundColor: '#1877F2', color: '#ffffff', display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '8px 16px', borderRadius: '8px', fontSize: '0.88rem', textDecoration: 'none', fontWeight: '500' }}
+              >
+                ดูโพสต์ต้นฉบับ <ExternalLink size={14} />
+              </a>
             </div>
           )}
         </article>

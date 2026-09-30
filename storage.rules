@@ -1,0 +1,11 @@
+rules_version = '2';
+
+// Craft rules based on data in your Firestore database
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      // ให้สิทธิ์อ่านและอัปโหลดไฟล์ตลอดไป (ไม่หมดอายุ)
+      allow read, write: if true;
+    }
+  }
+}
