@@ -1,7 +1,7 @@
 /**
  * ==============================================================================
- * สคริปต์ดึงโพสต์จาก Facebook ของโรงเรียนเข้าสู่ Supabase อัตโนมัติ
- * ทำงานบน GitHub Actions ทุกๆ 1-2 ชั่วโมง หรือสั่งรันแบบ Manual
+ * สคริปต์ดึงโพสต์และรูปภาพจาก Facebook ของโรงเรียนเข้าสู่ Supabase อัตโนมัติ
+ * ทำงานบน GitHub Actions ทุกๆ 2 ชั่วโมง หรือสั่งรันแบบ Manual
  * ==============================================================================
  */
 
@@ -54,60 +54,69 @@ async function fetchWithRedirects(url, headers = {}, maxRedirects = 5) {
 }
 
 /**
- * แกะข้อมูลโพสต์จากหน้า mbasic / mobile Facebook
+ * ฟังก์ชันค้นหา URL รูปภาพทั้งหมดที่มีใน Object
  */
-function extractPostsFromMbasic(html) {
-  const posts = [];
+function extractImagesFromObject(obj) {
+  const images = [];
 
-  // มองหารูปแบบ story_fbid หรือ fbid ในลิงก์
-  const storyRegex = /(?:story\.php\?story_fbid=([0-9]+)|fbid=([0-9]+))/gi;
-  let match;
-  const foundFbidSet = new Set();
+  function walk(o) {
+    if (!o || typeof o !== 'object') return;
 
-  while ((match = storyRegex.exec(html)) !== null) {
-    const fbid = match[1] || match[2];
-    if (fbid && !foundFbidSet.has(fbid)) {
-      foundFbidSet.add(fbid);
+    if (o.image && o.image.uri && typeof o.image.uri === 'string' && o.image.uri.includes('scontent')) {
+      images.push(o.image.uri);
+    }
+    if (o.viewer_image && o.viewer_image.uri && typeof o.viewer_image.uri === 'string' && o.viewer_image.uri.includes('scontent')) {
+      images.push(o.viewer_image.uri);
+    }
+    if (o.photo_image && o.photo_image.uri && typeof o.photo_image.uri === 'string' && o.photo_image.uri.includes('scontent')) {
+      images.push(o.photo_image.uri);
+    }
+    if (o.uri && typeof o.uri === 'string' && o.uri.includes('scontent') && !o.uri.includes('rsrc.php')) {
+      images.push(o.uri);
+    }
+
+    for (const key of Object.keys(o)) {
+      if (typeof o[key] === 'object' && o[key] !== null) {
+        walk(o[key]);
+      }
     }
   }
 
-  // แยกบล็อกโพสต์ออกมา
-  const articleBlocks = html.split(/<article\b[^>]*>|<div\s+role="article"/i).slice(1);
-  for (let i = 0; i < articleBlocks.length && posts.length < 5; i++) {
-    const block = articleBlocks[i];
+  walk(obj);
+  return [...new Set(images)];
+}
 
-    // ค้นหา ID
-    const idMatch = block.match(/(?:story_fbid=([0-9]+)|fbid=([0-9]+)|top_level_post_id\.([0-9]+))/i);
-    const id = idMatch ? (idMatch[1] || idMatch[2] || idMatch[3]) : `fb_${Date.now()}_${i}`;
+/**
+ * แกะข้อมูลโพสต์จาก JSON ภายในหน้าเว็บ Facebook Modern UI
+ * รวมข้อมูลข้อความและรูปภาพของโพสต์เดียวกันเข้าด้วยกันอย่างสมบูรณ์
+ */
+function extractPostsFromModernFB(html) {
+  const storyMap = new Map(); // id -> { id, message, created_time, images }
 
-    // ค้นหาข้อความในโพสต์ (ลบแท็ก HTML ทั้งหมด)
-    let text = '';
-    const pMatch = block.match(/<p\b[^>]*>([\s\S]*?)<\/p>/i);
-    if (pMatch) {
-      text = pMatch[1].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-    } else {
-      // ดึงจาก div ข้อความ
-      const cleanBlock = block.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
-                              .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '');
-      const textMatch = cleanBlock.match(/>([^<]{20,})</);
-      if (textMatch) {
-        text = textMatch[1].trim();
-      }
+  const scriptRegex = /<script\s+type="application\/json"[^>]*>([\s\S]*?)<\/script>/gi;
+  let scriptMatch;
+
+  while ((scriptMatch = scriptRegex.exec(html)) !== null) {
+    const content = scriptMatch[1];
+    if (content.includes('message') || content.includes('creation_time') || content.includes('post_id')) {
+      try {
+        const json = JSON.parse(content);
+        collectStories(json, storyMap);
+      } catch (_) {}
     }
+  }
 
-    // ค้นหารูปภาพประกอบ
-    let imageUrl = '';
-    const imgMatch = block.match(/src="([^"]*scontent[^"]*)"/i) || block.match(/src="([^"]*fbcdn\.net[^"]*)"/i);
-    if (imgMatch) {
-      imageUrl = imgMatch[1].replace(/&amp;/g, '&');
-    }
-
-    if (text || imageUrl) {
+  const posts = [];
+  for (const [id, story] of storyMap.entries()) {
+    // ต้องมีข้อความโพสต์ หรือเป็นเรื่องราวหลัก จึงนำมาแปลงเป็นข่าว 1 ข่าว
+    if (story.message && story.message.trim().length > 0) {
       posts.push({
         id: `fb_${id}`,
-        message: text || 'ภาพกิจกรรม โรงเรียนบ้านวังหัวแหวนพัฒนา',
-        created_time: new Date().toISOString(),
-        image_url: imageUrl,
+        numericId: id,
+        message: story.message,
+        created_time: story.created_time || new Date().toISOString().split('T')[0],
+        image_url: story.images[0] || '',
+        gallery_urls: story.images.slice(1).join(','),
         permalink: `https://www.facebook.com/${FB_TARGET_ID}/posts/${id}`
       });
     }
@@ -117,126 +126,188 @@ function extractPostsFromMbasic(html) {
 }
 
 /**
- * แกะข้อมูลโพสต์จาก JSON / GraphQL ภายในหน้าเว็บ Facebook Modern UI
+ * ค้นหาและ Merge ข้อมูล Story Node
  */
-function extractPostsFromModernFB(html) {
-  const posts = [];
-  const seenIds = new Set();
+function collectStories(obj, storyMap) {
+  if (!obj || typeof obj !== 'object') return;
 
-  // 1. ค้นหา script data-sjs ที่มีข้อมูล JSON โพสต์
-  const scriptRegex = /<script\s+type="application\/json"[^>]*>([\s\S]*?)<\/script>/gi;
-  let scriptMatch;
+  // หา ID ของโพสต์
+  let rawId = obj.post_id || (obj.message && obj.id);
+  let id = null;
 
-  while ((scriptMatch = scriptRegex.exec(html)) !== null) {
-    const content = scriptMatch[1];
-    if (content.includes('message') || content.includes('creation_time') || content.includes('story')) {
-      try {
-        const json = JSON.parse(content);
-        findStoriesInJson(json, posts, seenIds);
-      } catch (_) {
-        // บาง script เป็น JSON แฝงหรือมีฟอร์แมตเฉพาะ
-      }
+  if (rawId && typeof rawId === 'string') {
+    const digits = rawId.match(/([0-9]{12,})/);
+    if (digits) {
+      id = digits[1];
     }
   }
 
-  // 2. Fallback: ถ้าไม่พบใน JSON ให้ใช้ Regex สแกนหาข้อความและรูปภาพล่าสุด
-  if (posts.length === 0) {
-    const textMatches = [...html.matchAll(/"message":\s*\{\s*"text":\s*"([^"]+)"/g)];
-    const imgMatches = [...html.matchAll(/https:\/\/scontent[^"'\s\\]+\.jpg[^"'\s\\]*/g)];
-
-    if (textMatches.length > 0) {
-      for (let i = 0; i < Math.min(textMatches.length, 3); i++) {
-        let msg = textMatches[i][1];
-        try {
-          msg = JSON.parse(`"${msg}"`);
-        } catch (_) {}
-
-        const img = imgMatches[i] ? imgMatches[i][0].replace(/\\u0025/g, '%').replace(/\\/g, '') : '';
-        const id = `fb_parsed_${Date.now()}_${i}`;
-
-        posts.push({
-          id,
-          message: msg,
-          created_time: new Date().toISOString(),
-          image_url: img,
-          permalink: `https://www.facebook.com/${FB_TARGET_ID}`
-        });
-      }
+  if (id) {
+    if (!storyMap.has(id)) {
+      storyMap.set(id, {
+        id,
+        message: '',
+        created_time: '',
+        images: []
+      });
     }
-  }
 
-  return posts;
-}
+    const current = storyMap.get(id);
 
-/**
- * ค้นหา Story Node ใน JSON tree
- */
-function findStoriesInJson(obj, posts, seenIds) {
-  if (!obj || typeof obj !== 'object' || posts.length >= 5) return;
+    // ดึงข้อความถ้ายังไม่มี
+    if (!current.message && obj.message && obj.message.text) {
+      current.message = obj.message.text;
+    }
 
-  if (obj.post_id || (obj.message && obj.message.text)) {
-    const id = obj.post_id || obj.id || `fb_${Date.now()}_${posts.length}`;
-    if (!seenIds.has(id)) {
-      seenIds.add(id);
-      let text = obj.message && obj.message.text ? obj.message.text : '';
-      let date = obj.creation_time ? new Date(obj.creation_time * 1000).toISOString() : new Date().toISOString();
-      let img = '';
+    // ดึงวันที่ถ้ามี
+    if (!current.created_time && obj.creation_time) {
+      current.created_time = new Date(obj.creation_time * 1000).toISOString().split('T')[0];
+    }
 
-      if (obj.attachments && obj.attachments[0] && obj.attachments[0].media) {
-        img = obj.attachments[0].media.image ? obj.attachments[0].media.image.uri : '';
-      }
-
-      if (text || img) {
-        posts.push({
-          id: `fb_${id}`,
-          message: text,
-          created_time: date,
-          image_url: img,
-          permalink: `https://www.facebook.com/${FB_TARGET_ID}/posts/${id}`
-        });
-      }
+    // ดึงรูปภาพ
+    const foundImages = extractImagesFromObject(obj);
+    if (foundImages.length > 0) {
+      current.images = [...new Set([...current.images, ...foundImages])];
     }
   }
 
   for (const key of Object.keys(obj)) {
     if (typeof obj[key] === 'object' && obj[key] !== null) {
-      findStoriesInJson(obj[key], posts, seenIds);
+      collectStories(obj[key], storyMap);
     }
   }
 }
 
 /**
- * บันทึกโพสต์เข้า Supabase RPC
+ * บันทึกหรืออัปเดตโพสต์ลงใน Supabase ตรงไปยัง school_portal_data
  */
-async function sendToSupabase(post) {
-  const rpcUrl = `${SUPABASE_URL}/rest/v1/rpc/append_facebook_news`;
-  console.log(`[Supabase] กำลังส่งข่าว: "${post.message.substring(0, 40)}..." (ID: ${post.id})`);
+async function syncPostsToSupabase(posts) {
+  console.log(`\n📡 [Supabase] กำลังดึงข้อมูลข่าวเดิมจาก Supabase...`);
 
-  const res = await fetch(rpcUrl, {
+  const selectUrl = `${SUPABASE_URL}/rest/v1/school_portal_data?key=eq.news&select=value`;
+  const getRes = await fetch(selectUrl, {
+    headers: {
+      'apikey': SUPABASE_ANON_KEY,
+      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+    }
+  });
+
+  if (!getRes.ok) {
+    throw new Error(`Failed to fetch current news from Supabase: ${getRes.statusText}`);
+  }
+
+  const data = await getRes.json();
+  let currentNews = (data && data[0] && Array.isArray(data[0].value)) ? data[0].value : [];
+
+  // ลบข่าวขยะที่ไม่มีข้อความออก (เหลือเฉพาะข่าวที่มีข้อความสมบูรณ์และข่าวระบบเดิม)
+  currentNews = currentNews.filter(n => {
+    if (n.id && n.id.startsWith('fb_')) {
+      // ถ้าเป็นโพสต์ Facebook แต่ไม่มีข้อความ หรือมีแค่ข้อความ boilerplate ให้เอาออก
+      if (!n.content || n.content.includes('ติดตามภาพกิจกรรมเพิ่มเติม') || n.title.includes('ภาพกิจกรรม โรงเรียนบ้านวังหัวแหวนพั')) {
+        return false;
+      }
+    }
+    return true;
+  });
+
+  let changesMade = false;
+
+  for (const post of posts) {
+    const existingIndex = currentNews.findIndex(n => {
+      if (n.id === post.id) return true;
+      if (post.numericId && n.id && n.id.includes(post.numericId)) return true;
+      return false;
+    });
+
+    // สร้างหัวข้อและคำโปรยจากข้อความ
+    let title = 'ภาพกิจกรรม โรงเรียนบ้านวังหัวแหวนพัฒนา';
+    let subtitle = 'กิจกรรมและการดำเนินงานของโรงเรียน';
+    let content = post.message || '';
+
+    if (post.message && post.message.trim().length > 0) {
+      const lines = post.message.trim().split('\n').filter(l => l.trim().length > 0);
+      title = lines[0].trim();
+      if (title.length > 120) {
+        title = title.substring(0, 117) + '...';
+      }
+      if (lines.length > 1) {
+        subtitle = lines[1].trim();
+        if (subtitle.length > 150) {
+          subtitle = subtitle.substring(0, 147) + '...';
+        }
+      } else {
+        subtitle = post.message.trim().substring(0, 140);
+      }
+    }
+
+    const newItem = {
+      id: post.id,
+      title: title,
+      subtitle: subtitle,
+      content: content,
+      date: post.created_time || new Date().toISOString().split('T')[0],
+      category: 'activity',
+      imageUrl: post.image_url || '',
+      author: 'เพจโรงเรียนบ้านวังหัวแหวนพัฒนา',
+      isPinned: false,
+      status: 'published',
+      views: 0,
+      attachmentName: '',
+      attachmentUrl: '',
+      galleryUrls: post.gallery_urls || '',
+      fbUrl: post.permalink
+    };
+
+    if (existingIndex !== -1) {
+      // โพสต์มีอยู่แล้ว: รวมข้อมูลให้สมบูรณ์ (ทั้งข้อความเต็ม และรูปภาพจริง)
+      const existing = currentNews[existingIndex];
+      const bestImage = post.image_url || existing.imageUrl || '';
+      const bestGallery = post.gallery_urls || existing.galleryUrls || '';
+
+      console.log(`🖼️ [Supabase Update] อัปเดตข้อมูลข่าวให้สมบูรณ์ (รูป + ข้อความ): "${title.substring(0, 35)}..."`);
+      currentNews[existingIndex] = {
+        ...existing,
+        id: post.id,
+        title: title,
+        subtitle: subtitle,
+        content: content,
+        imageUrl: bestImage,
+        galleryUrls: bestGallery,
+        fbUrl: post.permalink
+      };
+      changesMade = true;
+    } else {
+      // โพสต์ใหม่: แทรกไว้ด้านบนสุด
+      console.log(`✨ [Supabase Insert] เพิ่มข่าวใหม่: "${title.substring(0, 35)}..." พร้อมรูปภาพ`);
+      currentNews.unshift(newItem);
+      changesMade = true;
+    }
+  }
+
+  // เซฟกลับขึ้น Supabase
+  console.log(`\n💾 [Supabase Save] กำลังบันทึกข่าวกลับขึ้น Supabase (${currentNews.length} รายการ)...`);
+  const updateUrl = `${SUPABASE_URL}/rest/v1/school_portal_data`;
+  const saveRes = await fetch(updateUrl, {
     method: 'POST',
     headers: {
       'apikey': SUPABASE_ANON_KEY,
       'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Prefer': 'resolution=merge-duplicates'
     },
     body: JSON.stringify({
-      p_id: post.id,
-      p_message: post.message,
-      p_created_time: post.created_time,
-      p_image_url: post.image_url,
-      p_permalink: post.permalink
+      key: 'news',
+      value: currentNews,
+      updated_at: new Date().toISOString()
     })
   });
 
-  if (!res.ok) {
-    const errText = await res.text();
-    console.error(`[Supabase Error ${res.status}] ${errText}`);
-    return false;
+  if (!saveRes.ok) {
+    const errText = await saveRes.text();
+    throw new Error(`Failed to save news to Supabase: ${errText}`);
   }
 
-  const data = await res.json();
-  console.log(`[Supabase Result] ${data.action || 'success'}: ${data.message || 'บันทึกเรียบร้อย'}`);
-  return true;
+  console.log(`✅ [Supabase Success] บันทึกข่าวพร้อมรูปภาพลงฐานข้อมูล Supabase สำเร็จเรียบร้อย!`);
 }
 
 /**
@@ -244,57 +315,32 @@ async function sendToSupabase(post) {
  */
 async function main() {
   console.log('====================================================');
-  console.log('🚀 เริ่มต้นดึงข้อมูลโพสต์ Facebook ของโรงเรียน...');
+  console.log('🚀 เริ่มต้นดึงข้อมูลโพสต์และรูปภาพ Facebook ของโรงเรียน...');
   console.log(`🎯 Target Facebook ID: ${FB_TARGET_ID}`);
   console.log(`📡 Supabase Endpoint: ${SUPABASE_URL}`);
-  console.log(`🔑 Cookie Status: ${FB_COOKIE ? 'มี Cookie ในระบบ (พร้อมทำงาน)' : '⚠️ ไม่มี FB_COOKIE ใน Environment'}`);
   console.log('====================================================\n');
-
-  if (!FB_COOKIE) {
-    console.log('ℹ️ คำแนะนำ: หาก Facebook ต้องการการยืนยันตัวตน โปรดเพิ่ม FB_COOKIE ใน GitHub Secrets');
-    console.log('   (ดูวิธีคัดลอก Cookie จากบราวเซอร์ได้ในคู่มือด้านล่าง)\n');
-  }
 
   let posts = [];
 
-  // ลองดึงจาก mbasic.facebook.com ก่อน (เบาและแกะข่าวง่ายที่สุด)
   try {
-    console.log('📌 1. ทดลองดึงจาก mbasic.facebook.com...');
-    const mbasicRes = await fetchWithRedirects(`https://mbasic.facebook.com/${FB_TARGET_ID}`);
-    if (mbasicRes.status === 200) {
-      posts = extractPostsFromMbasic(mbasicRes.text);
-      console.log(`✅ พบโพสต์จาก mbasic จำนวน ${posts.length} โพสต์`);
+    const webRes = await fetchWithRedirects(`https://www.facebook.com/${FB_TARGET_ID}`);
+    if (webRes.status === 200) {
+      posts = extractPostsFromModernFB(webRes.text);
+      console.log(`✅ พบโพสต์จาก Modern UI จำนวน ${posts.length} โพสต์`);
     }
   } catch (err) {
-    console.log(`⚠️ ดึงจาก mbasic ไม่สำเร็จ: ${err.message}`);
-  }
-
-  // หาก mbasic ไม่ได้ผล ลองดึงจากหน้า www.facebook.com
-  if (posts.length === 0) {
-    try {
-      console.log('\n📌 2. ทดลองดึงจาก www.facebook.com...');
-      const webRes = await fetchWithRedirects(`https://www.facebook.com/${FB_TARGET_ID}`);
-      if (webRes.status === 200) {
-        posts = extractPostsFromModernFB(webRes.text);
-        console.log(`✅ พบโพสต์จาก Modern UI จำนวน ${posts.length} โพสต์`);
-      }
-    } catch (err) {
-      console.log(`⚠️ ดึงจาก www ไม่สำเร็จ: ${err.message}`);
-    }
+    console.log(`⚠️ ดึงจาก Facebook ไม่สำเร็จ: ${err.message}`);
   }
 
   if (posts.length === 0) {
-    console.log('\n⚠️ ไม่พบโพสต์ใหม่ หรือติดหน้า Login ของ Facebook');
-    console.log('💡 โปรดตรวจสอบว่าได้ใส่ FB_COOKIE ใน GitHub Repository Secrets เรียบร้อยแล้ว');
+    console.log('\n⚠️ ไม่พบโพสต์ใหม่จาก Facebook');
     return;
   }
 
-  console.log(`\n🎉 สรุป: พบข่าวที่ต้องส่งเข้าเว็บทั้งหมด ${posts.length} รายการ`);
-  for (const post of posts) {
-    await sendToSupabase(post);
-  }
+  // ส่งข้อมูลเข้า Supabase
+  await syncPostsToSupabase(posts);
 
-  console.log('\n✨ ดำเนินการเสร็จสมบูรณ์!');
+  console.log('\n🎉 ดำเนินการเสร็จสมบูรณ์ 100%!');
 }
 
 main().catch(err => {
