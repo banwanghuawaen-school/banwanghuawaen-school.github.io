@@ -408,7 +408,18 @@ export const dbService = {
           content: cleanContent
         };
       });
-      return sanitized.sort((a, b) => {
+
+      // กรองเฉพาะข่าวในรอบ 1 ปีการศึกษา (ย้อนหลังไม่เกิน 365 วัน ยกเว้นข่าวที่ปักหมุด)
+      const ONE_ACADEMIC_YEAR_MS = 365 * 24 * 60 * 60 * 1000;
+      const now = Date.now();
+      const currentAcademicYearNews = sanitized.filter(item => {
+        if (item.isPinned) return true;
+        if (!item.date) return true;
+        const postTime = new Date(item.date).getTime();
+        return isNaN(postTime) || (now - postTime) <= ONE_ACADEMIC_YEAR_MS;
+      });
+
+      return currentAcademicYearNews.sort((a, b) => {
         if (a.isPinned && !b.isPinned) return -1;
         if (!a.isPinned && b.isPinned) return 1;
         return new Date(b.date) - new Date(a.date);

@@ -210,7 +210,32 @@ async function syncPostsToSupabase(posts) {
     return true;
   });
 
-  let changesMade = false;
+  // =====================================================================
+  // นโยบายตัดรอบ 1 ปีการศึกษา (Academic Year Auto-Pruning Policy)
+  // ลบข่าวที่เก่ากว่า 1 ปีการศึกษา (365 วัน) โดยอัตโนมัติ (ยกเว้นข่าวปักหมุด)
+  // =====================================================================
+  const ONE_ACADEMIC_YEAR_MS = 365 * 24 * 60 * 60 * 1000;
+  const now = Date.now();
+  const initialNewsCount = currentNews.length;
+
+  currentNews = currentNews.filter(item => {
+    // ข่าวที่แอดมินปักหมุดไว้ (isPinned) จะถูกเก็บไว้เสมอ
+    if (item.isPinned) return true;
+
+    if (!item.date) return true;
+    const postTime = new Date(item.date).getTime();
+    if (isNaN(postTime)) return true;
+
+    const ageMs = now - postTime;
+    if (ageMs > ONE_ACADEMIC_YEAR_MS) {
+      console.log(`🗑️ [Auto Prune] ลบข่าวเก่าเกิน 1 ปีการศึกษา: "${item.title.substring(0, 35)}..." (${item.date})`);
+      return false;
+    }
+    return true;
+  });
+
+  let changesMade = (currentNews.length !== initialNewsCount);
+
 
   for (const post of posts) {
     const existingIndex = currentNews.findIndex(n => {
