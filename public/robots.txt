@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://wanghuawaen.vercel.app/sitemap.xml
+Sitemap: https://banwanghuawaen.vercel.app/sitemap.xml
