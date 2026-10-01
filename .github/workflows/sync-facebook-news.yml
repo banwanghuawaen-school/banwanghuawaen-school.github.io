@@ -6,6 +6,9 @@ on:
     - cron: '15 */2 * * *'
   workflow_dispatch: # เปิดให้กดรันด่วนได้ด้วยตนเองจากหน้าเว็บ GitHub Actions
 
+permissions:
+  contents: write  # ต้องใช้สิทธิ์เขียนเพื่อ commit รูปภาพกลับเข้า repo
+
 jobs:
   sync-news:
     runs-on: ubuntu-latest
@@ -27,3 +30,16 @@ jobs:
           FB_COOKIE: ${{ secrets.FB_COOKIE }}
         run: |
           node scripts/sync-facebook.js
+
+      - name: Commit & Push Downloaded Photos
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/news/ || true
+          if git diff --cached --quiet; then
+            echo "📷 ไม่มีรูปภาพใหม่ที่ต้อง commit"
+          else
+            git commit -m "📷 auto: download Facebook photos for news"
+            git push
+            echo "✅ Commit รูปภาพใหม่เข้า repo สำเร็จ!"
+          fi

@@ -83,7 +83,7 @@ export default function NewsCard({ item, onClick }) {
 
   return (
     <article className="news-card" onClick={onClick}>
-      {/* Cover Image or Dynamic Formal Placeholder */}
+      {/* Cover Image or Text-only Post */}
       <div className="card-cover-container">
         {displayImage ? (
           <img 
@@ -91,15 +91,23 @@ export default function NewsCard({ item, onClick }) {
             alt={item.title} 
             className="card-image"
             onError={(e) => {
-              // Fallback to avoid broken image symbol if link expires
+              // Fallback: hide broken image and show text-only style
+              e.currentTarget.parentElement.classList.add('card-text-only');
               e.currentTarget.style.display = 'none';
             }} 
           />
         ) : (
-          <div className={`card-placeholder-fallback bg-gradient-${item.category || 'pr'}`}>
-            <div className="fallback-pattern"></div>
-            {getCategoryIcon(item.category)}
-            <span className="fallback-crest-text">โรงเรียนบ้านวังหัวแหวนพัฒนา</span>
+          <div className="card-text-only-fallback">
+            <div className="text-only-header">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+              </svg>
+              <span>ข่าวสารโรงเรียน</span>
+            </div>
+            <p className="text-only-preview">{cleanContent ? cleanContent.slice(0, 120) : item.title}</p>
           </div>
         )}
         <div className="card-category-floating" style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
@@ -191,29 +199,44 @@ export default function NewsCard({ item, onClick }) {
           transform: scale(1.05);
         }
 
-        /* Gradient fallbacks for lack of news images */
-        .card-placeholder-fallback {
+        /* Text-only fallback for posts without images */
+        .card-text-only-fallback {
           width: 100%;
           height: 100%;
           display: flex;
           flex-direction: column;
-          align-items: center;
           justify-content: center;
-          color: white;
-          position: relative;
-          padding: 20px;
-          text-align: center;
+          padding: 20px 24px;
+          background: var(--color-bg-card, #ffffff);
+          border-bottom: 1px solid var(--color-border, #e5e7eb);
+        }
+
+        .text-only-header {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          color: var(--color-text-muted, #6b7280);
+          font-size: 0.8rem;
+          font-weight: 500;
+          margin-bottom: 10px;
+        }
+
+        .text-only-preview {
+          margin: 0;
+          font-size: 0.92rem;
+          line-height: 1.55;
+          color: var(--color-text, #1f2937);
+          display: -webkit-box;
+          -webkit-line-clamp: 4;
+          -webkit-box-orient: vertical;
           overflow: hidden;
         }
 
-        .fallback-pattern {
-          position: absolute;
-          inset: 0;
-          opacity: 0.08;
-          background-image: radial-gradient(circle, white 1px, transparent 1px);
-          background-size: 10px 10px;
+        .card-text-only .card-text-only-fallback {
+          display: flex;
         }
 
+        /* Legacy gradient classes (kept for backward compatibility) */
         .bg-gradient-announcement {
           background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
         }
@@ -224,23 +247,6 @@ export default function NewsCard({ item, onClick }) {
 
         .bg-gradient-activity {
           background: linear-gradient(135deg, #cf9c27 0%, #906913 100%);
-        }
-
-        .card-decor-icon {
-          width: 48px;
-          height: 48px;
-          color: rgba(255, 255, 255, 0.9) !important;
-          margin-bottom: 12px;
-          filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
-        }
-
-        .fallback-crest-text {
-          font-family: var(--font-heading);
-          font-size: 0.75rem;
-          font-weight: 500;
-          letter-spacing: 1px;
-          text-transform: uppercase;
-          opacity: 0.8;
         }
 
         .card-category-floating {

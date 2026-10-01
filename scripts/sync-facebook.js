@@ -1,14 +1,22 @@
 /**
  * ==============================================================================
  * สคริปต์ดึงโพสต์และรูปภาพจาก Facebook ของโรงเรียนเข้าสู่ Supabase อัตโนมัติ
- * ทำงานบน GitHub Actions ทุกๆ 2 ชั่วโมง หรือสั่งรันแบบ Manual
+ * - ดึงรูปภาพจริงจาก Facebook CDN แล้วเซฟลง public/news/
+ * - โพสต์ไหนไม่มีรูปจริง ก็แสดงเป็นข้อความอย่างเดียว (ไม่ใช้รูป AI)
+ * - ทำงานบน GitHub Actions ทุกๆ 2 ชั่วโมง หรือสั่งรันแบบ Manual
  * ==============================================================================
  */
+
+const fs = require('fs');
+const path = require('path');
 
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://rsukgfvutcagkpcfatfw.supabase.co';
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzdWtnZnZ1dGNhZ2twY2ZhdGZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM0NzQwODEsImV4cCI6MjA5OTA1MDA4MX0.YoIDvfwtSM-jO32vbRvsmV7mRzNd3UEB0epIAeAxyZ0';
 const FB_TARGET_ID = process.env.FB_TARGET_ID || '100057502268064';
 const FB_COOKIE = process.env.FB_COOKIE || '';
+
+// Path ไปยังโฟลเดอร์เก็บรูปข่าว (อยู่ใน public/news/ ของโปรเจกต์)
+const NEWS_IMG_DIR = path.resolve(__dirname, '..', 'public', 'news');
 
 /**
  * ฟังก์ชันช่วยเรียก URL พร้อมจัดการ Redirect และ Cookie
@@ -108,7 +116,7 @@ function extractPostsFromModernFB(html) {
 
   const posts = [];
   for (const [id, story] of storyMap.entries()) {
-    // ต้องมีข้อความโพสต์ หรือเป็นเรื่องราวหลัก จึงนำมาแปลงเป็นข่าว 1 ข่าว
+    // ต้องมีข้อความโพสต์จึงนำมาแปลงเป็นข่าว 1 ข่าว
     if (story.message && story.message.trim().length > 0) {
       posts.push({
         id: `fb_${id}`,
@@ -116,7 +124,7 @@ function extractPostsFromModernFB(html) {
         message: story.message,
         created_time: story.created_time || new Date().toISOString().split('T')[0],
         image_url: story.images[0] || '',
-        gallery_urls: story.images.slice(1).join(','),
+        gallery_urls: story.images.slice(1),
         permalink: `https://www.facebook.com/${FB_TARGET_ID}/posts/${id}`
       });
     }
@@ -179,6 +187,59 @@ function collectStories(obj, storyMap) {
 }
 
 /**
+ * ดาวน์โหลดรูปภาพจาก Facebook CDN แล้วเซฟลงไฟล์ใน public/news/
+ * คืนค่า path ที่สัมพันธ์กับ public เช่น "news/fb_12345.jpg"
+ * ถ้ารูปมีอยู่แล้วจะข้ามไป (ไม่ดาวน์โหลดซ้ำ)
+ */
+async function downloadFacebookImage(imageUrl, postId) {
+  if (!imageUrl || !imageUrl.includes('scontent')) return '';
+
+  // สร้างชื่อไฟล์จาก post ID
+  const filename = `fb_${postId}.jpg`;
+  const filePath = path.join(NEWS_IMG_DIR, filename);
+
+  // ถ้ามีรูปอยู่แล้ว ไม่ต้องดาวน์โหลดซ้ำ
+  if (fs.existsSync(filePath)) {
+    console.log(`📷 [Skip] รูปภาพมีอยู่แล้ว: ${filename}`);
+    return `news/${filename}`;
+  }
+
+  try {
+    console.log(`📥 [Download] กำลังดาวน์โหลดรูปภาพ: ${filename}...`);
+    const res = await fetch(imageUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+      }
+    });
+
+    if (!res.ok) {
+      console.log(`⚠️ [Download Failed] ไม่สามารถดาวน์โหลดรูป ${filename}: HTTP ${res.status}`);
+      return '';
+    }
+
+    const buffer = Buffer.from(await res.arrayBuffer());
+
+    // ต้องมีขนาดอย่างน้อย 5KB ถึงจะเป็นรูปจริง (ไม่ใช่ placeholder)
+    if (buffer.length < 5000) {
+      console.log(`⚠️ [Skip Tiny] รูปเล็กเกินไป (${buffer.length} bytes), ข้ามไป: ${filename}`);
+      return '';
+    }
+
+    // สร้างโฟลเดอร์ถ้ายังไม่มี
+    if (!fs.existsSync(NEWS_IMG_DIR)) {
+      fs.mkdirSync(NEWS_IMG_DIR, { recursive: true });
+    }
+
+    fs.writeFileSync(filePath, buffer);
+    console.log(`✅ [Downloaded] เซฟรูปภาพสำเร็จ: ${filename} (${(buffer.length / 1024).toFixed(0)} KB)`);
+    return `news/${filename}`;
+  } catch (err) {
+    console.log(`⚠️ [Download Error] ${filename}: ${err.message}`);
+    return '';
+  }
+}
+
+/**
  * บันทึกหรืออัปเดตโพสต์ลงใน Supabase ตรงไปยัง school_portal_data
  */
 async function syncPostsToSupabase(posts) {
@@ -236,7 +297,6 @@ async function syncPostsToSupabase(posts) {
 
   let changesMade = (currentNews.length !== initialNewsCount);
 
-
   for (const post of posts) {
     const existingIndex = currentNews.findIndex(n => {
       if (n.id === post.id) return true;
@@ -265,6 +325,16 @@ async function syncPostsToSupabase(posts) {
       }
     }
 
+    // ดาวน์โหลดรูปภาพจริงจาก Facebook CDN ลงไฟล์ (ถ้ามี)
+    const localImagePath = await downloadFacebookImage(post.image_url, post.numericId);
+
+    // ดาวน์โหลดรูป gallery (ถ้ามี) — เก็บแค่ 4 รูปแรก
+    const galleryPaths = [];
+    for (let i = 0; i < Math.min(post.gallery_urls.length, 4); i++) {
+      const gPath = await downloadFacebookImage(post.gallery_urls[i], `${post.numericId}_g${i + 1}`);
+      if (gPath) galleryPaths.push(gPath);
+    }
+
     const newItem = {
       id: post.id,
       title: title,
@@ -272,24 +342,24 @@ async function syncPostsToSupabase(posts) {
       content: content,
       date: post.created_time || new Date().toISOString().split('T')[0],
       category: 'activity',
-      imageUrl: post.image_url || '',
+      imageUrl: localImagePath,  // ใช้ path ของไฟล์ local แทน CDN link
       author: 'เพจโรงเรียนบ้านวังหัวแหวนพัฒนา',
       isPinned: false,
       status: 'published',
       views: 0,
       attachmentName: '',
       attachmentUrl: '',
-      galleryUrls: post.gallery_urls || '',
+      galleryUrls: galleryPaths.join(','),
       fbUrl: post.permalink
     };
 
     if (existingIndex !== -1) {
-      // โพสต์มีอยู่แล้ว: รวมข้อมูลให้สมบูรณ์ (ทั้งข้อความเต็ม และรูปภาพจริง)
+      // โพสต์มีอยู่แล้ว: รวมข้อมูลให้สมบูรณ์
       const existing = currentNews[existingIndex];
-      const bestImage = post.image_url || existing.imageUrl || '';
-      const bestGallery = post.gallery_urls || existing.galleryUrls || '';
+      const bestImage = localImagePath || existing.imageUrl || '';
+      const bestGallery = galleryPaths.length > 0 ? galleryPaths.join(',') : (existing.galleryUrls || '');
 
-      console.log(`🖼️ [Supabase Update] อัปเดตข้อมูลข่าวให้สมบูรณ์ (รูป + ข้อความ): "${title.substring(0, 35)}..."`);
+      console.log(`🖼️ [Supabase Update] อัปเดตข่าว: "${title.substring(0, 35)}..." รูป: ${bestImage || 'ไม่มี'}`);
       currentNews[existingIndex] = {
         ...existing,
         id: post.id,
@@ -303,7 +373,7 @@ async function syncPostsToSupabase(posts) {
       changesMade = true;
     } else {
       // โพสต์ใหม่: แทรกไว้ด้านบนสุด
-      console.log(`✨ [Supabase Insert] เพิ่มข่าวใหม่: "${title.substring(0, 35)}..." พร้อมรูปภาพ`);
+      console.log(`✨ [Supabase Insert] เพิ่มข่าวใหม่: "${title.substring(0, 35)}..." รูป: ${localImagePath || 'ไม่มี (แสดงเป็นข้อความ)'}`);
       currentNews.unshift(newItem);
       changesMade = true;
     }
@@ -332,7 +402,7 @@ async function syncPostsToSupabase(posts) {
     throw new Error(`Failed to save news to Supabase: ${errText}`);
   }
 
-  console.log(`✅ [Supabase Success] บันทึกข่าวพร้อมรูปภาพลงฐานข้อมูล Supabase สำเร็จเรียบร้อย!`);
+  console.log(`✅ [Supabase Success] บันทึกข่าวลงฐานข้อมูล Supabase สำเร็จเรียบร้อย!`);
 }
 
 /**
@@ -343,7 +413,13 @@ async function main() {
   console.log('🚀 เริ่มต้นดึงข้อมูลโพสต์และรูปภาพ Facebook ของโรงเรียน...');
   console.log(`🎯 Target Facebook ID: ${FB_TARGET_ID}`);
   console.log(`📡 Supabase Endpoint: ${SUPABASE_URL}`);
+  console.log(`📁 Image Directory: ${NEWS_IMG_DIR}`);
   console.log('====================================================\n');
+
+  // สร้างโฟลเดอร์เก็บรูปถ้ายังไม่มี
+  if (!fs.existsSync(NEWS_IMG_DIR)) {
+    fs.mkdirSync(NEWS_IMG_DIR, { recursive: true });
+  }
 
   let posts = [];
 
@@ -352,6 +428,11 @@ async function main() {
     if (webRes.status === 200) {
       posts = extractPostsFromModernFB(webRes.text);
       console.log(`✅ พบโพสต์จาก Modern UI จำนวน ${posts.length} โพสต์`);
+
+      // แสดงสรุป
+      for (const p of posts) {
+        console.log(`  📝 [${p.id}] ${p.message.substring(0, 50)}... | รูป: ${p.image_url ? 'มี' : 'ไม่มี'} | Gallery: ${p.gallery_urls.length}`);
+      }
     }
   } catch (err) {
     console.log(`⚠️ ดึงจาก Facebook ไม่สำเร็จ: ${err.message}`);
@@ -359,6 +440,8 @@ async function main() {
 
   if (posts.length === 0) {
     console.log('\n⚠️ ไม่พบโพสต์ใหม่จาก Facebook');
+    // ถึงไม่พบโพสต์ใหม่ ก็ยังต้อง sync เพื่อ prune ข่าวเก่า
+    await syncPostsToSupabase([]);
     return;
   }
 
