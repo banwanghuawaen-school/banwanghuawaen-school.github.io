@@ -6,21 +6,24 @@ import {
   Sparkles, 
   ArrowRight, 
   CheckCircle2, 
-  Eye, 
   Footprints,
   Trees, 
   Coffee, 
-  ShoppingBag, 
   Car, 
   Home, 
-  Baby, 
   Trophy, 
-  Compass
+  Compass,
+  Sun,
+  Moon,
+  Tag,
+  Maximize2
 } from 'lucide-react';
 
 export default function CampusMap() {
   const [selectedZone, setSelectedZone] = useState('b1'); // default to Main Building 1
   const [activeCategory, setActiveCategory] = useState('all');
+  const [isNightMode, setIsNightMode] = useState(false);
+  const [showLabels, setShowLabels] = useState(true);
 
   const campusZones = {
     b1: {
@@ -28,33 +31,37 @@ export default function CampusMap() {
       number: '1',
       category: 'academic',
       name: 'อาคาร 1 (อาคารเรียนหลักวังพัฒนา)',
-      nameEn: 'Building 1 (Main Academic Building)',
-      type: 'อาคารเรียนมาตรฐาน 2 ชั้น',
+      nameEn: 'Building 1 (Main Academic Complex)',
+      type: 'อาคารเรียนมาตรฐาน 2 ชั้น ขนาดใหญ่',
       color: '#8b5cf6',
       badgeText: 'อาคารหลัก',
-      desc: 'อาคารเรียน 2 ชั้นขนาดใหญ่ เป็นศูนย์กลางการจัดการเรียนการสอนระดับประถมศึกษา พร้อมระบบเทคโนโลยีสารสนเทศเพื่อการศึกษาครบครัน',
+      icon: Building2,
+      desc: 'อาคารเรียน 2 ชั้น ขนาดใหญ่ ศูนย์กลางการเรียนการสอนระดับประถมศึกษา พร้อมระบบห้องเรียนอัจฉริยะ Smart Classroom และศูนย์เทคโนโลยีสารสนเทศของโรงเรียน',
       highlights: [
         'ชั้นที่ 1: ห้องพักครู, ห้องธุรการ-การเงิน, ห้องเรียนชั้น ป.1 - ป.3',
         'ชั้นที่ 2: ห้องเรียนชั้น ป.4 - ป.6, ห้องปฏิบัติการคอมพิวเตอร์และสื่อ DLTV',
-        'ระบบสมาร์ททีวีและอินเทอร์เน็ตความเร็วสูงประจำทุกห้องเรียน'
+        'ติดตั้งระบบ Smart TV ความคมชัดสูง 4K และอินเทอร์เน็ตความเร็วสูงทุกห้องเรียน'
       ],
+      facilities: ['ห้องเรียนประถม 6 ห้อง', 'ห้องพักครูและธุรการ', 'ห้องคอมพิวเตอร์ 20 เครื่อง', 'สมาร์ททีวีทุกห้อง'],
       area: '280 ตร.ม.'
     },
     b2: {
       id: 'b2',
       number: '2',
       category: 'academic',
-      name: 'อาคาร 2 (อาคารส่งเสริมการเรียนรู้)',
-      nameEn: 'Building 2 (Learning Center)',
-      type: 'อาคารเรียน 1 ชั้น',
+      name: 'อาคาร 2 (ศูนย์การเรียนรู้สร้างสรรค์)',
+      nameEn: 'Building 2 (Creative Learning Center)',
+      type: 'อาคารเรียน 1 ชั้น โครงสร้างทันสมัย',
       color: '#f97316',
       badgeText: 'อาคาร 2',
-      desc: 'อาคารกิจกรรมและการเรียนรู้เฉพาะทาง รองรับกิจกรรมเสริมทักษะวิชาการ ห้องสมุดมีชีวิต และห้องปฏิบัติการกิจกรรม',
+      icon: Building2,
+      desc: 'อาคารจัดกิจกรรมและแหล่งเรียนรู้เฉพาะทาง รองรับการพัฒนาทักษะวิชาการ การค้นคว้าอิสระ และการดูแลสุขอนามัยของนักเรียน',
       highlights: [
-        'ห้องสมุดเฉลิมพระเกียรติและมุมส่งเสริมการอ่าน',
-        'ห้องปฏิบัติการวิทยาศาสตร์พื้นฐานและโครงงานนักเรียน',
-        'ห้องพยาบาลและมุมตรวจสุขภาพนักเรียน'
+        'ห้องสมุดเฉลิมพระเกียรติ พร้อมมุม E-Library ค้นคว้าดิจิทัล',
+        'ห้องปฏิบัติการวิทยาศาสตร์พื้นฐานและโครงงานสะเต็มศึกษา (STEM)',
+        'ห้องพยาบาลมาตรฐาน พร้อมอุปกรณ์ปฐมพยาบาลเบื้องต้น'
       ],
+      facilities: ['ห้องสมุดมีชีวิต', 'มุมวิทยาศาสตร์ & STEM', 'ห้องพยาบาล', 'ห้องแนะแนว'],
       area: '160 ตร.ม.'
     },
     kindergarten: {
@@ -62,51 +69,57 @@ export default function CampusMap() {
       number: 'อ.',
       category: 'academic',
       name: 'อาคารเรียนปฐมวัย (อนุบาล) & ลานร่มรื่น',
-      nameEn: 'Kindergarten Building & Garden',
+      nameEn: 'Early Childhood Center & Garden',
       type: 'อาคารเรียนปฐมวัยและพื้นที่ส่งเสริมพัฒนาการ',
       color: '#f43f5e',
       badgeText: 'อนุบาล',
-      desc: 'อาคารเรียนสำหรับเด็กปฐมวัย (อนุบาล 2 - อนุบาล 3) ออกแบบเพื่อความปลอดภัยและส่งเสริมพัฒนาการทั้ง 4 ด้าน มีลานกิจกรรมร่มรื่นใต้ต้นไม้ใหญ่',
+      icon: Home,
+      desc: 'อาคารเรียนสำหรับเด็กปฐมวัย (อนุบาล 2 - อนุบาล 3) ออกแบบเพื่อความปลอดภัยสูงสุดและส่งเสริมพัฒนาการทั้ง 4 ด้าน ล้อมรอบด้วยธรรมชาติร่มรื่นใต้ต้นไม้ใหญ่',
       highlights: [
         'ห้องเรียนปฐมวัยพร้อมสื่อเสริมพัฒนาการกล้ามเนื้อมัดเล็กและมัดใหญ่',
-        'มุมนิทานและจินตนาการสร้างสรรค์',
-        'ห้องทำงาน/อำนวยการของผู้บริหาร (โซน ผอ.)',
+        'มุมหนังสือนิทานและพื้นที่ศิลปะจินตนาการสร้างสรรค์',
+        'ห้องอำนวยการและประสานงานผู้บริหาร (โซน ผอ.)',
         'ลานกิจกรรมร่มรื่นใต้ต้นไม้ใหญ่ประจำโรงเรียน'
       ],
+      facilities: ['ห้องเรียน อ.2 - อ.3', 'มุมเสริมทักษะ BBL', 'ห้อง ผอ.', 'ลานธรรมชาติใต้ต้นไม้ใหญ่'],
       area: '190 ตร.ม.'
     },
     canteen: {
       id: 'canteen',
       number: '3',
       category: 'service',
-      name: 'โรงอาหารโรงเรียน',
-      nameEn: 'School Cafeteria & Canteen',
+      name: 'โรงอาหารโรงเรียน (สุขาภิบาลดีเด่น)',
+      nameEn: 'School Cafeteria & Nutrition Hall',
       type: 'อาคารบริการโภชนาการนักเรียน',
       color: '#f59e0b',
       badgeText: 'โรงอาหาร',
-      desc: 'สถานที่ประกอบอาหารกลางวันและรับประทานอาหารของนักเรียนและบุคลากร สะอาด ถูกสุขอนามัยตามมาตรฐานโครงการอาหารกลางวัน สพฐ.',
+      icon: Coffee,
+      desc: 'สถานที่ประกอบอาหารกลางวันและรับประทานอาหารของนักเรียนและบุคลากร สะอาด ถูกสุขอนามัยตามมาตรฐานโครงการอาหารกลางวัน สพฐ. 100%',
       highlights: [
-        'โรงครัวปรุงอาหารสดใหม่ สะอาด ถูกหลักโภชนาการทุกวัน',
-        'โต๊ะรับประทานอาหารเป็นระเบียบสำหรับนักเรียนทุกระดับชั้น',
-        'จุดล้างมือน้ำไหลและจุดแปรงฟันหลังอาหารกลางวัน'
+        'โรงครัวมาตรฐาน ปรุงอาหารสดใหม่ สะอาด ถูกหลักโภชนาการทุกวัน',
+        'โต๊ะรับประทานอาหารสแตนเลสเป็นระเบียบสำหรับนักเรียนทุกระดับชั้น',
+        'จุดล้างมือน้ำไหลอัตโนมัติและจุดแปรงฟันส่งเสริมสุขนิสัย'
       ],
+      facilities: ['โรงครัวมาตรฐาน สพฐ.', 'โต๊ะรับประทานอาหาร', 'จุดล้างมือน้ำไหล', 'ตู้แช่นมโรงเรียน'],
       area: '140 ตร.ม.'
     },
     welfare: {
       id: 'welfare',
       number: '4',
       category: 'service',
-      name: 'ร้านค้าสวัสดิการโรงเรียน',
-      nameEn: 'School Welfare & Cooperative Store',
+      name: 'ร้านค้าสวัสดิการ & สหกรณ์นักเรียน',
+      nameEn: 'Welfare & Student Cooperative Store',
       type: 'ร้านค้าบริการนักเรียนและชุมชน',
       color: '#a855f7',
       badgeText: 'ร้านสวัสดิการ',
-      desc: 'ร้านค้าสวัสดิการโรงเรียนและสหกรณ์นักเรียน จำหน่ายเครื่องเขียน อุปกรณ์การเรียน เครื่องแต่งกาย และอาหารว่างที่มีประโยชน์',
+      icon: Coffee,
+      desc: 'ร้านค้าสวัสดิการและสหกรณ์โรงเรียน จำหน่ายเครื่องเขียน อุปกรณ์การเรียน ชุดนักเรียน และอาหารว่างที่มีประโยชน์ตามหลักโภชนาการ',
       highlights: [
-        'ฝึกทักษะการทำบัญชีและสหกรณ์นักเรียน',
-        'จำหน่ายอุปกรณ์การเรียนราคาประหยัด',
-        'เครื่องดื่มและนมโรงเรียนคุณภาพ'
+        'แหล่งฝึกปฏิบัติจริงด้านทักษะอาชีพและการทำบัญชีสหกรณ์นักเรียน',
+        'จำหน่ายอุปกรณ์การเรียนราคาประหยัดเพื่อลดภาระผู้ปกครอง',
+        'บริการเครื่องดื่มและนมโรงเรียนคุณภาพ'
       ],
+      facilities: ['ร้านค้าสหกรณ์', 'มุมเครื่องเขียน', 'มุมเครื่องแบบ', 'เคาน์เตอร์บริการ'],
       area: '45 ตร.ม.'
     },
     restroom1: {
@@ -114,16 +127,18 @@ export default function CampusMap() {
       number: 'ส1',
       category: 'service',
       name: 'ห้องน้ำ-สุขา (โซนร้านสวัสดิการ)',
-      nameEn: 'Restroom Zone A',
+      nameEn: 'Sanitary Restroom Zone A',
       type: 'อาคารสุขอนามัย',
-      color: '#eab308',
+      color: '#ea580c',
       badgeText: 'สุขา โซน 1',
-      desc: 'สุขาสำหรับนักเรียนระดับปฐมวัยและผู้มาติดต่อร้านค้าสวัสดิการ แยกห้องน้ำชาย-หญิง สะอาด ปลอดภัย และมีแสงสว่างทั่วถึง',
+      icon: Building2,
+      desc: 'สุขาสำหรับนักเรียนระดับปฐมวัยและผู้มาติดต่อร้านค้าสวัสดิการ แยกห้องน้ำชาย-หญิง สะอาด ปลอดภัย และมีแสงสว่างธรรมชาติทั่วถึง',
       highlights: [
-        'แยกสัดส่วนห้องน้ำชาย-หญิงชัดเจน',
-        'อ่างล้างมือพร้อมสบู่ทำความสะอาด',
-        'เจ้าหน้าที่ดูแลทำความสะอาดสม่ำเสมอตลอดวัน'
+        'แยกสัดส่วนห้องน้ำชาย-หญิงชัดเจน ปลอดภัย',
+        'สุขภัณฑ์สำหรับเด็กปฐมวัยเพื่อความสะดวกสบาย',
+        'เจ้าหน้าที่ดูแลทำความสะอาดและฆ่าเชื้อสม่ำเสมอ'
       ],
+      facilities: ['ห้องน้ำชาย', 'ห้องน้ำหญิง', 'อ่างล้างมือพร้อมสบู่', 'ระบบระบายอากาศ'],
       area: '35 ตร.ม.'
     },
     restroom2: {
@@ -131,16 +146,18 @@ export default function CampusMap() {
       number: 'ส2',
       category: 'service',
       name: 'ห้องน้ำ-สุขา (โซนอาคาร 2)',
-      nameEn: 'Restroom Zone B',
+      nameEn: 'Sanitary Restroom Zone B',
       type: 'อาคารสุขอนามัย',
-      color: '#38bdf8',
+      color: '#0284c7',
       badgeText: 'สุขา โซน 2',
+      icon: Building2,
       desc: 'ห้องน้ำหลักสำหรับนักเรียนชั้นประถมศึกษาและคณะครู ตั้งอยู่ทางทิศตะวันออกติดกับอาคารเรียน 2 สะดวกต่อการใช้งานระหว่างคาบเรียน',
       highlights: [
-        'ห้องสุขาและห้องอาบน้ำสำหรับนักเรียนหลังกิจกรรมกีฬา',
-        'ระบบระบายอากาศถูกสุขอนามัย',
-        'รองรับการใช้งานของนักเรียนทุกระดับชั้น'
+        'ห้องสุขามาตรฐานและจุดอาบน้ำหลังกิจกรรมพลศึกษา',
+        'ระบบประหยัดน้ำและสุขภัณฑ์ประหยัดพลังงาน',
+        'รองรับการใช้งานช่วงพักกลางวันได้อย่างรวดเร็ว'
       ],
+      facilities: ['ห้องสุขาประถม', 'จุดอาบน้ำนักกีฬา', 'อ่างล้างมือสุขอนามัย'],
       area: '50 ตร.ม.'
     },
     parking: {
@@ -148,67 +165,75 @@ export default function CampusMap() {
       number: 'P',
       category: 'facility',
       name: 'ลานจอดรถโรงเรียน',
-      nameEn: 'School Parking Area',
+      nameEn: 'Official Parking Complex',
       type: 'พื้นที่จอดรถยนต์และจักรยานยนต์',
-      color: '#ec4899',
+      color: '#db2777',
       badgeText: 'ลานจอดรถ',
-      desc: 'พื้นที่จอดรถในร่มและกลางแจ้ง สำหรับรถยนต์ของคณะครู บุคลากรทางการศึกษา และผู้ปกครองที่เดินทางมาติดต่อราชการ',
+      icon: Car,
+      desc: 'พื้นที่จอดรถในร่มและกลางแจ้ง สำหรับรถยนต์ของคณะครู บุคลากรทางการศึกษา และผู้ปกครองที่เดินทางมาติดต่อราชการโรงเรียน',
       highlights: [
-        'ช่องจอดรถยนต์และช่องจอดรถจักรยานยนต์เป็นระเบียบ',
+        'ช่องจอดรถยนต์ 8 คัน และช่องจอดรถจักรยานยนต์เป็นระเบียบ',
         'ทางเข้า-ออกสะดวก เชื่อมต่อกับถนนภายในโรงเรียน',
         'ระบบไฟส่องสว่างเวลากลางคืนเพื่อความปลอดภัย'
       ],
+      facilities: ['ช่องจอดรถยนต์ครู', 'ช่องจอดรถผู้มาติดต่อ', 'ที่จอดรถจักรยานยนต์', 'ไฟส่องสว่าง'],
       area: '180 ตร.ม.'
     },
     football: {
       id: 'football',
-      number: 'สนาม',
+      number: '⚽',
       category: 'sports',
-      name: 'สนามฟุตบอลโรงเรียน',
-      nameEn: 'Main Football Field',
+      name: 'สนามฟุตบอลโรงเรียน (สนามหญ้ามาตรฐาน)',
+      nameEn: 'Main Stadium Football Field',
       type: 'สนามกีฬากลางแจ้งขนาดใหญ่',
       color: '#22c55e',
       badgeText: 'สนามบอล',
-      desc: 'สนามฟุตบอลหญ้าธรรมชาติขนาดมาตรฐานใจกลางโรงเรียน เป็นหัวใจของการจัดกิจกรรมกลางแจ้ง กีฬาสี และการออกกำลังกายของชุมชน',
+      icon: Trophy,
+      desc: 'สนามฟุตบอลหญ้าธรรมชาติขนาดมาตรฐานใจกลางโรงเรียน เป็นหัวใจของการจัดกิจกรรมกลางแจ้ง กีฬาสี และการออกกำลังกายของชุมชนบ้านวังหัวแหวน',
       highlights: [
-        'สนามหญ้าตัดแต่งเรียบสม่ำเสมอ พร้อมเส้นเขตสนามชัดเจน',
-        'ประตูฟุตบอลมาตรฐานพร้อมตาข่าย',
+        'สนามหญ้าตัดแต่งลายแถบเรียบสม่ำเสมอ พร้อมเส้นเขตสนามชัดเจน',
+        'ประตูฟุตบอลมาตรฐานพร้อมตาข่ายเหนียวแน่น ปลอดภัย',
         'ใช้ในการเรียนการสอนวิชาพลศึกษาและกิจกรรมหน้าเสาธงในวันสำคัญ'
       ],
+      facilities: ['สนามหญ้ามาตรฐาน', 'ประตูฟุตบอล 2 ฝั่ง', 'ซุ้มม้านั่งนักกีฬา', 'ธงมุมสนาม 4 มุม'],
       area: '1,200 ตร.ม.'
     },
     volleyball: {
       id: 'volleyball',
-      number: 'วอลเลย์',
+      number: '🏐',
       category: 'sports',
       name: 'สนามวอลเลย์บอล & ลานกีฬาอเนกประสงค์',
-      nameEn: 'Volleyball Court & Outdoor Arena',
-      type: 'สนามกีฬากลางแจ้งคอนกรีต',
+      nameEn: 'Volleyball & Takraw Arena',
+      type: 'สนามกีฬากลางแจ้งคอนกรีตมาตรฐาน',
       color: '#10b981',
       badgeText: 'สนามวอลเลย์',
+      icon: Trophy,
       desc: 'สนามวอลเลย์บอลคอนกรีตมาตรฐาน ตั้งอยู่ด้านหน้าติดแนวรั้วโรงเรียน ใช้ฝึกซ้อมกีฬาวอลเลย์บอล ตะกร้อ และการละเล่นพื้นบ้าน',
       highlights: [
-        'พื้นคอนกรีตทาสีกันลื่นพร้อมเส้นสนามมาตรฐาน',
+        'พื้นคอนกรีตทาสีกันลื่นสีมินต์-เขียว พร้อมเส้นสนามมาตรฐาน',
         'เสาและตาข่ายวอลเลย์บอลที่ได้มาตรฐานความปลอดภัย',
-        'ร่มรื่นด้วยแนวต้นไม้ใหญ่ด้านข้างสนาม'
+        'ร่มรื่นด้วยแนวต้นไม้ใหญ่ด้านข้างสนามตลอดช่วงบ่าย'
       ],
+      facilities: ['สนามคอนกรีตมาตรฐาน', 'เสาและตาข่ายวอลเลย์บอล', 'เส้นเขตตะกร้อ', 'ร่มเงาต้นไม้'],
       area: '162 ตร.ม.'
     },
     playground: {
       id: 'playground',
       number: 'BBL',
       category: 'sports',
-      name: 'สนามเด็กเล่นสร้างสรรค์ (BBL) & แนวทิวไม้',
-      nameEn: 'Creative BBL Playground',
+      name: 'สนามเด็กเล่นสร้างสรรค์ (BBL) & ทิวไม้ร่มรื่น',
+      nameEn: 'BBL Creative Playground & Tree Boulevard',
       type: 'พื้นที่เรียนรู้กลางแจ้งและเครื่องเล่นพัฒนาการ',
-      color: '#a78bfa',
+      color: '#a855f7',
       badgeText: 'สนามเด็กเล่น',
-      desc: 'สนามเด็กเล่นแนวยาวขนานถนนหลัก ร่มรื่นด้วยแนวต้นไม้ใหญ่ตลอดแนว มีเครื่องเล่นตามหลักการพัฒนาสมอง (Brain-based Learning: BBL)',
+      icon: Trees,
+      desc: 'สนามเด็กเล่นแนวยาวขนานถนนหลัก ร่มรื่นด้วยแนวต้นไม้ใหญ่ 7 ต้นตลอดแนว มีเครื่องเล่นตามหลักการพัฒนาสมอง (Brain-based Learning: BBL)',
       highlights: [
-        'เครื่องเล่นเสริมทักษะ: ชิงช้า, กระดานลื่น, บาร์โหนทรงตัว',
-        'ลานกระโดดและภาพวาดลายพื้นพัฒนาทักษะสมอง',
-        'ทิวต้นไม้ร่มรื่น ให้ร่มเงาตลอดทั้งวันสำหรับพักผ่อน'
+        'เครื่องเล่นเสริมทักษะ: สไลเดอร์ 3D, ชิงช้า, กระดานกระดก, บาร์โหนทรงตัว',
+        'ลานกระโดดและภาพวาดลายพื้นพัฒนาทักษะสมอง (BBL Floor Games)',
+        'ทิวต้นไม้ร่มรื่น ให้ร่มเงาตลอดทั้งวันสำหรับพักผ่อนและทำกิจกรรม'
       ],
+      facilities: ['สไลเดอร์เกลียว', 'ชุดชิงช้า 4 ที่นั่ง', 'บาร์โหนทรงตัว', 'ทิวไม้ร่มรื่น 7 ต้น'],
       area: '220 ตร.ม.'
     },
     flagpole_shrine: {
@@ -216,16 +241,18 @@ export default function CampusMap() {
       number: 'ธง-พระ',
       category: 'facility',
       name: 'ลานเสาธงชาติ และซุ้มพระพุทธรูปประจำโรงเรียน',
-      nameEn: 'National Flagpole & Buddha Shrine',
-      type: 'ศูนย์รวมจิตใจและลานพิธีการ',
+      nameEn: 'Flagpole Plaza & Buddha Shrine',
+      type: 'ศูนย์รวมจิตใจและลานพิธีการยามเช้า',
       color: '#d97706',
       badgeText: 'เสาธง / พระพุทธรูป',
-      desc: 'จุดศูนย์รวมจิตใจและอัตลักษณ์ของโรงเรียน ใช้ประกอบพิธีเข้าแถวเคารพธงชาติ สวดมนต์ ไหว้พระ และรับฟังโอวาทในตอนเช้าของทุกวัน',
+      icon: Compass,
+      desc: 'จุดศูนย์รวมจิตใจและอัตลักษณ์ของโรงเรียน ใช้ประกอบพิธีเข้าแถวเคารพธงชาติ สวดมนต์ ไหว้พระ และรับฟังโอวาทในตอนเช้าของทุกวันเรียน',
       highlights: [
-        'เสาธงชาติสูงสง่างาม หน้าอาคารเรียนหลัก',
+        'เสาธงชาติสูงสง่างาม หน้าอาคารเรียนหลัก โบกสะบัดธงไตรรงค์',
         'ซุ้มประดิษฐานพระพุทธรูปศักดิ์สิทธิ์ประจำโรงเรียนบ้านวังหัวแหวนพัฒนา',
-        'ลานคอนกรีตสำหรับนักเรียนและครูยืนเข้าแถวอย่างเป็นระเบียบ'
+        'ลานคอนกรีตเข้าแถวอย่างเป็นระเบียบของครูและนักเรียน'
       ],
+      facilities: ['เสาธงชาติมาตรฐาน', 'ซุ้มพระพุทธรูป', 'ลานเข้าแถวเคารพธงชาติ', 'ระบบสปอตไลต์'],
       area: '80 ตร.ม.'
     },
     teachers_housing: {
@@ -233,33 +260,37 @@ export default function CampusMap() {
       number: 'พักครู',
       category: 'facility',
       name: 'กลุ่มบ้านพักครู (5 หลัง) & ที่พักบุคลากร',
-      nameEn: 'Teachers Residential Houses',
+      nameEn: 'Faculty Residential Village (5 Cottages)',
       type: 'โซนที่พักอาศัยของคณะครูและบุคลากร',
       color: '#b45309',
       badgeText: 'บ้านพักครู',
-      desc: 'กลุ่มบ้านพักสำหรับครูและบุคลากรทางการศึกษาที่ปฏิบัติหน้าที่ดูแลโรงเรียน จำนวน 5 หลัง ตั้งอยู่ในมุมที่เงียบสงบ ปลอดภัย และร่มรื่น',
+      icon: Home,
+      desc: 'กลุ่มบ้านพักทรงคอทเทจอบอุ่นสำหรับครูและบุคลากรทางการศึกษา จำนวน 5 หลัง ตั้งอยู่ในมุมที่เงียบสงบ ปลอดภัย และใกล้ชิดธรรมชาติ',
       highlights: [
-        'บ้านพักครูจำนวน 5 หลังพร้อมระบบสาธารณูปโภคครบครัน',
-        'มีครูเวรดูแลความปลอดภัยของโรงเรียนตลอด 24 ชั่วโมง',
-        'สภาพแวดล้อมร่มรื่น น่าอยู่ ใกล้ชิดธรรมชาติ'
+        'บ้านพักครูจำนวน 5 หลังพร้อมระบบสาธารณูปโภคและไฟฟ้าครบถ้วน',
+        'มีครูเวรประจำการดูแลความปลอดภัยของโรงเรียนตลอด 24 ชั่วโมง',
+        'สภาพแวดล้อมร่มรื่น สวนหย่อมขนาดเล็ก สบายตา'
       ],
+      facilities: ['บ้านพักครู 5 หลัง', 'ระเบียงไม้พักผ่อน', 'สวนหย่อมร่มรื่น', 'ระบบรักษาความปลอดภัย'],
       area: '450 ตร.ม.'
     },
     gate_fence: {
       id: 'gate_fence',
       number: 'ประตู',
       category: 'facility',
-      name: 'ประตูทางเข้า, ป้ายชื่อโรงเรียน และแนวรั้ว',
-      nameEn: 'School Gate & Boundary Fence',
+      name: 'ซุ้มประตูทางเข้า, ป้ายชื่อโรงเรียน และแนวรั้ว',
+      nameEn: 'Grand School Gate & Boundary Boulevard',
       type: 'ทางเข้าหลักและระบบรักษาความปลอดภัย',
-      color: '#475569',
+      color: '#334155',
       badgeText: 'ประตู & รั้ว',
-      desc: 'ทางเข้าหลักของโรงเรียนบ้านวังหัวแหวนพัฒนา ประดับป้ายหินสลักชื่อโรงเรียนอย่างสง่างาม พร้อมประตูเหล็กแข็งแรงและแนวรั้วรอบโรงเรียน',
+      icon: Building2,
+      desc: 'ทางเข้าหลักของโรงเรียนบ้านวังหัวแหวนพัฒนา ประดับป้ายหินสลักชื่อโรงเรียนสีน้ำเงิน-ทองสง่างาม พร้อมประตูเหล็กแข็งแรงและทางม้าลายปลอดภัย',
       highlights: [
-        'ป้ายชื่อโรงเรียนบ้านวังหัวแหวนพัฒนา สวยงาม เด่นชัดริมถนน',
-        'ประตูรั้วเหล็กเปิด-ปิดตามเวลาทำการราชการ',
-        'แนวรั้วคอนกรีตและทิวต้นไม้ล้อมรอบสร้างความปลอดภัยแก่นักเรียน'
+        'ป้ายชื่อโรงเรียนบ้านวังหัวแหวนพัฒนา หรูหรา สง่างามริมถนน',
+        'ประตูรั้วเหล็กเปิด-ปิดตามเวลาทำการราชการเพื่อความปลอดภัย',
+        'ทางม้าลายคนข้าม (Zebra Crossing) เพิ่มความปลอดภัยแก่นักเรียนและผู้ปกครอง'
       ],
+      facilities: ['ป้ายหินแกรนิตสลักทอง', 'ประตูเหล็กดัดสองบาน', 'ทางม้าลาย', 'แนวรั้วและทิวไม้'],
       area: 'ตลอดแนวหน้า รร.'
     }
   };
@@ -268,10 +299,10 @@ export default function CampusMap() {
 
   const categories = [
     { id: 'all', label: 'ทั้งหมด (14 โซน)', icon: Compass },
-    { id: 'academic', label: 'อาคารเรียน', icon: Building2 },
+    { id: 'academic', label: 'อาคารเรียน & ห้องสมุด', icon: Building2 },
     { id: 'sports', label: 'สนามกีฬา & เครื่องเล่น', icon: Trophy },
     { id: 'service', label: 'สวัสดิการ & สุขา', icon: Coffee },
-    { id: 'facility', label: 'ที่พัก & ลานกิจกรรม', icon: Home }
+    { id: 'facility', label: 'ที่พัก & ลานพิธีการ', icon: Home }
   ];
 
   const filteredZoneKeys = Object.keys(campusZones).filter(key => {
@@ -280,698 +311,1001 @@ export default function CampusMap() {
   });
 
   return (
-    <div className="campus-view container section-padding animate-fade-in">
-      {/* Page Header */}
-      <div className="page-header text-center mb-4">
-        <span className="section-tag">CAMPUS MASTER PLAN</span>
-        <h2 className="section-title">แผนผังโรงเรียนบ้านวังหัวแหวนพัฒนา</h2>
-        <div className="school-divider">
-          <span className="school-divider-dot"></span>
-        </div>
-        <p className="section-subtitle">
-          แผนผังแสดงตำแหน่งอาคารเรียน สนามกีฬา อาคารบริการ และสิ่งอำนวยความสะดวกภายในบริเวณโรงเรียน
-        </p>
-      </div>
-
-      {/* Category Filter Pills */}
-      <div className="category-filters-row mb-4">
-        {categories.map(cat => {
-          const Icon = cat.icon;
-          const isActive = activeCategory === cat.id;
-          return (
-            <button
-              key={cat.id}
-              className={`cat-pill-btn ${isActive ? 'active' : ''}`}
-              onClick={() => setActiveCategory(cat.id)}
-            >
-              <Icon size={16} />
-              <span>{cat.label}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Main Two-Column Layout */}
-      <div className="campus-grid-container">
+    <div className={`campus-view-wrapper ${isNightMode ? 'mode-night' : 'mode-day'} animate-fade-in`}>
+      <div className="container section-padding">
         
-        {/* Left: The Visual Interactive Campus Map */}
-        <div className="map-view-card">
-          <div className="map-card-topbar">
-            <div className="topbar-title">
-              <Layers size={18} className="text-secondary" />
-              <span>แผนผังเชิงโต้ตอบ (คลิกที่อาคารหรือพื้นที่เพื่อดูรายละเอียด)</span>
-            </div>
-            <div className="topbar-hint">
-              <Footprints size={14} /> โซนที่เลือก: <strong className="text-secondary">{currentZone.name}</strong>
-            </div>
+        {/* Page Top Title */}
+        <div className="page-header text-center mb-4">
+          <div className="d-flex align-items-center justify-content-center gap-2 mb-2">
+            <span className="section-tag-gold">✨ 2.5D INTERACTIVE CAMPUS MASTER PLAN</span>
+          </div>
+          <h2 className="master-title">
+            แผนผังโรงเรียนบ้านวังหัวแหวนพัฒนา
+          </h2>
+          <div className="school-divider">
+            <span className="school-divider-dot"></span>
+          </div>
+          <p className="master-subtitle">
+            สำรวจอาคารเรียน สนามกีฬา แหล่งเรียนรู้ และสิ่งอำนวยความสะดวกในระบบจำลอง 2.5D เสมือนจริง
+          </p>
+        </div>
+
+        {/* Action Controls Bar */}
+        <div className="controls-island mb-4">
+          <div className="filters-group">
+            {categories.map(cat => {
+              const Icon = cat.icon;
+              const isActive = activeCategory === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  className={`pill-btn ${isActive ? 'active' : ''}`}
+                  onClick={() => setActiveCategory(cat.id)}
+                >
+                  <Icon size={15} />
+                  <span>{cat.label}</span>
+                </button>
+              );
+            })}
           </div>
 
-          <div className="blueprint-canvas-wrapper">
-            {/* SVG Interactive Canvas */}
-            <svg 
-              viewBox="0 0 960 680" 
-              className="campus-master-svg"
-              preserveAspectRatio="xMidYMid meet"
+          <div className="toggles-group">
+            {/* Day / Night Ambience Toggle */}
+            <button 
+              className={`ambience-toggle-btn ${isNightMode ? 'night' : 'day'}`}
+              onClick={() => setIsNightMode(!isNightMode)}
+              title={isNightMode ? "เปลี่ยนเป็นโหมดกลางวัน" : "เปลี่ยนเป็นโหมดพลบค่ำ/ราตรี"}
             >
-              <defs>
-                {/* Notebook Grid Paper Pattern matching the hand sketch */}
-                <pattern id="campus-grid" width="30" height="30" patternUnits="userSpaceOnUse">
-                  <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#e9ecef" strokeWidth="0.8" />
-                </pattern>
+              {isNightMode ? (
+                <>
+                  <Moon size={16} className="text-warning" />
+                  <span>โหมดราตรี (Night Mode)</span>
+                </>
+              ) : (
+                <>
+                  <Sun size={16} className="text-warning" />
+                  <span>โหมดกลางวัน (Day Mode)</span>
+                </>
+              )}
+            </button>
 
-                {/* Road texture stripes */}
-                <pattern id="road-stripe" width="20" height="10" patternUnits="userSpaceOnUse">
-                  <rect x="0" y="0" width="10" height="2" fill="#f8fafc" />
-                </pattern>
+            {/* Labels Toggle */}
+            <button 
+              className={`label-toggle-btn ${showLabels ? 'active' : ''}`}
+              onClick={() => setShowLabels(!showLabels)}
+              title="เปิด/ปิดป้ายชื่ออาคาร"
+            >
+              <Tag size={15} />
+              <span>{showLabels ? 'ซ่อนป้ายชื่อ' : 'แสดงป้ายชื่อ'}</span>
+            </button>
+          </div>
+        </div>
 
-                {/* Filter Shadow for 3D elevation */}
-                <filter id="soft-shadow" x="-5%" y="-5%" width="110%" height="115%">
-                  <feDropShadow dx="0" dy="4" stdDeviation="4" floodOpacity="0.12" />
-                </filter>
-                <filter id="active-glow" x="-10%" y="-10%" width="120%" height="120%">
-                  <feDropShadow dx="0" dy="0" stdDeviation="6" floodColor="#e5b326" floodOpacity="0.85" />
-                  <feDropShadow dx="0" dy="4" stdDeviation="8" floodOpacity="0.25" />
-                </filter>
-              </defs>
+        {/* Main 2-Column Showcase */}
+        <div className="campus-stage-grid">
+          
+          {/* Left Canvas Column: The Ultra-WOW 2.5D SVG Map */}
+          <div className="stage-canvas-panel glass-panel">
+            <div className="canvas-header-bar">
+              <div className="d-flex align-items-center gap-2">
+                <Layers size={18} className="text-secondary" />
+                <span className="fw-semibold">แผนผังจำลองเชิงสถาปัตยกรรม (คลิกอาคารเพื่อชมข้อมูล)</span>
+              </div>
+              <div className="selected-indicator">
+                <Footprints size={14} /> โซนปัจจุบัน: <strong>{currentZone.name.split(' (')[0]}</strong>
+              </div>
+            </div>
 
-              {/* 1. Base Grid Canvas */}
-              <rect x="0" y="0" width="960" height="680" fill="#fbfbfa" rx="16" />
-              <rect x="15" y="15" width="930" height="650" fill="url(#campus-grid)" rx="12" stroke="#e2e8f0" strokeWidth="1.5" />
-
-              {/* ---------------------------------------------------- */}
-              {/* 2. ROADS NETWORK (ถนนภายในโรงเรียน) */}
-              {/* ---------------------------------------------------- */}
-              
-              {/* Vertical Main Road from Gate to North */}
-              <rect x="360" y="140" width="46" height="500" fill="#64748b" rx="2" />
-              {/* Center dashed line for vertical road */}
-              <line x1="383" y1="170" x2="383" y2="610" stroke="#f1f5f9" strokeWidth="2.5" strokeDasharray="12 10" opacity="0.85" />
-
-              {/* Horizontal Internal Road in front of buildings */}
-              <rect x="360" y="210" width="560" height="42" fill="#64748b" rx="2" />
-              {/* Center dashed line for horizontal road */}
-              <line x1="390" y1="231" x2="910" y2="231" stroke="#f1f5f9" strokeWidth="2.5" strokeDasharray="14 10" opacity="0.85" />
-
-              {/* Road Intersection Smoother */}
-              <rect x="360" y="210" width="46" height="42" fill="#64748b" />
-
-              {/* Curb accents on road */}
-              <line x1="360" y1="210" x2="360" y2="630" stroke="#475569" strokeWidth="2" />
-              <line x1="406" y1="252" x2="406" y2="630" stroke="#475569" strokeWidth="2" />
-              <line x1="406" y1="210" x2="920" y2="210" stroke="#475569" strokeWidth="2" />
-              <line x1="406" y1="252" x2="920" y2="252" stroke="#475569" strokeWidth="2" />
-
-
-              {/* ---------------------------------------------------- */}
-              {/* 3. SOUTH BOUNDARY: GATE, SCHOOL SIGN, FENCE & TREES */}
-              {/* ---------------------------------------------------- */}
-              
-              {/* Gate & Fence Interactive Group */}
-              <g 
-                className={`svg-zone ${selectedZone === 'gate_fence' ? 'active-zone' : ''}`}
-                onClick={() => setSelectedZone('gate_fence')}
+            <div className={`canvas-viewport ${isNightMode ? 'night-ambient' : 'day-ambient'}`}>
+              <svg 
+                viewBox="0 0 980 700" 
+                className="master-svg-canvas"
+                preserveAspectRatio="xMidYMid meet"
               >
-                {/* Iron Main Gate at bottom of vertical road */}
-                <rect x="350" y="605" width="66" height="30" fill="#334155" rx="4" filter="url(#soft-shadow)" />
-                <rect x="356" y="610" width="24" height="20" fill="#475569" rx="2" stroke="#94a3b8" strokeWidth="1" />
-                <rect x="386" y="610" width="24" height="20" fill="#475569" rx="2" stroke="#94a3b8" strokeWidth="1" />
-                <text x="383" y="658" textAnchor="middle" fill="#1e293b" fontSize="13" fontWeight="700" fontFamily="Prompt">ประตูโรงเรียน</text>
+                <defs>
+                  {/* Subtle Blueprint Grid */}
+                  <pattern id="grid-pattern" width="28" height="28" patternUnits="userSpaceOnUse">
+                    <path d="M 28 0 L 0 0 0 28" fill="none" stroke={isNightMode ? "rgba(255,255,255,0.04)" : "rgba(11,37,69,0.05)"} strokeWidth="1" />
+                  </pattern>
 
-                {/* School Sign Monument (ป้าย รร.) */}
-                <rect x="424" y="602" width="70" height="26" fill="#f8fafc" rx="4" stroke="#0b2545" strokeWidth="2.5" filter="url(#soft-shadow)" />
-                <rect x="427" y="605" width="64" height="20" fill="#0b2545" rx="2" />
-                <text x="459" y="619" textAnchor="middle" fill="#e5b326" fontSize="9" fontWeight="700" fontFamily="Prompt">ป้าย รร.</text>
-                <text x="459" y="658" textAnchor="middle" fill="#0b2545" fontSize="12" fontWeight="600" fontFamily="Prompt">ป้ายโรงเรียน</text>
+                  {/* FIFA Football Lawn Stripes Pattern */}
+                  <pattern id="lawn-stripes" width="30" height="200" patternUnits="userSpaceOnUse">
+                    <rect x="0" y="0" width="15" height="200" fill={isNightMode ? "#166534" : "#22c55e"} />
+                    <rect x="15" y="0" width="15" height="200" fill={isNightMode ? "#14532d" : "#16a34a"} />
+                  </pattern>
 
-                {/* Concrete Boundary Fence running along the bottom */}
-                <line x1="495" y1="615" x2="920" y2="615" stroke="#94a3b8" strokeWidth="6" strokeLinecap="round" />
-                <line x1="495" y1="615" x2="920" y2="615" stroke="#cbd5e1" strokeWidth="2" strokeDasharray="10 8" />
-                <text x="740" y="656" textAnchor="middle" fill="#64748b" fontSize="13" fontWeight="600" fontFamily="Prompt">รั้วโรงเรียน</text>
+                  {/* Asphalt Texture */}
+                  <linearGradient id="asphalt-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor={isNightMode ? "#1e293b" : "#475569"} />
+                    <stop offset="100%" stopColor={isNightMode ? "#0f172a" : "#334155"} />
+                  </linearGradient>
 
-                {/* Fence trees row (right side) */}
-                <g opacity="0.9">
-                  <circle cx="680" cy="595" r="16" fill="#4ade80" stroke="#15803d" strokeWidth="2" />
-                  <circle cx="705" cy="592" r="19" fill="#22c55e" stroke="#15803d" strokeWidth="2" />
-                  <circle cx="730" cy="596" r="15" fill="#4ade80" stroke="#15803d" strokeWidth="2" />
-                  <rect x="702" y="608" width="6" height="12" fill="#78350f" />
+                  {/* Building 1 Purple Roof 3D Gradient */}
+                  <linearGradient id="b1-roof-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#c084fc" />
+                    <stop offset="70%" stopColor="#9333ea" />
+                    <stop offset="100%" stopColor="#6b21a8" />
+                  </linearGradient>
 
-                  <circle cx="830" cy="595" r="16" fill="#4ade80" stroke="#15803d" strokeWidth="2" />
-                  <circle cx="855" cy="592" r="19" fill="#22c55e" stroke="#15803d" strokeWidth="2" />
-                  <circle cx="880" cy="596" r="15" fill="#4ade80" stroke="#15803d" strokeWidth="2" />
-                  <rect x="852" y="608" width="6" height="12" fill="#78350f" />
-                  <text x="780" y="598" textAnchor="middle" fill="#166534" fontSize="12" fontWeight="600" fontFamily="Prompt">ต้นไม้</text>
-                </g>
-              </g>
+                  {/* Building 2 Coral Roof Gradient */}
+                  <linearGradient id="b2-roof-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#fb7185" />
+                    <stop offset="70%" stopColor="#e11d48" />
+                    <stop offset="100%" stopColor="#9f1239" />
+                  </linearGradient>
 
+                  {/* 3D Drop Shadows */}
+                  <filter id="iso-shadow" x="-10%" y="-10%" width="125%" height="130%">
+                    <feDropShadow dx="3" dy="8" stdDeviation="5" floodColor="#0b2545" floodOpacity={isNightMode ? "0.6" : "0.22"} />
+                  </filter>
+                  <filter id="active-beacon-glow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="0" stdDeviation="8" floodColor="#f59e0b" floodOpacity="0.9" />
+                    <feDropShadow dx="0" dy="4" stdDeviation="12" floodColor="#e5b326" floodOpacity="0.5" />
+                  </filter>
+                  <filter id="light-beam" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="8" result="blur" />
+                  </filter>
+                </defs>
 
-              {/* ---------------------------------------------------- */}
-              {/* 4. WEST SIDE (LEFT OF ROAD): TEACHERS HOUSES & KINDERGARTEN */}
-              {/* ---------------------------------------------------- */}
+                {/* 1. Base Canvas Background */}
+                <rect x="0" y="0" width="980" height="700" fill={isNightMode ? "#091322" : "#fdfbf7"} rx="16" />
+                <rect x="15" y="15" width="950" height="670" fill="url(#grid-pattern)" rx="12" stroke={isNightMode ? "#1e293b" : "#e2e8f0"} strokeWidth="1.5" />
 
-              {/* Group: Teachers' Housing (บ้านพักครู 5 หลัง) */}
-              <g 
-                className={`svg-zone ${selectedZone === 'teachers_housing' ? 'active-zone' : ''}`}
-                onClick={() => setSelectedZone('teachers_housing')}
-              >
-                {/* Bounding hover highlight area */}
-                <rect x="180" y="420" width="165" height="195" fill={selectedZone === 'teachers_housing' ? 'rgba(180, 83, 9, 0.08)' : 'transparent'} rx="10" stroke={selectedZone === 'teachers_housing' ? '#b45309' : 'transparent'} strokeWidth="1.5" strokeDasharray="4 4" />
-
-                {/* House 1 (Top Left) */}
-                <polygon points="215,440 235,422 255,440" fill="#b45309" stroke="#78350f" strokeWidth="1.5" />
-                <rect x="220" y="440" width="30" height="24" fill="#fed7aa" stroke="#78350f" strokeWidth="1.5" />
-                <rect x="231" y="448" width="8" height="16" fill="#b45309" />
-
-                {/* House 2 (Top Right) */}
-                <polygon points="280,440 300,422 320,440" fill="#b45309" stroke="#78350f" strokeWidth="1.5" />
-                <rect x="285" y="440" width="30" height="24" fill="#fed7aa" stroke="#78350f" strokeWidth="1.5" />
-                <rect x="296" y="448" width="8" height="16" fill="#b45309" />
-
-                {/* House 3 (Middle Right) */}
-                <polygon points="280,505 300,487 320,505" fill="#b45309" stroke="#78350f" strokeWidth="1.5" />
-                <rect x="285" y="505" width="30" height="24" fill="#fed7aa" stroke="#78350f" strokeWidth="1.5" />
-                <rect x="296" y="513" width="8" height="16" fill="#b45309" />
-
-                {/* House 4 (Middle-Bottom Left) */}
-                <polygon points="220,545 240,527 260,545" fill="#b45309" stroke="#78350f" strokeWidth="1.5" />
-                <rect x="225" y="545" width="30" height="24" fill="#fed7aa" stroke="#78350f" strokeWidth="1.5" />
-                <rect x="236" y="553" width="8" height="16" fill="#b45309" />
-
-                {/* House 5 (Bottom Right) */}
-                <polygon points="288,585 308,567 328,585" fill="#b45309" stroke="#78350f" strokeWidth="1.5" />
-                <rect x="293" y="585" width="30" height="24" fill="#fed7aa" stroke="#78350f" strokeWidth="1.5" />
-                <rect x="304" y="593" width="8" height="16" fill="#b45309" />
-
-                {/* Labels */}
-                <text x="215" y="500" textAnchor="middle" fill="#78350f" fontSize="13" fontWeight="700" fontFamily="Prompt">บ้านพักครู</text>
-                <text x="220" y="605" textAnchor="middle" fill="#78350f" fontSize="13" fontWeight="700" fontFamily="Prompt">บ้านพักครู</text>
-              </g>
-
-              {/* Group: Kindergarten (อนุบาล & ห้อง/โซน ผอ. & ต้นไม้ใหญ่) */}
-              <g 
-                className={`svg-zone ${selectedZone === 'kindergarten' ? 'active-zone' : ''}`}
-                onClick={() => setSelectedZone('kindergarten')}
-              >
-                {/* Big Tree next to Kindergarten (ต้นไม้ใหญ่) */}
-                <g>
-                  {/* Tree trunk */}
-                  <rect x="326" y="325" width="10" height="28" fill="#78350f" rx="2" />
-                  {/* Lush tree canopy */}
-                  <circle cx="331" cy="305" r="22" fill="#86efac" stroke="#16a34a" strokeWidth="2.5" />
-                  <circle cx="318" cy="295" r="16" fill="#bbf7d0" stroke="#16a34a" strokeWidth="2" />
-                  <circle cx="344" cy="295" r="16" fill="#bbf7d0" stroke="#16a34a" strokeWidth="2" />
-                  {/* Arrow and label: ต้นไม้ใหญ่ */}
-                  <path d="M 331 350 L 331 370 M 331 350 L 326 358 M 331 350 L 336 358" stroke="#16a34a" strokeWidth="2" fill="none" />
-                  <text x="331" y="386" textAnchor="middle" fill="#15803d" fontSize="11" fontWeight="600" fontFamily="Prompt">ต้นไม้ใหญ่</text>
-                </g>
-
-                {/* Kindergarten Main Building (อนุบาล - Pink/Red) */}
-                <rect x="240" y="240" width="65" height="85" fill="#fca5a5" rx="8" stroke="#dc2626" strokeWidth="2.5" filter="url(#soft-shadow)" />
-                <rect x="248" y="248" width="49" height="30" fill="#fee2e2" rx="4" />
-                <text x="272" y="288" textAnchor="middle" fill="#991b1b" fontSize="13" fontWeight="700" fontFamily="Prompt">อนุบาล</text>
-
-                {/* Director Area structure below kindergarten (ของ ผอ.) */}
-                <rect x="244" y="325" width="57" height="52" fill="#f8fafc" rx="4" stroke="#64748b" strokeWidth="1.8" />
-                <line x1="244" y1="350" x2="301" y2="350" stroke="#cbd5e1" strokeWidth="1.5" />
+                {/* ---------------------------------------------------- */}
+                {/* 2. ROAD NETWORK & PEDESTRIAN ZEBRA CROSSING */}
+                {/* ---------------------------------------------------- */}
                 
-                {/* Arrow and label: ของ ผอ. */}
-                <path d="M 235 348 Q 215 345 220 330" fill="none" stroke="#334155" strokeWidth="2" />
-                <polygon points="233,344 238,349 231,351" fill="#334155" />
-                <text x="205" y="322" textAnchor="middle" fill="#334155" fontSize="12" fontWeight="700" fontFamily="Prompt">ของ ผอ.</text>
-              </g>
+                {/* Vertical Main Road */}
+                <rect x="365" y="140" width="50" height="510" fill="url(#asphalt-grad)" rx="2" filter="url(#iso-shadow)" />
+                {/* Road dashed lane */}
+                <line x1="390" y1="170" x2="390" y2="620" stroke="#f8fafc" strokeWidth="2.5" strokeDasharray="14 12" opacity={isNightMode ? "0.4" : "0.85"} />
+
+                {/* Horizontal North Road */}
+                <rect x="365" y="210" width="580" height="46" fill="url(#asphalt-grad)" rx="2" filter="url(#iso-shadow)" />
+                <line x1="415" y1="233" x2="930" y2="233" stroke="#f8fafc" strokeWidth="2.5" strokeDasharray="16 12" opacity={isNightMode ? "0.4" : "0.85"} />
+
+                {/* Road Intersection Corner Smooth */}
+                <rect x="365" y="210" width="50" height="46" fill="url(#asphalt-grad)" />
+
+                {/* Pedestrian Zebra Crossing near Gate */}
+                <g opacity={isNightMode ? "0.6" : "0.9"}>
+                  <rect x="368" y="580" width="44" height="4" fill="#ffffff" />
+                  <rect x="368" y="588" width="44" height="4" fill="#ffffff" />
+                  <rect x="368" y="596" width="44" height="4" fill="#ffffff" />
+                  <rect x="368" y="604" width="44" height="4" fill="#ffffff" />
+                </g>
+
+                {/* Night Street Light Cones */}
+                {isNightMode && (
+                  <g opacity="0.35">
+                    <circle cx="390" cy="233" r="60" fill="#fef08a" filter="url(#light-beam)" />
+                    <circle cx="390" cy="420" r="50" fill="#fef08a" filter="url(#light-beam)" />
+                    <circle cx="680" cy="233" r="65" fill="#fef08a" filter="url(#light-beam)" />
+                  </g>
+                )}
 
 
-              {/* ---------------------------------------------------- */}
-              {/* 5. PLAYGROUND & TREE ROW (EAST OF ROAD, WEST OF FIELD) */}
-              {/* ---------------------------------------------------- */}
-
-              {/* Group: Playground (สนามเด็กเล่น BBL) */}
-              <g 
-                className={`svg-zone ${selectedZone === 'playground' ? 'active-zone' : ''}`}
-                onClick={() => setSelectedZone('playground')}
-              >
-                {/* Playground Purple Long Strip */}
-                <rect x="388" y="295" width="40" height="175" fill="#e9d5ff" rx="14" stroke="#a855f7" strokeWidth="2" filter="url(#soft-shadow)" />
-                {/* Rotated text for long strip */}
-                <text 
-                  x="408" 
-                  y="385" 
-                  textAnchor="middle" 
-                  fill="#7e22ce" 
-                  fontSize="12" 
-                  fontWeight="700" 
-                  fontFamily="Prompt"
-                  transform="rotate(-90 408 385)"
+                {/* ---------------------------------------------------- */}
+                {/* 3. SOUTH BOUNDARY: GATE, SCHOOL SIGN & FENCE */}
+                {/* ---------------------------------------------------- */}
+                
+                <g 
+                  className={`zone-item ${selectedZone === 'gate_fence' ? 'active-zone' : ''}`}
+                  onClick={() => setSelectedZone('gate_fence')}
+                  filter={selectedZone === 'gate_fence' ? 'url(#active-beacon-glow)' : 'none'}
                 >
-                  สนามเด็กเล่น
-                </text>
+                  {/* Gate Entrance with 3D Pillars */}
+                  <rect x="352" y="618" width="14" height="28" fill="#1e293b" rx="2" />
+                  <rect x="414" y="618" width="14" height="28" fill="#1e293b" rx="2" />
+                  {/* Double Wrought Iron Gates */}
+                  <rect x="366" y="622" width="22" height="20" fill="none" stroke="#94a3b8" strokeWidth="2.5" />
+                  <line x1="377" y1="622" x2="377" y2="642" stroke="#94a3b8" strokeWidth="2" />
+                  <rect x="392" y="622" width="22" height="20" fill="none" stroke="#94a3b8" strokeWidth="2.5" />
+                  <line x1="403" y1="622" x2="403" y2="642" stroke="#94a3b8" strokeWidth="2" />
 
-                {/* Swings / seesaw playful decorations */}
-                <circle cx="408" cy="315" r="4" fill="#a855f7" />
-                <circle cx="408" cy="455" r="4" fill="#a855f7" />
+                  {/* School Sign Granite Plaque with Gold Trim */}
+                  <rect x="432" y="615" width="80" height="28" fill="#0b2545" rx="4" stroke="#e5b326" strokeWidth="2.5" filter="url(#iso-shadow)" />
+                  <rect x="436" y="619" width="72" height="20" fill="#163964" rx="2" />
+                  <text x="472" y="633" textAnchor="middle" fill="#fde047" fontSize="10" fontWeight="800" fontFamily="Prompt">ป้าย รร.</text>
 
-                {/* Line of 7 Trees along the road */}
-                <g>
-                  {[305, 335, 365, 395, 425, 455, 485].map((yVal, idx) => (
-                    <g key={idx}>
-                      <circle cx="380" cy={yVal} r="10" fill="#4ade80" stroke="#16a34a" strokeWidth="2" />
-                      <circle cx="377" cy={yVal - 3} r="3" fill="#bbf7d0" />
+                  {/* Boundary Fence with Concrete Posts */}
+                  <line x1="516" y1="628" x2="940" y2="628" stroke="#94a3b8" strokeWidth="5" strokeLinecap="round" />
+                  {[540, 600, 660, 720, 780, 840, 900].map(xP => (
+                    <rect key={xP} x={xP} y="621" width="8" height="16" fill="#64748b" rx="1" />
+                  ))}
+
+                  {/* Shaded Lush Trees along Fence */}
+                  <g>
+                    <circle cx="690" cy="610" r="18" fill="#15803d" />
+                    <circle cx="688" cy="607" r="15" fill="#22c55e" />
+                    <circle cx="715" cy="605" r="22" fill="#15803d" />
+                    <circle cx="712" cy="601" r="19" fill="#4ade80" />
+                    <circle cx="740" cy="608" r="16" fill="#22c55e" />
+
+                    <circle cx="840" cy="610" r="18" fill="#15803d" />
+                    <circle cx="838" cy="607" r="15" fill="#22c55e" />
+                    <circle cx="865" cy="605" r="22" fill="#15803d" />
+                    <circle cx="862" cy="601" r="19" fill="#4ade80" />
+                    <circle cx="890" cy="608" r="16" fill="#22c55e" />
+                  </g>
+
+                  {showLabels && (
+                    <>
+                      <text x="390" y="665" textAnchor="middle" fill={isNightMode ? "#f8fafc" : "#1e293b"} fontSize="12" fontWeight="700" fontFamily="Prompt">ประตูโรงเรียน</text>
+                      <text x="472" y="665" textAnchor="middle" fill="#e5b326" fontSize="12" fontWeight="700" fontFamily="Prompt">ป้ายโรงเรียน</text>
+                      <text x="790" y="665" textAnchor="middle" fill="#64748b" fontSize="12" fontWeight="600" fontFamily="Prompt">รั้วโรงเรียน & ทิวไม้</text>
+                    </>
+                  )}
+                </g>
+
+
+                {/* ---------------------------------------------------- */}
+                {/* 4. WEST COMPLEX: 5 TEACHER COTTAGES & KINDERGARTEN */}
+                {/* ---------------------------------------------------- */}
+
+                {/* 4.1 Teachers Cottages (บ้านพักครู 5 หลัง) */}
+                <g 
+                  className={`zone-item ${selectedZone === 'teachers_housing' ? 'active-zone' : ''}`}
+                  onClick={() => setSelectedZone('teachers_housing')}
+                  filter={selectedZone === 'teachers_housing' ? 'url(#active-beacon-glow)' : 'none'}
+                >
+                  {/* Shaded Village Compound Border */}
+                  <rect x="180" y="420" width="170" height="205" fill={selectedZone === 'teachers_housing' ? 'rgba(180,83,9,0.1)' : 'transparent'} rx="12" stroke={selectedZone === 'teachers_housing' ? '#b45309' : 'transparent'} strokeWidth="1.5" strokeDasharray="5 5" />
+
+                  {/* 5 Distinct Cottages with 3D Depth */}
+                  {[
+                    { x: 220, y: 430, label: '1' },
+                    { x: 285, y: 430, label: '2' },
+                    { x: 285, y: 495, label: '3' },
+                    { x: 225, y: 540, label: '4' },
+                    { x: 295, y: 575, label: '5' }
+                  ].map((h, i) => (
+                    <g key={i} filter="url(#iso-shadow)">
+                      {/* Chimney */}
+                      <rect x={h.x + 22} y={h.y - 8} width="5" height="12" fill="#78350f" />
+                      {/* 3D Pitched Roof */}
+                      <polygon points={`${h.x},${h.y + 16} ${h.x + 18},${h.y} ${h.x + 36},${h.y + 16}`} fill="#b45309" stroke="#78350f" strokeWidth="1.5" />
+                      {/* Front Facade */}
+                      <rect x={h.x + 3} y={h.y + 16} width="30" height="22" fill={isNightMode ? "#78350f" : "#fed7aa"} stroke="#78350f" strokeWidth="1.5" />
+                      {/* Glowing Window or Door */}
+                      <rect x={h.x + 8} y={h.y + 20} width="8" height="8" fill={isNightMode ? "#fef08a" : "#60a5fa"} rx="1" />
+                      <rect x={h.x + 20} y={h.y + 24} width="8" height="14" fill="#78350f" />
                     </g>
                   ))}
-                </g>
-              </g>
 
-
-              {/* ---------------------------------------------------- */}
-              {/* 6. CENTRAL QUAD: FOOTBALL FIELD & VOLLEYBALL COURT */}
-              {/* ---------------------------------------------------- */}
-
-              {/* Group: Football Field (สนามบอลใหญ่) */}
-              <g 
-                className={`svg-zone ${selectedZone === 'football' ? 'active-zone' : ''}`}
-                onClick={() => setSelectedZone('football')}
-              >
-                {/* Grass Boundary Container */}
-                <rect x="445" y="270" width="375" height="205" fill="#4ade80" rx="12" stroke="#15803d" strokeWidth="3" filter="url(#soft-shadow)" />
-                
-                {/* Outer Field Lines */}
-                <rect x="458" y="280" width="349" height="185" fill="#22c55e" stroke="#ffffff" strokeWidth="2.5" rx="6" />
-
-                {/* Center Line */}
-                <line x1="632" y1="280" x2="632" y2="465" stroke="#ffffff" strokeWidth="2.5" />
-                
-                {/* Center Circle */}
-                <circle cx="632" cy="372" r="38" fill="none" stroke="#ffffff" strokeWidth="2.5" />
-                <circle cx="632" cy="372" r="3.5" fill="#ffffff" />
-
-                {/* Left Penalty Box */}
-                <rect x="458" y="322" width="60" height="100" fill="none" stroke="#ffffff" strokeWidth="2.5" />
-                <rect x="458" y="342" width="25" height="60" fill="none" stroke="#ffffff" strokeWidth="2.5" />
-                <circle cx="500" cy="372" r="2.5" fill="#ffffff" />
-
-                {/* Right Penalty Box */}
-                <rect x="747" y="322" width="60" height="100" fill="none" stroke="#ffffff" strokeWidth="2.5" />
-                <rect x="782" y="342" width="25" height="60" fill="none" stroke="#ffffff" strokeWidth="2.5" />
-                <circle cx="765" cy="372" r="2.5" fill="#ffffff" />
-
-                {/* Corner Arcs */}
-                <path d="M 458 290 A 10 10 0 0 0 468 280" fill="none" stroke="#ffffff" strokeWidth="2" />
-                <path d="M 458 455 A 10 10 0 0 1 468 465" fill="none" stroke="#ffffff" strokeWidth="2" />
-                <path d="M 807 290 A 10 10 0 0 1 797 280" fill="none" stroke="#ffffff" strokeWidth="2" />
-                <path d="M 807 455 A 10 10 0 0 0 797 465" fill="none" stroke="#ffffff" strokeWidth="2" />
-
-                {/* Large Text in center */}
-                <text x="632" y="378" textAnchor="middle" fill="#064e3b" fontSize="18" fontWeight="800" fontFamily="Prompt" filter="drop-shadow(0 1px 2px rgba(255,255,255,0.7))">สนามบอล</text>
-              </g>
-
-              {/* Group: Volleyball Court (สนามวอลเลย์บอล) */}
-              <g 
-                className={`svg-zone ${selectedZone === 'volleyball' ? 'active-zone' : ''}`}
-                onClick={() => setSelectedZone('volleyball')}
-              >
-                {/* Court Container */}
-                <rect x="495" y="495" width="88" height="75" fill="#86efac" rx="6" stroke="#15803d" strokeWidth="2" filter="url(#soft-shadow)" />
-                {/* Court Infield */}
-                <rect x="503" y="503" width="72" height="59" fill="#a7f3d0" stroke="#ffffff" strokeWidth="2" />
-                {/* Net center line */}
-                <line x1="539" y1="503" x2="539" y2="562" stroke="#059669" strokeWidth="3" strokeDasharray="3 2" />
-                {/* Attack lines */}
-                <line x1="527" y1="503" x2="527" y2="562" stroke="#ffffff" strokeWidth="1.5" />
-                <line x1="551" y1="503" x2="551" y2="562" stroke="#ffffff" strokeWidth="1.5" />
-
-                {/* Text vertical */}
-                <text x="517" y="536" textAnchor="middle" fill="#065f46" fontSize="10" fontWeight="700" fontFamily="Prompt" transform="rotate(-90 517 536)">สนาม</text>
-                <text x="539" y="536" textAnchor="middle" fill="#047857" fontSize="10" fontWeight="700" fontFamily="Prompt" transform="rotate(-90 539 536)">วอลเลย์</text>
-                <text x="561" y="536" textAnchor="middle" fill="#065f46" fontSize="10" fontWeight="700" fontFamily="Prompt" transform="rotate(-90 561 536)">บอล</text>
-              </g>
-
-
-              {/* ---------------------------------------------------- */}
-              {/* 7. NORTH SIDE OF FIELD: FLAGPOLE & BUDDHA STATUE */}
-              {/* ---------------------------------------------------- */}
-
-              {/* Group: Flagpole & Buddha Statue */}
-              <g 
-                className={`svg-zone ${selectedZone === 'flagpole_shrine' ? 'active-zone' : ''}`}
-                onClick={() => setSelectedZone('flagpole_shrine')}
-              >
-                {/* Flagpole (เสาธง) */}
-                <g>
-                  {/* Base & Pole */}
-                  <rect x="585" y="196" width="3" height="24" fill="#334155" />
-                  <circle cx="586.5" cy="195" r="3.5" fill="#e5b326" />
-                  {/* Thai Flag Waving */}
-                  <rect x="588" y="197" width="18" height="3.5" fill="#ef4444" />
-                  <rect x="588" y="200.5" width="18" height="3" fill="#ffffff" />
-                  <rect x="588" y="203.5" width="18" height="5" fill="#1e3a8a" />
-                  <rect x="588" y="208.5" width="18" height="3" fill="#ffffff" />
-                  <rect x="588" y="211.5" width="18" height="3.5" fill="#ef4444" />
-                  {/* Arrow & label: เสาธง */}
-                  <path d="M 586 230 L 586 216 M 586 216 L 582 221 M 586 216 L 590 221" stroke="#1e293b" strokeWidth="2" fill="none" />
-                  <text x="586" y="244" textAnchor="middle" fill="#1e293b" fontSize="12" fontWeight="700" fontFamily="Prompt">เสาธง</text>
+                  {showLabels && (
+                    <>
+                      <text x="220" y="500" textAnchor="middle" fill="#b45309" fontSize="13" fontWeight="800" fontFamily="Prompt">บ้านพักครู</text>
+                      <text x="230" y="605" textAnchor="middle" fill="#b45309" fontSize="13" fontWeight="800" fontFamily="Prompt">บ้านพักครู</text>
+                    </>
+                  )}
                 </g>
 
-                {/* Buddha Statue (พระพุทธรูป) */}
-                <g>
-                  {/* Pedestal & Statue silhouette */}
-                  <rect x="635" y="202" width="20" height="6" fill="#78350f" rx="1" />
-                  <path d="M 640 202 C 640 196, 642 192, 645 190 C 648 192, 650 196, 650 202 Z" fill="#d97706" />
-                  <circle cx="645" cy="189" r="3.5" fill="#e5b326" />
-                  <circle cx="645" cy="189" r="6" fill="#fef08a" opacity="0.4" />
-                  {/* Arrow & label: พระพุทธรูป */}
-                  <path d="M 650 230 L 646 215 M 646 215 L 643 220 M 646 215 L 650 220" stroke="#1e293b" strokeWidth="2" fill="none" />
-                  <text x="655" y="244" textAnchor="middle" fill="#1e293b" fontSize="12" fontWeight="700" fontFamily="Prompt">พระพุทธรูป</text>
+                {/* 4.2 Kindergarten & Heritage Tree (อนุบาล & ต้นไม้ใหญ่ & ของ ผอ.) */}
+                <g 
+                  className={`zone-item ${selectedZone === 'kindergarten' ? 'active-zone' : ''}`}
+                  onClick={() => setSelectedZone('kindergarten')}
+                  filter={selectedZone === 'kindergarten' ? 'url(#active-beacon-glow)' : 'none'}
+                >
+                  {/* Big Heritage Tree (ต้นไม้ใหญ่) */}
+                  <g filter="url(#iso-shadow)">
+                    {/* Shadow on ground */}
+                    <ellipse cx="334" cy="355" rx="28" ry="12" fill="#000000" opacity={isNightMode ? "0.4" : "0.15"} />
+                    {/* Trunk with bark details */}
+                    <rect x="328" y="325" width="12" height="32" fill="#78350f" rx="3" />
+                    {/* Volumetric Layered Leaves */}
+                    <circle cx="334" cy="310" r="26" fill="#15803d" />
+                    <circle cx="320" cy="298" r="20" fill="#22c55e" />
+                    <circle cx="348" cy="298" r="20" fill="#4ade80" />
+                    <circle cx="334" cy="285" r="18" fill="#86efac" />
+                    {showLabels && (
+                      <text x="334" y="380" textAnchor="middle" fill="#15803d" fontSize="12" fontWeight="700" fontFamily="Prompt">ต้นไม้ใหญ่</text>
+                    )}
+                  </g>
+
+                  {/* Kindergarten Building 3D Extrusion */}
+                  <g filter="url(#iso-shadow)">
+                    {/* 3D Wall Side Shadow */}
+                    <rect x="236" y="240" width="70" height="85" fill="#dc2626" rx="8" />
+                    {/* Roof Facet */}
+                    <rect x="236" y="235" width="70" height="40" fill="url(#b2-roof-grad)" rx="8" />
+                    {/* Front Wall */}
+                    <rect x="240" y="255" width="62" height="65" fill={isNightMode ? "#450a0a" : "#fee2e2"} rx="4" />
+                    {/* Windows with Day/Night Lighting */}
+                    <rect x="246" y="265" width="22" height="16" fill={isNightMode ? "#fef08a" : "#93c5fd"} rx="2" />
+                    <rect x="274" y="265" width="22" height="16" fill={isNightMode ? "#fef08a" : "#93c5fd"} rx="2" />
+                    <text x="271" y="302" textAnchor="middle" fill="#991b1b" fontSize="14" fontWeight="800" fontFamily="Prompt">อนุบาล</text>
+                  </g>
+
+                  {/* Director's Compound / Office below (ของ ผอ.) */}
+                  <g filter="url(#iso-shadow)">
+                    <rect x="240" y="325" width="62" height="52" fill={isNightMode ? "#1e293b" : "#ffffff"} rx="6" stroke="#94a3b8" strokeWidth="2" />
+                    <line x1="240" y1="351" x2="302" y2="351" stroke="#cbd5e1" strokeWidth="1.5" />
+                    <rect x="248" y="331" width="46" height="14" fill={isNightMode ? "#fef08a" : "#f1f5f9"} rx="2" />
+                    {showLabels && (
+                      <>
+                        <path d="M 235 348 Q 215 345 220 330" fill="none" stroke={isNightMode ? "#cbd5e1" : "#334155"} strokeWidth="2" />
+                        <polygon points="233,344 238,349 231,351" fill={isNightMode ? "#cbd5e1" : "#334155"} />
+                        <text x="200" y="322" textAnchor="middle" fill={isNightMode ? "#f1f5f9" : "#334155"} fontSize="12" fontWeight="700" fontFamily="Prompt">ของ ผอ.</text>
+                      </>
+                    )}
+                  </g>
                 </g>
-              </g>
 
 
-              {/* ---------------------------------------------------- */}
-              {/* 8. TOP ROW BUILDINGS (ALONG THE NORTH INTERNAL ROAD) */}
-              {/* ---------------------------------------------------- */}
+                {/* ---------------------------------------------------- */}
+                {/* 5. PLAYGROUND & 7 TREE BOULEVARD */}
+                {/* ---------------------------------------------------- */}
 
-              {/* 8.1 Welfare Shop (ร้านค้าสวัสดิการ) */}
-              <g 
-                className={`svg-zone ${selectedZone === 'welfare' ? 'active-zone' : ''}`}
-                onClick={() => setSelectedZone('welfare')}
-              >
-                <rect x="388" y="142" width="50" height="54" fill="#e9d5ff" rx="6" stroke="#9333ea" strokeWidth="2" filter="url(#soft-shadow)" />
-                <rect x="393" y="146" width="40" height="18" fill="#f3e8ff" rx="3" />
-                <text x="413" y="172" textAnchor="middle" fill="#6b21a8" fontSize="10" fontWeight="700" fontFamily="Prompt">ร้านค้า</text>
-                <text x="413" y="184" textAnchor="middle" fill="#6b21a8" fontSize="9" fontWeight="700" fontFamily="Prompt">สวัสดิการ</text>
-              </g>
+                <g 
+                  className={`zone-item ${selectedZone === 'playground' ? 'active-zone' : ''}`}
+                  onClick={() => setSelectedZone('playground')}
+                  filter={selectedZone === 'playground' ? 'url(#active-beacon-glow)' : 'none'}
+                >
+                  {/* BBL Soft Purple Rubber Safety Flooring */}
+                  <rect x="392" y="295" width="44" height="185" fill={isNightMode ? "#581c87" : "#e9d5ff"} rx="16" stroke="#a855f7" strokeWidth="2.5" filter="url(#iso-shadow)" />
 
-              {/* 8.2 Restroom 1 (ห้องน้ำ โซนร้านสวัสดิการ) */}
-              <g 
-                className={`svg-zone ${selectedZone === 'restroom1' ? 'active-zone' : ''}`}
-                onClick={() => setSelectedZone('restroom1')}
-              >
-                <rect x="397" y="94" width="34" height="34" fill="#fed7aa" rx="5" stroke="#ea580c" strokeWidth="2" filter="url(#soft-shadow)" />
-                {/* Arrow pointing up */}
-                <path d="M 405 138 Q 400 120 412 116" fill="none" stroke="#ea580c" strokeWidth="1.8" />
-                <text x="414" y="85" textAnchor="middle" fill="#c2410c" fontSize="11" fontWeight="700" fontFamily="Prompt">ห้องน้ำ</text>
-              </g>
+                  {/* Play Equipment Visuals: Slide, Swings, Hopscotch */}
+                  <circle cx="414" cy="315" r="7" fill="#ef4444" />
+                  <rect x="411" y="322" width="6" height="16" fill="#f59e0b" rx="2" />
+                  <line x1="404" y1="445" x2="424" y2="445" stroke="#3b82f6" strokeWidth="3" />
+                  <line x1="407" y1="448" x2="407" y2="465" stroke="#64748b" strokeWidth="2" />
+                  <line x1="421" y1="448" x2="421" y2="465" stroke="#64748b" strokeWidth="2" />
 
-              {/* 8.3 Canteen (โรงอาหาร) */}
-              <g 
-                className={`svg-zone ${selectedZone === 'canteen' ? 'active-zone' : ''}`}
-                onClick={() => setSelectedZone('canteen')}
-              >
-                <rect x="448" y="125" width="56" height="71" fill="#fed7aa" rx="6" stroke="#ea580c" strokeWidth="2.5" filter="url(#soft-shadow)" />
-                <rect x="453" y="130" width="46" height="24" fill="#ffedd5" rx="3" />
-                <text x="476" y="166" textAnchor="middle" fill="#9a3412" fontSize="13" fontWeight="700" fontFamily="Prompt">โรง</text>
-                <text x="476" y="184" textAnchor="middle" fill="#9a3412" fontSize="13" fontWeight="700" fontFamily="Prompt">อาหาร</text>
-              </g>
+                  {showLabels && (
+                    <text 
+                      x="414" 
+                      y="395" 
+                      textAnchor="middle" 
+                      fill="#6b21a8" 
+                      fontSize="13" 
+                      fontWeight="800" 
+                      fontFamily="Prompt"
+                      transform="rotate(-90 414 395)"
+                    >
+                      สนามเด็กเล่น BBL
+                    </text>
+                  )}
 
-              {/* 8.4 Building 1 (อาคาร 1 - Main Large Building) */}
-              <g 
-                className={`svg-zone ${selectedZone === 'b1' ? 'active-zone' : ''}`}
-                onClick={() => setSelectedZone('b1')}
-              >
-                <rect x="514" y="122" width="168" height="74" fill="#d8b4fe" rx="8" stroke="#7e22ce" strokeWidth="3" filter="url(#soft-shadow)" />
-                <rect x="522" y="130" width="152" height="20" fill="#f3e8ff" rx="4" />
-                {/* Small windows pattern */}
-                <g fill="#c084fc">
-                  <rect x="526" y="134" width="16" height="12" rx="2" />
-                  <rect x="548" y="134" width="16" height="12" rx="2" />
-                  <rect x="570" y="134" width="16" height="12" rx="2" />
-                  <rect x="618" y="134" width="16" height="12" rx="2" />
-                  <rect x="640" y="134" width="16" height="12" rx="2" />
-                  <rect x="652" y="134" width="16" height="12" rx="2" />
+                  {/* 7 Lush Shade Trees along the road */}
+                  <g>
+                    {[305, 335, 365, 395, 425, 455, 485].map((yT, idx) => (
+                      <g key={idx} filter="url(#iso-shadow)">
+                        <circle cx="380" cy={yT} r="12" fill="#15803d" />
+                        <circle cx="377" cy={yT - 3} r="9" fill="#22c55e" />
+                        <circle cx="375" cy={yT - 5} r="4" fill="#86efac" />
+                      </g>
+                    ))}
+                  </g>
                 </g>
-                <text x="598" y="172" textAnchor="middle" fill="#581c87" fontSize="18" fontWeight="800" fontFamily="Prompt">อาคาร 1</text>
-              </g>
 
-              {/* 8.5 Building 2 (อาคาร 2) */}
-              <g 
-                className={`svg-zone ${selectedZone === 'b2' ? 'active-zone' : ''}`}
-                onClick={() => setSelectedZone('b2')}
-              >
-                <rect x="692" y="122" width="80" height="74" fill="#fca5a5" rx="7" stroke="#dc2626" strokeWidth="2.5" filter="url(#soft-shadow)" />
-                <rect x="698" y="128" width="68" height="20" fill="#fee2e2" rx="3" />
-                <text x="732" y="172" textAnchor="middle" fill="#991b1b" fontSize="15" fontWeight="700" fontFamily="Prompt">อาคาร 2</text>
-              </g>
 
-              {/* 8.6 Restroom 2 (ห้องน้ำ โซนอาคาร 2) */}
-              <g 
-                className={`svg-zone ${selectedZone === 'restroom2' ? 'active-zone' : ''}`}
-                onClick={() => setSelectedZone('restroom2')}
-              >
-                <rect x="782" y="118" width="62" height="78" fill="#bae6fd" rx="6" stroke="#0284c7" strokeWidth="2" filter="url(#soft-shadow)" />
-                <text x="813" y="158" textAnchor="middle" fill="#0369a1" fontSize="12" fontWeight="700" fontFamily="Prompt">ห้อง</text>
-                <text x="813" y="174" textAnchor="middle" fill="#0369a1" fontSize="12" fontWeight="700" fontFamily="Prompt">น้ำ</text>
-              </g>
+                {/* ---------------------------------------------------- */}
+                {/* 6. CENTRAL QUAD: STADIUM FOOTBALL FIELD & VOLLEYBALL */}
+                {/* ---------------------------------------------------- */}
 
-              {/* 8.7 Parking Lot (ลานจอดรถ) */}
-              <g 
-                className={`svg-zone ${selectedZone === 'parking' ? 'active-zone' : ''}`}
-                onClick={() => setSelectedZone('parking')}
-              >
-                <rect x="854" y="118" width="66" height="78" fill="#fbcfe8" rx="6" stroke="#db2777" strokeWidth="2" strokeDasharray="3 3" filter="url(#soft-shadow)" />
-                {/* Parking stalls lines */}
-                <line x1="864" y1="126" x2="898" y2="126" stroke="#db2777" strokeWidth="1.5" />
-                <line x1="864" y1="140" x2="898" y2="140" stroke="#db2777" strokeWidth="1.5" />
-                <line x1="864" y1="154" x2="898" y2="154" stroke="#db2777" strokeWidth="1.5" />
-                <text x="887" y="174" textAnchor="middle" fill="#9d174d" fontSize="10" fontWeight="700" fontFamily="Prompt">ลานจอดรถ</text>
-              </g>
+                {/* 6.1 Football Field (สนามบอลหญ้ามาตรฐาน) */}
+                <g 
+                  className={`zone-item ${selectedZone === 'football' ? 'active-zone' : ''}`}
+                  onClick={() => setSelectedZone('football')}
+                  filter={selectedZone === 'football' ? 'url(#active-beacon-glow)' : 'none'}
+                >
+                  {/* Field Surrounding Track Border */}
+                  <rect x="450" y="270" width="385" height="215" fill={isNightMode ? "#14532d" : "#15803d"} rx="16" filter="url(#iso-shadow)" />
+                  
+                  {/* FIFA Mowed Grass Pattern Infield */}
+                  <rect x="460" y="280" width="365" height="195" fill="url(#lawn-stripes)" rx="10" stroke="#ffffff" strokeWidth="2.5" />
 
-              {/* Compass Rose Accent */}
-              <g transform="translate(900, 50)" opacity="0.85">
-                <circle cx="0" cy="0" r="22" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.5" />
-                <polygon points="0,-18 5,-2 0,0" fill="#dc2626" />
-                <polygon points="0,-18 -5,-2 0,0" fill="#ef4444" />
-                <polygon points="0,18 5,2 0,0" fill="#64748b" />
-                <polygon points="0,18 -5,2 0,0" fill="#94a3b8" />
-                <text x="0" y="-22" textAnchor="middle" fill="#dc2626" fontSize="11" fontWeight="800">N</text>
-              </g>
+                  {/* Field Markings: Center line & circle */}
+                  <line x1="642" y1="280" x2="642" y2="475" stroke="#ffffff" strokeWidth="2.5" opacity="0.9" />
+                  <circle cx="642" cy="377" r="42" fill="none" stroke="#ffffff" strokeWidth="2.5" opacity="0.9" />
+                  <circle cx="642" cy="377" r="4" fill="#ffffff" />
 
-            </svg>
-          </div>
+                  {/* Left Penalty Box & 3D Goal */}
+                  <rect x="460" y="322" width="66" height="110" fill="none" stroke="#ffffff" strokeWidth="2.5" />
+                  <rect x="460" y="347" width="28" height="60" fill="none" stroke="#ffffff" strokeWidth="2.5" />
+                  {/* Left Goalpost 3D */}
+                  <rect x="450" y="352" width="10" height="50" fill="none" stroke="#ffffff" strokeWidth="3" />
 
-          {/* Quick Zone Jump Badges */}
-          <div className="zone-jump-bar">
-            <span className="jump-label"><MapPin size={14} /> เลือกดูสถานที่:</span>
-            <div className="jump-scroll-row">
-              {filteredZoneKeys.map(key => {
-                const z = campusZones[key];
-                const isSelected = selectedZone === key;
-                return (
-                  <button
-                    key={key}
-                    className={`jump-chip ${isSelected ? 'active' : ''}`}
-                    onClick={() => setSelectedZone(key)}
+                  {/* Right Penalty Box & 3D Goal */}
+                  <rect x="759" y="322" width="66" height="110" fill="none" stroke="#ffffff" strokeWidth="2.5" />
+                  <rect x="797" y="347" width="28" height="60" fill="none" stroke="#ffffff" strokeWidth="2.5" />
+                  {/* Right Goalpost 3D */}
+                  <rect x="825" y="352" width="10" height="50" fill="none" stroke="#ffffff" strokeWidth="3" />
+
+                  {/* 4 Corner Flags with Red Pennants */}
+                  <g>
+                    <polygon points="460,280 468,284 460,288" fill="#ef4444" />
+                    <polygon points="460,475 468,471 460,467" fill="#ef4444" />
+                    <polygon points="825,280 817,284 825,288" fill="#ef4444" />
+                    <polygon points="825,475 817,471 825,467" fill="#ef4444" />
+                  </g>
+
+                  {/* Stadium Title */}
+                  <text 
+                    x="642" 
+                    y="384" 
+                    textAnchor="middle" 
+                    fill="#ffffff" 
+                    fontSize="22" 
+                    fontWeight="800" 
+                    fontFamily="Prompt"
+                    filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))"
                   >
-                    <span className="chip-dot" style={{ backgroundColor: z.color }}></span>
-                    <span>{z.name.split(' (')[0]}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
+                    สนามบอล
+                  </text>
+                </g>
 
-        {/* Right: Rich Information Details Card */}
-        <div className="details-view-card">
-          <div className="details-header-banner" style={{ borderTopColor: currentZone.color }}>
-            <div className="d-flex align-items-center justify-content-between mb-2">
-              <span className="zone-badge" style={{ backgroundColor: `${currentZone.color}20`, color: currentZone.color, borderColor: currentZone.color }}>
-                {currentZone.badgeText}
-              </span>
-              <span className="area-text">พื้นที่: {currentZone.area}</span>
-            </div>
-            <h3 className="zone-title">{currentZone.name}</h3>
-            <p className="zone-title-en">{currentZone.nameEn}</p>
-            <p className="zone-type-badge">
-              <Building2 size={14} /> {currentZone.type}
-            </p>
-          </div>
+                {/* 6.2 Volleyball Court (สนามวอลเลย์บอล) */}
+                <g 
+                  className={`zone-item ${selectedZone === 'volleyball' ? 'active-zone' : ''}`}
+                  onClick={() => setSelectedZone('volleyball')}
+                  filter={selectedZone === 'volleyball' ? 'url(#active-beacon-glow)' : 'none'}
+                >
+                  <rect x="500" y="505" width="94" height="80" fill={isNightMode ? "#064e3b" : "#86efac"} rx="8" stroke="#15803d" strokeWidth="2.5" filter="url(#iso-shadow)" />
+                  <rect x="508" y="513" width="78" height="64" fill={isNightMode ? "#047857" : "#a7f3d0"} stroke="#ffffff" strokeWidth="2" />
+                  {/* 3D Net with Post */}
+                  <line x1="547" y1="510" x2="547" y2="580" stroke="#1e293b" strokeWidth="3" strokeDasharray="3 2" />
+                  <circle cx="547" cy="510" r="3" fill="#e5b326" />
+                  <circle cx="547" cy="580" r="3" fill="#e5b326" />
 
-          <div className="details-body">
-            <div className="info-block">
-              <h5 className="info-heading">
-                <Sparkles size={16} className="text-secondary" /> รายละเอียดและการใช้งาน:
-              </h5>
-              <p className="info-desc">{currentZone.desc}</p>
+                  {showLabels && (
+                    <>
+                      <text x="522" y="550" textAnchor="middle" fill="#065f46" fontSize="11" fontWeight="700" fontFamily="Prompt" transform="rotate(-90 522 550)">สนาม</text>
+                      <text x="547" y="550" textAnchor="middle" fill="#047857" fontSize="11" fontWeight="800" fontFamily="Prompt" transform="rotate(-90 547 550)">วอลเลย์</text>
+                      <text x="572" y="550" textAnchor="middle" fill="#065f46" fontSize="11" fontWeight="700" fontFamily="Prompt" transform="rotate(-90 572 550)">บอล</text>
+                    </>
+                  )}
+                </g>
+
+
+                {/* ---------------------------------------------------- */}
+                {/* 7. CEREMONIAL: NATIONAL FLAGPOLE & BUDDHA SHRINE */}
+                {/* ---------------------------------------------------- */}
+
+                <g 
+                  className={`zone-item ${selectedZone === 'flagpole_shrine' ? 'active-zone' : ''}`}
+                  onClick={() => setSelectedZone('flagpole_shrine')}
+                  filter={selectedZone === 'flagpole_shrine' ? 'url(#active-beacon-glow)' : 'none'}
+                >
+                  {/* Flagpole (เสาธง) */}
+                  <g filter="url(#iso-shadow)">
+                    {/* Multi-tier Marble Base */}
+                    <rect x="590" y="215" width="16" height="5" fill="#94a3b8" rx="1" />
+                    <rect x="597" y="190" width="3" height="28" fill="#e2e8f0" />
+                    <circle cx="598.5" cy="189" r="3" fill="#f59e0b" />
+                    {/* Waving Thai National Flag */}
+                    <path d="M 600 190 Q 610 188 622 192 L 622 208 Q 610 204 600 206 Z" fill="#ef4444" />
+                    <path d="M 600 193 Q 610 191 622 195 L 622 205 Q 610 201 600 203 Z" fill="#ffffff" />
+                    <path d="M 600 196 Q 610 194 622 198 L 622 202 Q 610 198 600 200 Z" fill="#1e3a8a" />
+                    
+                    {showLabels && (
+                      <>
+                        <path d="M 598 230 L 598 218 M 598 218 L 594 223 M 598 218 L 602 223" stroke={isNightMode ? "#cbd5e1" : "#1e293b"} strokeWidth="2" fill="none" />
+                        <text x="598" y="244" textAnchor="middle" fill={isNightMode ? "#f8fafc" : "#1e293b"} fontSize="12" fontWeight="800" fontFamily="Prompt">เสาธง</text>
+                      </>
+                    )}
+                  </g>
+
+                  {/* Buddha Shrine (พระพุทธรูป) */}
+                  <g filter="url(#iso-shadow)">
+                    {/* Pedestal & Golden Statue */}
+                    <rect x="650" y="202" width="22" height="8" fill="#78350f" rx="2" />
+                    <circle cx="661" cy="189" r="10" fill="#fef08a" opacity="0.5" filter="url(#light-beam)" />
+                    <path d="M 656 202 C 656 195, 658 190, 661 188 C 664 190, 666 195, 666 202 Z" fill="#d97706" />
+                    <circle cx="661" cy="187" r="4" fill="#fbbf24" />
+
+                    {showLabels && (
+                      <>
+                        <path d="M 661 230 L 661 218 M 661 218 L 657 223 M 661 218 L 665 223" stroke={isNightMode ? "#cbd5e1" : "#1e293b"} strokeWidth="2" fill="none" />
+                        <text x="661" y="244" textAnchor="middle" fill={isNightMode ? "#f8fafc" : "#1e293b"} fontSize="12" fontWeight="800" fontFamily="Prompt">พระพุทธรูป</text>
+                      </>
+                    )}
+                  </g>
+                </g>
+
+
+                {/* ---------------------------------------------------- */}
+                {/* 8. NORTH COMPLEX: THE MAIN ROW OF BUILDINGS */}
+                {/* ---------------------------------------------------- */}
+
+                {/* 8.1 Welfare Shop (ร้านค้าสวัสดิการ) */}
+                <g 
+                  className={`zone-item ${selectedZone === 'welfare' ? 'active-zone' : ''}`}
+                  onClick={() => setSelectedZone('welfare')}
+                  filter={selectedZone === 'welfare' ? 'url(#active-beacon-glow)' : 'none'}
+                >
+                  <rect x="390" y="140" width="54" height="60" fill={isNightMode ? "#4c1d95" : "#e9d5ff"} rx="7" stroke="#7e22ce" strokeWidth="2.5" filter="url(#iso-shadow)" />
+                  {/* Shop Awning Stripes */}
+                  <rect x="392" y="142" width="50" height="16" fill="#a855f7" rx="3" />
+                  <rect x="396" y="166" width="42" height="18" fill={isNightMode ? "#fde047" : "#ffffff"} rx="2" />
+                  <text x="417" y="174" textAnchor="middle" fill="#581c87" fontSize="10" fontWeight="800" fontFamily="Prompt">ร้านค้า</text>
+                  <text x="417" y="185" textAnchor="middle" fill="#581c87" fontSize="9" fontWeight="800" fontFamily="Prompt">สวัสดิการ</text>
+                </g>
+
+                {/* 8.2 Restroom 1 (ห้องน้ำ 1) */}
+                <g 
+                  className={`zone-item ${selectedZone === 'restroom1' ? 'active-zone' : ''}`}
+                  onClick={() => setSelectedZone('restroom1')}
+                  filter={selectedZone === 'restroom1' ? 'url(#active-beacon-glow)' : 'none'}
+                >
+                  <rect x="400" y="90" width="38" height="38" fill={isNightMode ? "#7c2d12" : "#fed7aa"} rx="6" stroke="#ea580c" strokeWidth="2.5" filter="url(#iso-shadow)" />
+                  <path d="M 408 135 Q 402 118 418 114" fill="none" stroke="#ea580c" strokeWidth="2" />
+                  <text x="419" y="80" textAnchor="middle" fill="#c2410c" fontSize="12" fontWeight="800" fontFamily="Prompt">ห้องน้ำ</text>
+                </g>
+
+                {/* 8.3 Canteen (โรงอาหาร สพฐ.) */}
+                <g 
+                  className={`zone-item ${selectedZone === 'canteen' ? 'active-zone' : ''}`}
+                  onClick={() => setSelectedZone('canteen')}
+                  filter={selectedZone === 'canteen' ? 'url(#active-beacon-glow)' : 'none'}
+                >
+                  <rect x="452" y="122" width="60" height="78" fill={isNightMode ? "#7c2d12" : "#fed7aa"} rx="8" stroke="#ea580c" strokeWidth="3" filter="url(#iso-shadow)" />
+                  {/* Canteen 3D Overhang Roof */}
+                  <rect x="450" y="118" width="64" height="24" fill="#f97316" rx="4" />
+                  {/* Dining Windows / Ambient glow */}
+                  <rect x="458" y="148" width="48" height="36" fill={isNightMode ? "#fef08a" : "#ffedd5"} rx="3" />
+                  <text x="482" y="166" textAnchor="middle" fill="#9a3412" fontSize="14" fontWeight="800" fontFamily="Prompt">โรง</text>
+                  <text x="482" y="184" textAnchor="middle" fill="#9a3412" fontSize="14" fontWeight="800" fontFamily="Prompt">อาหาร</text>
+                </g>
+
+                {/* 8.4 Building 1 (อาคาร 1 - Main Complex 2-Story) */}
+                <g 
+                  className={`zone-item ${selectedZone === 'b1' ? 'active-zone' : ''}`}
+                  onClick={() => setSelectedZone('b1')}
+                  filter={selectedZone === 'b1' ? 'url(#active-beacon-glow)' : 'none'}
+                >
+                  {/* 3D Extruded Wall Shadow */}
+                  <rect x="522" y="124" width="180" height="78" fill="#581c87" rx="10" />
+                  {/* 3D Sloped Tile Roof */}
+                  <rect x="522" y="116" width="180" height="36" fill="url(#b1-roof-grad)" rx="8" filter="url(#iso-shadow)" />
+                  {/* Front Facade */}
+                  <rect x="526" y="136" width="172" height="62" fill={isNightMode ? "#2e1065" : "#f3e8ff"} rx="6" />
+
+                  {/* 2nd Floor Windows Row */}
+                  <g fill={isNightMode ? "#fef08a" : "#c084fc"} filter={isNightMode ? "url(#light-beam)" : "none"}>
+                    <rect x="536" y="142" width="20" height="12" rx="3" />
+                    <rect x="564" y="142" width="20" height="12" rx="3" />
+                    <rect x="592" y="142" width="20" height="12" rx="3" />
+                    <rect x="620" y="142" width="20" height="12" rx="3" />
+                    <rect x="648" y="142" width="20" height="12" rx="3" />
+                    <rect x="670" y="142" width="20" height="12" rx="3" />
+                  </g>
+
+                  {/* Entrance Stairs & Name Plate */}
+                  <rect x="585" y="194" width="54" height="6" fill="#cbd5e1" rx="1" />
+                  <text 
+                    x="612" 
+                    y="180" 
+                    textAnchor="middle" 
+                    fill="#581c87" 
+                    fontSize="20" 
+                    fontWeight="900" 
+                    fontFamily="Prompt"
+                  >
+                    อาคาร 1
+                  </text>
+                </g>
+
+                {/* 8.5 Building 2 (อาคาร 2) */}
+                <g 
+                  className={`zone-item ${selectedZone === 'b2' ? 'active-zone' : ''}`}
+                  onClick={() => setSelectedZone('b2')}
+                  filter={selectedZone === 'b2' ? 'url(#active-beacon-glow)' : 'none'}
+                >
+                  <rect x="712" y="124" width="86" height="78" fill="#9f1239" rx="8" />
+                  <rect x="712" y="118" width="86" height="34" fill="url(#b2-roof-grad)" rx="6" filter="url(#iso-shadow)" />
+                  <rect x="716" y="136" width="78" height="62" fill={isNightMode ? "#4c0519" : "#fee2e2"} rx="4" />
+                  
+                  {/* Windows */}
+                  <rect x="724" y="144" width="24" height="12" fill={isNightMode ? "#fef08a" : "#fca5a5"} rx="2" />
+                  <rect x="760" y="144" width="24" height="12" fill={isNightMode ? "#fef08a" : "#fca5a5"} rx="2" />
+                  <text x="755" y="180" textAnchor="middle" fill="#991b1b" fontSize="16" fontWeight="800" fontFamily="Prompt">อาคาร 2</text>
+                </g>
+
+                {/* 8.6 Restroom 2 (ห้องน้ำ 2) */}
+                <g 
+                  className={`zone-item ${selectedZone === 'restroom2' ? 'active-zone' : ''}`}
+                  onClick={() => setSelectedZone('restroom2')}
+                  filter={selectedZone === 'restroom2' ? 'url(#active-beacon-glow)' : 'none'}
+                >
+                  <rect x="806" y="120" width="64" height="82" fill={isNightMode ? "#075985" : "#bae6fd"} rx="7" stroke="#0284c7" strokeWidth="2.5" filter="url(#iso-shadow)" />
+                  <text x="838" y="158" textAnchor="middle" fill="#0369a1" fontSize="13" fontWeight="800" fontFamily="Prompt">ห้อง</text>
+                  <text x="838" y="176" textAnchor="middle" fill="#0369a1" fontSize="13" fontWeight="800" fontFamily="Prompt">น้ำ</text>
+                </g>
+
+                {/* 8.7 Parking Complex with 3 Parked Cars (ลานจอดรถ) */}
+                <g 
+                  className={`zone-item ${selectedZone === 'parking' ? 'active-zone' : ''}`}
+                  onClick={() => setSelectedZone('parking')}
+                  filter={selectedZone === 'parking' ? 'url(#active-beacon-glow)' : 'none'}
+                >
+                  {/* Parking Asphalt Ground */}
+                  <rect x="878" y="120" width="70" height="82" fill={isNightMode ? "#500724" : "#fbcfe8"} rx="7" stroke="#db2777" strokeWidth="2" strokeDasharray="4 3" filter="url(#iso-shadow)" />
+                  
+                  {/* Parking Stall White Lines */}
+                  <line x1="886" y1="130" x2="925" y2="130" stroke="#db2777" strokeWidth="1.5" />
+                  <line x1="886" y1="150" x2="925" y2="150" stroke="#db2777" strokeWidth="1.5" />
+                  <line x1="886" y1="170" x2="925" y2="170" stroke="#db2777" strokeWidth="1.5" />
+
+                  {/* Cute Vector Cars Parked */}
+                  {/* Car 1: White School Van */}
+                  <rect x="892" y="124" width="28" height="12" fill="#ffffff" rx="3" stroke="#94a3b8" strokeWidth="1" />
+                  <rect x="898" y="126" width="8" height="8" fill="#38bdf8" rx="1" />
+                  {/* Car 2: Blue Sedan */}
+                  <rect x="892" y="144" width="26" height="11" fill="#3b82f6" rx="3" />
+                  <rect x="897" y="146" width="7" height="7" fill="#bae6fd" rx="1" />
+
+                  <text x="913" y="190" textAnchor="middle" fill="#9d174d" fontSize="11" fontWeight="800" fontFamily="Prompt">ลานจอดรถ</text>
+                </g>
+
+                {/* 3D Compass Rose in North-East */}
+                <g transform="translate(930, 50)" filter="url(#iso-shadow)">
+                  <circle cx="0" cy="0" r="24" fill={isNightMode ? "#1e293b" : "#ffffff"} stroke={isNightMode ? "#475569" : "#cbd5e1"} strokeWidth="2" />
+                  <polygon points="0,-20 6,-2 0,0" fill="#dc2626" />
+                  <polygon points="0,-20 -6,-2 0,0" fill="#ef4444" />
+                  <polygon points="0,20 6,2 0,0" fill="#64748b" />
+                  <polygon points="0,20 -6,2 0,0" fill="#94a3b8" />
+                  <circle cx="0" cy="0" r="4" fill="#ffffff" />
+                  <text x="0" y="-25" textAnchor="middle" fill="#dc2626" fontSize="12" fontWeight="900">N</text>
+                </g>
+
+              </svg>
             </div>
 
-            <div className="info-block mt-4">
-              <h5 className="info-heading">
-                <CheckCircle2 size={16} className="text-secondary" /> จุดเด่นและฟังก์ชันภายใน:
-              </h5>
-              <ul className="highlights-list">
-                {currentZone.highlights.map((item, idx) => (
-                  <li key={idx}>
-                    <ArrowRight size={14} className="bullet-arrow" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="school-safety-notice mt-4">
-              <div className="notice-icon">
-                <Compass size={20} />
+            {/* Quick Campus Zone Jump Ribbon */}
+            <div className="campus-jump-ribbon">
+              <span className="ribbon-label"><MapPin size={15} /> คลิกเลือกสถานที่:</span>
+              <div className="ribbon-scroll">
+                {filteredZoneKeys.map(key => {
+                  const z = campusZones[key];
+                  const isSelected = selectedZone === key;
+                  return (
+                    <button
+                      key={key}
+                      className={`ribbon-chip ${isSelected ? 'active' : ''}`}
+                      onClick={() => setSelectedZone(key)}
+                    >
+                      <span className="chip-indicator" style={{ backgroundColor: z.color }}></span>
+                      <span>{z.name.split(' (')[0]}</span>
+                    </button>
+                  );
+                })}
               </div>
-              <div className="notice-text">
-                <strong>โรงเรียนบ้านวังหัวแหวนพัฒนา</strong>
-                <p>มุ่งสร้างบรรยากาศและสภาพแวดล้อมที่สะอาด ปลอดภัย และเอื้อต่อการเรียนรู้ของนักเรียนทุกคน</p>
+            </div>
+          </div>
+
+          {/* Right Column: Ultra-Luxurious Facility Presentation Drawer */}
+          <div className="stage-details-panel glass-panel">
+            {/* Header with dynamic color banner */}
+            <div className="drawer-header" style={{ borderTopColor: currentZone.color }}>
+              <div className="d-flex align-items-center justify-content-between mb-2">
+                <span className="drawer-badge" style={{ backgroundColor: `${currentZone.color}25`, color: currentZone.color, borderColor: currentZone.color }}>
+                  {currentZone.badgeText}
+                </span>
+                <span className="drawer-area-badge">
+                  ขนาดพื้นที่: <strong>{currentZone.area}</strong>
+                </span>
+              </div>
+              <h3 className="drawer-title">{currentZone.name}</h3>
+              <p className="drawer-subtitle">{currentZone.nameEn}</p>
+              <div className="drawer-type-pill">
+                <Building2 size={14} /> {currentZone.type}
+              </div>
+            </div>
+
+            {/* Drawer Body Content */}
+            <div className="drawer-body">
+              <div className="content-segment">
+                <h5 className="segment-heading">
+                  <Sparkles size={16} className="text-secondary" /> วัตถุประสงค์และการใช้งาน:
+                </h5>
+                <p className="segment-desc">{currentZone.desc}</p>
+              </div>
+
+              <div className="content-segment mt-4">
+                <h5 className="segment-heading">
+                  <CheckCircle2 size={16} className="text-secondary" /> จุดเด่นและระบบภายใน:
+                </h5>
+                <ul className="drawer-checklist">
+                  {currentZone.highlights.map((h, i) => (
+                    <li key={i}>
+                      <ArrowRight size={14} className="bullet-gold" />
+                      <span>{h}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="content-segment mt-4">
+                <h5 className="segment-heading">
+                  <Layers size={16} className="text-secondary" /> สิ่งอำนวยความสะดวก:
+                </h5>
+                <div className="facilities-chips-grid">
+                  {currentZone.facilities.map((fac, i) => (
+                    <span key={i} className="facility-chip">
+                      {fac}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* School Quality Assurance Badge */}
+              <div className="school-guarantee-card mt-4">
+                <div className="guarantee-icon">
+                  <Trophy size={22} className="text-warning" />
+                </div>
+                <div className="guarantee-text">
+                  <strong>โรงเรียนบ้านวังหัวแหวนพัฒนา</strong>
+                  <p>สังกัด สพป.กำแพงเพชร เขต 2 มุ่งมั่นพัฒนาสภาพแวดล้อมที่สะอาด ปลอดภัย และทันสมัยสำหรับเยาวชนทุกคน</p>
+                </div>
               </div>
             </div>
           </div>
+
         </div>
 
       </div>
 
-      {/* Embedded Styles */}
+      {/* Scoped CSS for Campus Master Experience */}
       <style>{`
-        .campus-view {
-          min-height: 80vh;
+        .campus-view-wrapper {
+          transition: background-color 0.4s ease;
         }
 
-        .category-filters-row {
+        .campus-view-wrapper.mode-day {
+          background-color: var(--color-bg-body);
+        }
+
+        .campus-view-wrapper.mode-night {
+          background-color: #070d17;
+          color: #f1f5f9;
+        }
+
+        .section-tag-gold {
+          background: linear-gradient(135deg, rgba(229,179,38,0.2) 0%, rgba(245,158,11,0.1) 100%);
+          color: #b45309;
+          border: 1px solid rgba(229,179,38,0.4);
+          font-family: var(--font-heading);
+          font-size: 0.8rem;
+          font-weight: 700;
+          padding: 6px 16px;
+          border-radius: var(--radius-full);
+          letter-spacing: 0.8px;
+        }
+
+        .mode-night .section-tag-gold {
+          color: #fde047;
+          border-color: rgba(253,224,71,0.4);
+        }
+
+        .master-title {
+          font-size: 2rem;
+          font-weight: 800;
+          color: var(--color-primary);
+          margin-top: 6px;
+        }
+
+        .mode-night .master-title {
+          color: #ffffff;
+        }
+
+        .master-subtitle {
+          color: var(--color-text-muted);
+          font-size: 1.05rem;
+          max-width: 680px;
+          margin: 0 auto;
+        }
+
+        .mode-night .master-subtitle {
+          color: #94a3b8;
+        }
+
+        /* Controls Island */
+        .controls-island {
           display: flex;
-          gap: 10px;
-          justify-content: center;
+          justify-content: space-between;
+          align-items: center;
+          gap: 16px;
           flex-wrap: wrap;
         }
 
-        .cat-pill-btn {
+        .filters-group {
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+
+        .pill-btn {
           display: inline-flex;
           align-items: center;
-          gap: 8px;
-          padding: 8px 18px;
+          gap: 7px;
+          padding: 8px 16px;
           border-radius: var(--radius-full);
           border: 1px solid var(--color-border);
-          background-color: white;
+          background: white;
           color: var(--color-text-main);
           font-family: var(--font-heading);
-          font-size: 0.9rem;
-          font-weight: 500;
+          font-size: 0.88rem;
+          font-weight: 600;
           cursor: pointer;
           transition: all 0.2s ease;
           box-shadow: var(--shadow-sm);
         }
 
-        .cat-pill-btn:hover {
-          border-color: var(--color-secondary);
-          color: var(--color-primary);
-          transform: translateY(-1px);
+        .mode-night .pill-btn {
+          background: #111c2e;
+          border-color: #1e293b;
+          color: #cbd5e1;
         }
 
-        .cat-pill-btn.active {
+        .pill-btn:hover {
+          border-color: var(--color-secondary);
+          color: var(--color-primary);
+          transform: translateY(-2px);
+        }
+
+        .pill-btn.active {
           background-color: var(--color-primary);
           color: white;
           border-color: var(--color-primary);
-          box-shadow: 0 4px 12px rgba(11, 37, 69, 0.2);
+          box-shadow: 0 4px 14px rgba(11, 37, 69, 0.25);
         }
 
-        /* 2-Column Campus Layout */
-        .campus-grid-container {
+        .mode-night .pill-btn.active {
+          background-color: #3b82f6;
+          border-color: #3b82f6;
+          color: white;
+        }
+
+        .toggles-group {
+          display: flex;
+          gap: 10px;
+        }
+
+        .ambience-toggle-btn, .label-toggle-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 16px;
+          border-radius: var(--radius-full);
+          font-family: var(--font-heading);
+          font-size: 0.85rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          border: 1px solid var(--color-border);
+          background: white;
+          color: var(--color-text-main);
+        }
+
+        .mode-night .ambience-toggle-btn, .mode-night .label-toggle-btn {
+          background: #111c2e;
+          border-color: #1e293b;
+          color: #cbd5e1;
+        }
+
+        .ambience-toggle-btn:hover, .label-toggle-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: var(--shadow-sm);
+        }
+
+        /* 2-Column Stage Grid */
+        .campus-stage-grid {
           display: grid;
-          grid-template-columns: 1.8fr 1fr;
+          grid-template-columns: 1.85fr 1fr;
           gap: 28px;
           align-items: start;
         }
 
         @media (max-width: 1024px) {
-          .campus-grid-container {
+          .campus-stage-grid {
             grid-template-columns: 1fr;
           }
         }
 
-        /* Map View Card */
-        .map-view-card {
-          background: white;
+        /* Stage Canvas Panel */
+        .stage-canvas-panel {
           border-radius: var(--radius-lg);
-          border: 1px solid var(--color-border);
-          box-shadow: var(--shadow-md);
           overflow: hidden;
+          box-shadow: 0 16px 36px -10px rgba(11, 37, 69, 0.15);
         }
 
-        .map-card-topbar {
-          background: linear-gradient(135deg, var(--color-primary) 0%, #0f325d 100%);
+        .mode-night .stage-canvas-panel {
+          background: #0f1a2a;
+          border-color: #1e293b;
+        }
+
+        .canvas-header-bar {
+          background: linear-gradient(135deg, var(--color-primary) 0%, #153b68 100%);
           color: white;
           padding: 14px 20px;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          font-size: 0.9rem;
+          font-size: 0.88rem;
           font-family: var(--font-heading);
           border-bottom: 2px solid var(--color-secondary);
-          flex-wrap: wrap;
-          gap: 8px;
         }
 
-        .topbar-title {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          font-weight: 600;
-        }
-
-        .topbar-hint {
+        .selected-indicator {
           display: flex;
           align-items: center;
           gap: 6px;
+          color: #fde047;
           font-size: 0.85rem;
-          opacity: 0.95;
         }
 
-        .blueprint-canvas-wrapper {
-          background-color: #f8fafc;
+        .canvas-viewport {
           padding: 16px;
           display: flex;
           justify-content: center;
+          transition: background-color 0.4s ease;
         }
 
-        .campus-master-svg {
+        .canvas-viewport.day-ambient {
+          background: #f8fafc;
+        }
+
+        .canvas-viewport.night-ambient {
+          background: #080f1a;
+        }
+
+        .master-svg-canvas {
           width: 100%;
           height: auto;
-          max-height: 560px;
+          max-height: 600px;
           display: block;
         }
 
-        /* Interactive SVG Zone Styles */
-        .svg-zone {
+        /* Zone Items Interactive States */
+        .zone-item {
           cursor: pointer;
-          transition: all 0.2s ease-in-out;
+          transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.2s ease;
         }
 
-        .svg-zone:hover {
-          filter: brightness(1.06) drop-shadow(0 4px 10px rgba(11, 37, 69, 0.25));
+        .zone-item:hover {
+          filter: drop-shadow(0 4px 12px rgba(229,179,38,0.7)) brightness(1.08);
+          transform: translateY(-2px);
         }
 
-        .svg-zone.active-zone {
-          filter: drop-shadow(0 0 10px #e5b326) brightness(1.05);
+        .zone-item.active-zone {
+          transform: translateY(-2px);
         }
 
-        /* Zone Jump Bottom Bar */
-        .zone-jump-bar {
+        /* Jump Ribbon */
+        .campus-jump-ribbon {
           padding: 12px 18px;
-          background-color: #f8fafc;
+          background: rgba(248, 250, 252, 0.8);
           border-top: 1px solid var(--color-border);
           display: flex;
           align-items: center;
           gap: 12px;
         }
 
-        .jump-label {
-          font-size: 0.85rem;
-          font-weight: 600;
+        .mode-night .campus-jump-ribbon {
+          background: #0d1522;
+          border-color: #1e293b;
+        }
+
+        .ribbon-label {
+          font-size: 0.84rem;
+          font-weight: 700;
           color: var(--color-text-muted);
           white-space: nowrap;
           display: flex;
           align-items: center;
-          gap: 4px;
+          gap: 5px;
         }
 
-        .jump-scroll-row {
+        .ribbon-scroll {
           display: flex;
           gap: 8px;
           overflow-x: auto;
           padding-bottom: 4px;
-          scrollbar-width: thin;
         }
 
-        .jump-chip {
+        .ribbon-chip {
           display: inline-flex;
           align-items: center;
           gap: 6px;
@@ -987,101 +1321,137 @@ export default function CampusMap() {
           transition: all 0.15s ease;
         }
 
-        .jump-chip:hover {
+        .mode-night .ribbon-chip {
+          background: #111c2e;
+          border-color: #1e293b;
+          color: #cbd5e1;
+        }
+
+        .ribbon-chip:hover {
           border-color: var(--color-secondary);
         }
 
-        .jump-chip.active {
+        .ribbon-chip.active {
           background-color: var(--color-primary);
           color: white;
           border-color: var(--color-primary);
         }
 
-        .chip-dot {
+        .mode-night .ribbon-chip.active {
+          background-color: #3b82f6;
+          border-color: #3b82f6;
+          color: white;
+        }
+
+        .chip-indicator {
           width: 8px;
           height: 8px;
           border-radius: 50%;
         }
 
-        /* Details View Card */
-        .details-view-card {
-          background: white;
+        /* Stage Details Panel (Right Column) */
+        .stage-details-panel {
           border-radius: var(--radius-lg);
-          border: 1px solid var(--color-border);
-          box-shadow: var(--shadow-md);
           overflow: hidden;
+          box-shadow: 0 16px 36px -10px rgba(11, 37, 69, 0.15);
         }
 
-        .details-header-banner {
+        .mode-night .stage-details-panel {
+          background: #0f1a2a;
+          border-color: #1e293b;
+        }
+
+        .drawer-header {
           padding: 24px;
           background: linear-gradient(180deg, #f8fafc 0%, white 100%);
-          border-top: 5px solid var(--color-primary);
+          border-top: 6px solid var(--color-primary);
           border-bottom: 1px solid var(--color-border);
         }
 
-        .zone-badge {
+        .mode-night .drawer-header {
+          background: linear-gradient(180deg, #132237 0%, #0f1a2a 100%);
+          border-bottom-color: #1e293b;
+        }
+
+        .drawer-badge {
           font-size: 0.78rem;
-          font-weight: 700;
-          padding: 3px 10px;
+          font-weight: 800;
+          padding: 3px 12px;
           border-radius: var(--radius-full);
           border: 1px solid;
           font-family: var(--font-heading);
         }
 
-        .area-text {
+        .drawer-area-badge {
           font-size: 0.82rem;
           color: var(--color-text-muted);
-          font-weight: 500;
         }
 
-        .zone-title {
-          font-size: 1.35rem;
+        .drawer-title {
+          font-size: 1.45rem;
+          font-weight: 800;
           color: var(--color-primary);
-          font-weight: 700;
           margin-bottom: 4px;
           line-height: 1.3;
         }
 
-        .zone-title-en {
-          font-size: 0.85rem;
+        .mode-night .drawer-title {
+          color: #ffffff;
+        }
+
+        .drawer-subtitle {
+          font-size: 0.88rem;
           color: var(--color-text-muted);
-          margin-bottom: 10px;
+          margin-bottom: 12px;
           font-weight: 500;
         }
 
-        .zone-type-badge {
+        .drawer-type-pill {
           display: inline-flex;
           align-items: center;
           gap: 6px;
-          font-size: 0.85rem;
+          font-size: 0.84rem;
           color: #475569;
           background-color: #f1f5f9;
-          padding: 4px 10px;
+          padding: 4px 12px;
           border-radius: 6px;
-          font-weight: 500;
+          font-weight: 600;
         }
 
-        .details-body {
+        .mode-night .drawer-type-pill {
+          background-color: #1e293b;
+          color: #94a3b8;
+        }
+
+        .drawer-body {
           padding: 24px;
         }
 
-        .info-heading {
+        .segment-heading {
           font-size: 0.98rem;
-          color: var(--color-primary);
           font-weight: 700;
+          color: var(--color-primary);
           margin-bottom: 8px;
           display: flex;
           align-items: center;
           gap: 8px;
         }
 
-        .info-desc {
+        .mode-night .segment-heading {
+          color: #fde047;
+        }
+
+        .segment-desc {
           font-size: 0.94rem;
           color: var(--color-text-main);
           line-height: 1.65;
         }
 
-        .highlights-list {
+        .mode-night .segment-desc {
+          color: #cbd5e1;
+        }
+
+        .drawer-checklist {
           list-style: none;
           padding: 0;
           margin: 0;
@@ -1090,7 +1460,7 @@ export default function CampusMap() {
           gap: 10px;
         }
 
-        .highlights-list li {
+        .drawer-checklist li {
           display: flex;
           align-items: flex-start;
           gap: 10px;
@@ -1099,39 +1469,77 @@ export default function CampusMap() {
           color: var(--color-text-main);
         }
 
-        .bullet-arrow {
+        .mode-night .drawer-checklist li {
+          color: #cbd5e1;
+        }
+
+        .bullet-gold {
           color: var(--color-secondary);
           flex-shrink: 0;
           margin-top: 3px;
         }
 
-        .school-safety-notice {
-          background-color: #eff6ff;
+        .facilities-chips-grid {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+        }
+
+        .facility-chip {
+          background: #f1f5f9;
+          color: #334155;
+          font-size: 0.82rem;
+          font-weight: 600;
+          padding: 4px 10px;
+          border-radius: var(--radius-full);
+          border: 1px solid #e2e8f0;
+        }
+
+        .mode-night .facility-chip {
+          background: #1e293b;
+          color: #94a3b8;
+          border-color: #334155;
+        }
+
+        .school-guarantee-card {
+          background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+          border: 1px solid #bbf7d0;
           border-radius: var(--radius-md);
-          border: 1px solid #bfdbfe;
           padding: 14px 16px;
           display: flex;
           gap: 12px;
           align-items: center;
         }
 
-        .notice-icon {
-          color: #2563eb;
+        .mode-night .school-guarantee-card {
+          background: #064e3b;
+          border-color: #047857;
+        }
+
+        .guarantee-icon {
           flex-shrink: 0;
         }
 
-        .notice-text strong {
+        .guarantee-text strong {
           display: block;
           font-size: 0.88rem;
-          color: #1e3a8a;
+          color: #14532d;
           margin-bottom: 2px;
         }
 
-        .notice-text p {
+        .mode-night .guarantee-text strong {
+          color: #86efac;
+        }
+
+        .guarantee-text p {
           font-size: 0.82rem;
-          color: #3b82f6;
+          color: #15803d;
           margin: 0;
           line-height: 1.4;
+        }
+
+        .mode-night .guarantee-text p {
+          color: #dcfce7;
         }
       `}</style>
     </div>
