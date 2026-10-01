@@ -65,19 +65,19 @@ export default function CampusMap() {
       id: 'kindergarten',
       number: 'อ.',
       category: 'academic',
-      name: 'อาคารเรียนปฐมวัย (อนุบาล) & ลานร่มรื่น',
-      nameEn: 'Early Childhood Center & Garden',
-      type: 'อาคารเรียนปฐมวัยและพื้นที่ส่งเสริมพัฒนาการ',
+      name: 'อาคารเรียนปฐมวัย (อนุบาล) & ห้องของผู้อำนวยการ',
+      nameEn: 'Early Childhood Center & Director Office',
+      type: 'อาคารเรียนปฐมวัยและห้องปฏิบัติงานผู้บริหาร',
       color: '#f43f5e',
-      badgeText: 'อนุบาล',
-      desc: 'อาคารเรียนสำหรับเด็กปฐมวัย (อนุบาล 2 - อนุบาล 3) ออกแบบเพื่อความปลอดภัยและส่งเสริมพัฒนาการทั้ง 4 ด้าน ล้อมรอบด้วยธรรมชาติร่มรื่นใต้ต้นไม้ใหญ่',
+      badgeText: 'อนุบาล & ผอ.',
+      desc: 'อาคารเรียนสำหรับเด็กปฐมวัย (อนุบาล 2 - อนุบาล 3) พร้อมห้องปฏิบัติงานของผู้อำนวยการโรงเรียน ออกแบบเพื่อความปลอดภัยและส่งเสริมพัฒนาการอย่างสมบูรณ์แบบ',
       highlights: [
         'ห้องเรียนปฐมวัยพร้อมสื่อเสริมพัฒนาการกล้ามเนื้อมัดเล็กและมัดใหญ่',
         'มุมหนังสือนิทานและพื้นที่กิจกรรมสร้างสรรค์',
-        'ห้องอำนวยการและประสานงานผู้บริหาร (โซน ผอ.)',
-        'ลานกิจกรรมร่มรื่นใต้ต้นไม้ใหญ่ประจำโรงเรียน'
+        'ห้องปฏิบัติงานของผู้อำนวยการโรงเรียน (ห้องของผู้อำนวยการ)',
+        'พื้นที่ร่มรื่นใต้ร่มไม้ธรรมชาติเพื่อความผ่อนคลาย'
       ],
-      facilities: ['ห้องเรียน อ.2 - อ.3', 'มุมเสริมทักษะ BBL', 'ห้อง ผอ.', 'ลานต้นไม้ใหญ่'],
+      facilities: ['ห้องเรียน อ.2 - อ.3', 'ห้องของผู้อำนวยการ', 'มุมเสริมทักษะ BBL'],
       area: '190 ตร.ม.'
     },
     canteen: {
@@ -664,25 +664,18 @@ export default function CampusMap() {
                 {/* 7. WEST COMPLEX: KINDERGARTEN & 5 TEACHER COTTAGES (สมดุลฝั่งซ้าย) */}
                 {/* ---------------------------------------------------- */}
 
-                {/* 7.1 Kindergarten & Heritage Tree (อนุบาล & ของ ผอ. & ต้นไม้ใหญ่) */}
+                {/* 7.1 Kindergarten & Director Office (อนุบาล & ห้องของผู้อำนวยการ) */}
                 <g 
                   className={`zone-item ${selectedZone === 'kindergarten' ? 'active-zone' : ''}`}
                   onClick={() => setSelectedZone('kindergarten')}
                   filter={selectedZone === 'kindergarten' ? 'url(#clean-glow)' : 'none'}
                 >
-                  {/* Big Tree (ต้นไม้ใหญ่) at x=235, y=165 */}
+                  {/* Tree at x=235, y=165 (เอาข้อความป้ายออกตามที่ผู้ใช้สั่ง) */}
                   <g>
                     <rect x="231" y="175" width="8" height="26" fill="#78350f" rx="2" />
                     <circle cx="235" cy="160" r="24" fill="#16a34a" />
                     <circle cx="226" cy="152" r="15" fill="#4ade80" />
                     <circle cx="244" cy="152" r="15" fill="#4ade80" />
-                    
-                    {showLabels && (
-                      <>
-                        <path d="M 235 204 L 235 214 M 235 204 L 232 209 M 235 204 L 238 209" stroke="#16a34a" strokeWidth="1.5" fill="none" />
-                        <text x="235" y="227" textAnchor="middle" fill="#15803d" fontSize="12" fontWeight="700" fontFamily="Prompt">ต้นไม้ใหญ่</text>
-                      </>
-                    )}
                   </g>
 
                   {/* Kindergarten Building (อนุบาล) */}
@@ -690,15 +683,14 @@ export default function CampusMap() {
                   <rect x="75" y="113" width="95" height="22" fill={isNightMode ? "#7f1d1d" : "#fee2e2"} rx="3" />
                   <text x="122" y="162" textAnchor="middle" fill="#991b1b" fontSize="16" fontWeight="800" fontFamily="Prompt">อนุบาล</text>
 
-                  {/* Director Area Structure (ของ ผอ.) */}
-                  <rect x="75" y="195" width="95" height="50" fill={isNightMode ? "#1e293b" : "#ffffff"} rx="4" stroke="#64748b" strokeWidth="2" />
-                  <line x1="75" y1="220" x2="170" y2="220" stroke="#cbd5e1" strokeWidth="1.5" />
+                  {/* Director Office Structure (ห้องของผู้อำนวยการ) */}
+                  <rect x="68" y="195" width="110" height="54" fill={isNightMode ? "#1e293b" : "#ffffff"} rx="6" stroke="#475569" strokeWidth="2" />
+                  <line x1="68" y1="222" x2="178" y2="222" stroke="#cbd5e1" strokeWidth="1" strokeDasharray="3 3" />
                   
                   {showLabels && (
                     <>
-                      <path d="M 68 220 Q 48 217 52 203" fill="none" stroke={isNightMode ? "#cbd5e1" : "#334155"} strokeWidth="1.8" />
-                      <polygon points="66,217 70,221 64,223" fill={isNightMode ? "#cbd5e1" : "#334155"} />
-                      <text x="42" y="195" textAnchor="middle" fill={isNightMode ? "#f1f5f9" : "#334155"} fontSize="12" fontWeight="700" fontFamily="Prompt">ของ ผอ.</text>
+                      <text x="123" y="213" textAnchor="middle" fill={isNightMode ? "#cbd5e1" : "#1e293b"} fontSize="11" fontWeight="700" fontFamily="Prompt">ห้องของ</text>
+                      <text x="123" y="238" textAnchor="middle" fill={isNightMode ? "#cbd5e1" : "#1e293b"} fontSize="11" fontWeight="700" fontFamily="Prompt">ผู้อำนวยการ</text>
                     </>
                   )}
                 </g>
@@ -823,7 +815,7 @@ export default function CampusMap() {
           <div className="stage-details-panel">
             {/* Header with dynamic color banner */}
             <div className="drawer-header" style={{ borderTopColor: currentZone.color }}>
-              <div className="d-flex align-items-center justify-content-between mb-2">
+              <div className="drawer-meta-row">
                 <span className="drawer-badge" style={{ backgroundColor: `${currentZone.color}20`, color: currentZone.color, borderColor: currentZone.color }}>
                   {currentZone.badgeText}
                 </span>
@@ -1219,26 +1211,45 @@ export default function CampusMap() {
           border-bottom-color: #1e293b;
         }
 
+        .drawer-meta-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          margin-bottom: 12px;
+          flex-wrap: wrap;
+        }
+
         .drawer-badge {
-          font-size: 0.78rem;
-          font-weight: 800;
-          padding: 3px 12px;
+          display: inline-flex;
+          align-items: center;
+          font-size: 0.82rem;
+          font-weight: 700;
+          padding: 4px 14px;
           border-radius: var(--radius-full);
           border: 1px solid;
           font-family: var(--font-heading);
+          line-height: 1.4;
+          white-space: nowrap;
         }
 
         .drawer-area-badge {
-          font-size: 0.82rem;
+          display: inline-flex;
+          align-items: center;
+          font-size: 0.84rem;
           color: var(--color-text-muted);
+          font-family: var(--font-heading);
+          white-space: nowrap;
         }
 
         .drawer-title {
-          font-size: 1.4rem;
+          font-size: 1.45rem;
           font-weight: 800;
           color: var(--color-primary);
-          margin-bottom: 4px;
-          line-height: 1.3;
+          margin-top: 4px;
+          margin-bottom: 6px;
+          line-height: 1.35;
+          clear: both;
         }
 
         .mode-night .drawer-title {
