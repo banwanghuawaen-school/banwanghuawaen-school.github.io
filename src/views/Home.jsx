@@ -142,7 +142,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
       {/* 2. STATS RIBBON (ข้อมูลสถิติพื้นฐาน) */}
       <section className="stats-ribbon-section">
         <div className="container">
-          <div className="stats-ribbon-card glass-panel">
+          <div className="stats-ribbon-card">
             <div className="stat-item">
               <div className="stat-icon-circle bg-primary-soft">
                 <Users size={28} className="text-primary" />
@@ -174,18 +174,6 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
               <div className="stat-info">
                 <h3 className="stat-number">8</h3>
                 <p className="stat-label">ระดับชั้นเรียน (อ.2 - ป.6)</p>
-              </div>
-            </div>
-
-            <div className="stat-divider"></div>
-
-            <div className="stat-item">
-              <div className="stat-icon-circle bg-purple-soft">
-                <Award size={28} className="text-purple" />
-              </div>
-              <div className="stat-info">
-                <h3 className="stat-number">100<span className="stat-plus">%</span></h3>
-                <p className="stat-label">Smart Classroom ทุกชั้น</p>
               </div>
             </div>
           </div>
@@ -246,32 +234,6 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
                 </div>
               </div>
 
-            </div>
-          </div>
-        </div>
-      </section>
-
-
-      {/* 4. INTERACTIVE 2.5D CAMPUS MAP SHOWCASE CALLOUT */}
-      <section className="section-padding campus-callout-section">
-        <div className="container">
-          <div className="campus-feature-card glass-panel-dark">
-            <div className="feature-card-content">
-              <div className="badge-tag-purple mb-2">CAMPUS MASTER PLAN 2.5D</div>
-              <h3 className="feature-title">
-                สำรวจแผนผังและบรรยากาศโรงเรียนเสมือนจริง
-              </h3>
-              <p className="feature-desc">
-                ระบบแผนผังจำลองเชิงสถาปัตยกรรม 2.5D จัดวางตามตำแหน่งจริง 14 โซน ทั้งอาคาร 1, อาคาร 2, อนุบาล, สนามฟุตบอลมาตรฐาน, สนามเด็กเล่น BBL และกลุ่มบ้านพักครู พร้อมสลับโหมดกลางวัน-กลางคืนได้
-              </p>
-              <div className="feature-badges-row mb-4">
-                <span className="f-badge"><CheckCircle2 size={14} className="text-secondary" /> จำลอง 14 โซนอาคารจริง</span>
-                <span className="f-badge"><CheckCircle2 size={14} className="text-secondary" /> โหมดกลางวัน / ราตรี (Day & Night)</span>
-                <span className="f-badge"><CheckCircle2 size={14} className="text-secondary" /> รายละเอียดห้องเรียน & สนามกีฬา</span>
-              </div>
-              <button className="btn btn-secondary btn-lg" onClick={() => setView('campus')}>
-                <Layers size={18} /> เข้าสู่แผนผังโรงเรียน 2.5D <ArrowRight size={18} />
-              </button>
             </div>
           </div>
         </div>
@@ -565,13 +527,15 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
         }
 
         .stats-ribbon-card {
-          padding: 24px 32px;
+          background: #ffffff;
+          border: 2px solid #e2e8f0;
+          padding: 28px 40px;
           border-radius: var(--radius-lg);
           display: flex;
           justify-content: space-around;
           align-items: center;
           gap: 20px;
-          box-shadow: 0 16px 36px -10px rgba(11, 37, 69, 0.15);
+          box-shadow: 0 20px 45px -12px rgba(11, 37, 69, 0.25);
         }
 
         @media (max-width: 768px) {
