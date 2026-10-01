@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://banwanghuawaen-school.github.io/sitemap.xml
+Sitemap: https://wanghuawaen.vercel.app/sitemap.xml
