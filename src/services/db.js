@@ -50,8 +50,8 @@ const DEFAULT_NEWS = [
     isPinned: true,
     status: "published",
     views: 128,
-    attachmentName: "ใบสมัครเข้าเรียน 2569.pdf",
-    attachmentUrl: "https://example.com/downloads/apply-form-2026.pdf",
+    attachmentName: "",
+    attachmentUrl: "",
     galleryUrls: ""
   },
   {

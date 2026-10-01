@@ -138,7 +138,7 @@ export default function NewsCard({ item, onClick }) {
             <Eye size={14} />
             {(item.views || 0).toLocaleString()}
           </span>
-          {item.attachmentUrl && (
+          {item.attachmentUrl && !item.attachmentUrl.includes('example.com') && (
             <span className="meta-item text-primary" title="มีไฟล์เอกสารดาวน์โหลดแนบ" style={{ color: 'var(--color-primary)' }}>
               <Download size={14} />
             </span>

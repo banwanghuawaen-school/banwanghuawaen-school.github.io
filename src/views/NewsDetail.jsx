@@ -173,7 +173,7 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem }) {
           </div>
 
           {/* Attachment Download Section */}
-          {newsItem.attachmentName && newsItem.attachmentUrl && (
+          {newsItem.attachmentName && newsItem.attachmentUrl && !newsItem.attachmentUrl.includes('example.com') && (
             <div className="article-attachment-download-box">
               <Download size={24} className="download-icon" />
               <div className="download-info">
