@@ -30,7 +30,16 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem }) {
     return galleryUrlsStr.split(',').map(url => url.trim()).filter(Boolean);
   };
 
-  const galleryImages = parseGalleryUrls(newsItem.galleryUrls);
+  const resolveImageUrl = (img) => {
+    if (!img) return '';
+    if (img.startsWith('http://') || img.startsWith('https://') || img.startsWith('data:')) return img;
+    const clean = img.replace(/^\/+/, '');
+    const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+    return `${base}${clean}`;
+  };
+
+  const galleryImages = parseGalleryUrls(newsItem?.galleryUrls).map(resolveImageUrl);
+  const coverImage = resolveImageUrl(newsItem?.imageUrl);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -125,14 +134,14 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem }) {
           {/* Cover image or fallback pattern banner */}
           <div 
             className="article-cover-wrapper" 
-            style={newsItem.imageUrl || galleryImages.length > 0 ? { cursor: 'zoom-in' } : {}}
+            style={coverImage || galleryImages.length > 0 ? { cursor: 'zoom-in' } : {}}
             onClick={() => {
-              const imgToZoom = newsItem.imageUrl || galleryImages[0];
+              const imgToZoom = coverImage || galleryImages[0];
               if (imgToZoom) setLightboxImage(imgToZoom);
             }}
           >
-            {newsItem.imageUrl ? (
-              <img src={newsItem.imageUrl} alt={newsItem.title} className="article-cover-img" />
+            {coverImage ? (
+              <img src={coverImage} alt={newsItem.title} className="article-cover-img" />
             ) : galleryImages.length > 0 ? (
               <img src={galleryImages[0]} alt={newsItem.title} className="article-cover-img" />
             ) : (

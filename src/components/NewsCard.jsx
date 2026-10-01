@@ -49,8 +49,17 @@ export default function NewsCard({ item, onClick }) {
     return dateStr;
   };
 
+  const resolveImageUrl = (img) => {
+    if (!img) return '';
+    if (img.startsWith('http://') || img.startsWith('https://') || img.startsWith('data:')) return img;
+    const clean = img.replace(/^\/+/, '');
+    const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+    return `${base}${clean}`;
+  };
+
   const firstGalleryImg = item.galleryUrls ? item.galleryUrls.split(',')[0]?.trim() : '';
-  const displayImage = item.imageUrl || firstGalleryImg;
+  const rawImage = item.imageUrl || firstGalleryImg;
+  const displayImage = resolveImageUrl(rawImage);
 
   // Helper to clean raw HTML, markdown symbols, and Facebook scraped footer metadata
   const cleanTextExcerpt = (text) => {
@@ -77,7 +86,15 @@ export default function NewsCard({ item, onClick }) {
       {/* Cover Image or Dynamic Formal Placeholder */}
       <div className="card-cover-container">
         {displayImage ? (
-          <img src={displayImage} alt={item.title} className="card-image" />
+          <img 
+            src={displayImage} 
+            alt={item.title} 
+            className="card-image"
+            onError={(e) => {
+              // Fallback to avoid broken image symbol if link expires
+              e.currentTarget.style.display = 'none';
+            }} 
+          />
         ) : (
           <div className={`card-placeholder-fallback bg-gradient-${item.category || 'pr'}`}>
             <div className="fallback-pattern"></div>
@@ -85,10 +102,17 @@ export default function NewsCard({ item, onClick }) {
             <span className="fallback-crest-text">โรงเรียนบ้านวังหัวแหวนพัฒนา</span>
           </div>
         )}
-        <div className="card-category-floating" style={{ display: 'flex', gap: '6px' }}>
+        <div className="card-category-floating" style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
           {item.isPinned && (
             <span className="badge badge-pinned" style={{ backgroundColor: '#f97316', color: 'white', display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '4px 8px', fontSize: '0.75rem', fontWeight: '600', borderRadius: '4px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
               <Pin size={11} fill="white" /> ปักหมุด
+            </span>
+          )}
+          {item.fbUrl && (
+            <span className="badge" style={{ backgroundColor: '#1877F2', color: 'white', display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '4px 8px', fontSize: '0.75rem', fontWeight: '600', borderRadius: '4px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg> Facebook
             </span>
           )}
           {getCategoryBadge(item.category)}
