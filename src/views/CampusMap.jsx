@@ -383,7 +383,7 @@ export default function CampusMap() {
 
             <div className={`canvas-viewport ${isNightMode ? 'night-ambient' : 'day-ambient'}`}>
               <svg 
-                viewBox="0 0 1000 700" 
+                viewBox="0 0 960 670" 
                 className="master-svg-canvas"
                 preserveAspectRatio="xMidYMid meet"
               >
@@ -400,35 +400,52 @@ export default function CampusMap() {
                 </defs>
 
                 {/* 1. Base Canvas Background with Notebook Grid */}
-                <rect x="0" y="0" width="1000" height="700" fill={isNightMode ? "#091322" : "#fdfcf9"} rx="14" />
-                <rect x="15" y="15" width="970" height="670" fill="url(#clean-grid)" rx="10" stroke={isNightMode ? "#1e293b" : "#e2e8f0"} strokeWidth="1.5" />
+                <rect x="0" y="0" width="960" height="670" fill={isNightMode ? "#091322" : "#fdfcf9"} rx="14" />
+                <rect x="15" y="15" width="930" height="640" fill="url(#clean-grid)" rx="10" stroke={isNightMode ? "#1e293b" : "#e2e8f0"} strokeWidth="1.5" />
+
+                {/* Top-Left Blueprint Emblem & Orientation (Balances Top-Left Space) */}
+                <g>
+                  {/* Compass Rose */}
+                  <g transform="translate(65, 55)">
+                    <circle cx="0" cy="0" r="18" fill={isNightMode ? "#1e293b" : "#ffffff"} stroke={isNightMode ? "#475569" : "#cbd5e1"} strokeWidth="1.5" />
+                    <polygon points="0,-14 4,-2 0,0" fill="#dc2626" />
+                    <polygon points="0,-14 -4,-2 0,0" fill="#ef4444" />
+                    <polygon points="0,14 4,2 0,0" fill="#64748b" />
+                    <polygon points="0,14 -4,2 0,0" fill="#94a3b8" />
+                    <text x="0" y="-18" textAnchor="middle" fill="#dc2626" fontSize="10" fontWeight="900">N</text>
+                  </g>
+                  {/* Map Orientation Tag */}
+                  <text x="96" y="50" fill={isNightMode ? "#cbd5e1" : "#1e293b"} fontSize="12" fontWeight="800" fontFamily="Prompt">แผนผังแม่บทสถานศึกษา</text>
+                  <text x="96" y="66" fill={isNightMode ? "#64748b" : "#94a3b8"} fontSize="10" fontWeight="600" fontFamily="Prompt">รร.บ้านวังหัวแหวนพัฒนา</text>
+                </g>
 
                 {/* ---------------------------------------------------- */}
-                {/* 2. ROAD NETWORK (ถนนภายในโรงเรียน - จัดวางเป็นระเบียบชัดเจน) */}
+                {/* 2. ROAD NETWORK (ถนนภายในโรงเรียน - จัดวางสมดุลกึ่งกลาง) */}
                 {/* ---------------------------------------------------- */}
                 
                 {/* Vertical Main Road from Gate up to North Road */}
-                <rect x="330" y="160" width="50" height="460" fill={isNightMode ? "#1e293b" : "#64748b"} rx="2" />
+                <rect x="300" y="20" width="45" height="585" fill={isNightMode ? "#1e293b" : "#64748b"} rx="2" />
                 {/* Clean center dashed line for vertical road */}
-                <line x1="355" y1="185" x2="355" y2="600" stroke="#ffffff" strokeWidth="2.5" strokeDasharray="12 10" opacity="0.8" />
+                <line x1="322.5" y1="25" x2="322.5" y2="595" stroke="#ffffff" strokeWidth="2.5" strokeDasharray="12 10" opacity="0.8" />
 
                 {/* Horizontal North Road in front of the buildings */}
-                <rect x="330" y="160" width="630" height="46" fill={isNightMode ? "#1e293b" : "#64748b"} rx="2" />
+                <rect x="300" y="135" width="605" height="44" fill={isNightMode ? "#1e293b" : "#64748b"} rx="2" />
                 {/* Clean center dashed line for horizontal road */}
-                <line x1="380" y1="183" x2="945" y2="183" stroke="#ffffff" strokeWidth="2.5" strokeDasharray="14 10" opacity="0.8" />
+                <line x1="345" y1="157" x2="895" y2="157" stroke="#ffffff" strokeWidth="2.5" strokeDasharray="14 10" opacity="0.8" />
 
                 {/* Smooth road intersection box */}
-                <rect x="330" y="160" width="50" height="46" fill={isNightMode ? "#1e293b" : "#64748b"} />
+                <rect x="300" y="135" width="45" height="44" fill={isNightMode ? "#1e293b" : "#64748b"} />
 
                 {/* Road Borders */}
-                <line x1="330" y1="206" x2="330" y2="620" stroke="#334155" strokeWidth="2" />
-                <line x1="380" y1="206" x2="380" y2="620" stroke="#334155" strokeWidth="2" />
-                <line x1="330" y1="160" x2="960" y2="160" stroke="#334155" strokeWidth="2" />
-                <line x1="380" y1="206" x2="960" y2="206" stroke="#334155" strokeWidth="2" />
+                <line x1="300" y1="20" x2="300" y2="605" stroke="#334155" strokeWidth="2" />
+                <line x1="345" y1="20" x2="345" y2="135" stroke="#334155" strokeWidth="2" />
+                <line x1="345" y1="179" x2="345" y2="605" stroke="#334155" strokeWidth="2" />
+                <line x1="300" y1="135" x2="905" y2="135" stroke="#334155" strokeWidth="2" />
+                <line x1="345" y1="179" x2="905" y2="179" stroke="#334155" strokeWidth="2" />
 
 
                 {/* ---------------------------------------------------- */}
-                {/* 3. TOP ROW OF BUILDINGS (เหนือถนนแนวนอน - เว้นระยะห่างเรียบร้อย) */}
+                {/* 3. TOP ROW OF BUILDINGS (เหนือถนนแนวนอน - กระจายสมดุล) */}
                 {/* ---------------------------------------------------- */}
 
                 {/* 3.1 Welfare Shop (ร้านค้าสวัสดิการ) */}
@@ -437,19 +454,19 @@ export default function CampusMap() {
                   onClick={() => setSelectedZone('welfare')}
                   filter={selectedZone === 'welfare' ? 'url(#clean-glow)' : 'none'}
                 >
-                  <rect x="350" y="78" width="60" height="74" fill={isNightMode ? "#4c1d95" : "#e9d5ff"} rx="6" stroke="#9333ea" strokeWidth="2" />
-                  <text x="380" y="112" textAnchor="middle" fill="#581c87" fontSize="12" fontWeight="700" fontFamily="Prompt">ร้านค้า</text>
-                  <text x="380" y="130" textAnchor="middle" fill="#581c87" fontSize="11" fontWeight="700" fontFamily="Prompt">สวัสดิการ</text>
+                  <rect x="360" y="55" width="55" height="74" fill={isNightMode ? "#4c1d95" : "#e9d5ff"} rx="6" stroke="#9333ea" strokeWidth="2" />
+                  <text x="387" y="90" textAnchor="middle" fill="#581c87" fontSize="12" fontWeight="700" fontFamily="Prompt">ร้านค้า</text>
+                  <text x="387" y="108" textAnchor="middle" fill="#581c87" fontSize="11" fontWeight="700" fontFamily="Prompt">สวัสดิการ</text>
                 </g>
 
-                {/* 3.2 Restroom 1 (ห้องน้ำ โซนร้านสวัสดิการ) */}
+                {/* 3.2 Restroom 1 (ห้องน้ำ โซนร้านสวัสดิการ - วางซ้อนด้านบนตามภาพสเก็ตช์) */}
                 <g 
                   className={`zone-item ${selectedZone === 'restroom1' ? 'active-zone' : ''}`}
                   onClick={() => setSelectedZone('restroom1')}
                   filter={selectedZone === 'restroom1' ? 'url(#clean-glow)' : 'none'}
                 >
-                  <rect x="355" y="24" width="50" height="46" fill={isNightMode ? "#7c2d12" : "#fed7aa"} rx="6" stroke="#ea580c" strokeWidth="2" />
-                  <text x="380" y="52" textAnchor="middle" fill="#c2410c" fontSize="12" fontWeight="700" fontFamily="Prompt">ห้องน้ำ</text>
+                  <rect x="362" y="15" width="51" height="35" fill={isNightMode ? "#7c2d12" : "#fed7aa"} rx="5" stroke="#ea580c" strokeWidth="2" />
+                  <text x="387" y="37" textAnchor="middle" fill="#c2410c" fontSize="11" fontWeight="700" fontFamily="Prompt">ห้องน้ำ</text>
                 </g>
 
                 {/* 3.3 Canteen (โรงอาหาร) */}
@@ -458,9 +475,9 @@ export default function CampusMap() {
                   onClick={() => setSelectedZone('canteen')}
                   filter={selectedZone === 'canteen' ? 'url(#clean-glow)' : 'none'}
                 >
-                  <rect x="420" y="65" width="75" height="87" fill={isNightMode ? "#7c2d12" : "#fed7aa"} rx="6" stroke="#ea580c" strokeWidth="2.5" />
-                  <text x="457" y="105" textAnchor="middle" fill="#9a3412" fontSize="14" fontWeight="800" fontFamily="Prompt">โรง</text>
-                  <text x="457" y="125" textAnchor="middle" fill="#9a3412" fontSize="14" fontWeight="800" fontFamily="Prompt">อาหาร</text>
+                  <rect x="425" y="44" width="70" height="85" fill={isNightMode ? "#7c2d12" : "#fed7aa"} rx="6" stroke="#ea580c" strokeWidth="2.5" />
+                  <text x="460" y="82" textAnchor="middle" fill="#9a3412" fontSize="14" fontWeight="800" fontFamily="Prompt">โรง</text>
+                  <text x="460" y="102" textAnchor="middle" fill="#9a3412" fontSize="14" fontWeight="800" fontFamily="Prompt">อาหาร</text>
                 </g>
 
                 {/* 3.4 Building 1 (อาคาร 1 - อาคารเรียนหลักหลังใหญ่) */}
@@ -469,17 +486,17 @@ export default function CampusMap() {
                   onClick={() => setSelectedZone('b1')}
                   filter={selectedZone === 'b1' ? 'url(#clean-glow)' : 'none'}
                 >
-                  <rect x="505" y="52" width="175" height="100" fill={isNightMode ? "#3b0764" : "#d8b4fe"} rx="8" stroke="#7e22ce" strokeWidth="3" />
+                  <rect x="505" y="32" width="165" height="97" fill={isNightMode ? "#3b0764" : "#d8b4fe"} rx="8" stroke="#7e22ce" strokeWidth="3" />
                   {/* Window Row Accent */}
                   <g fill={isNightMode ? "#fef08a" : "#c084fc"} opacity="0.8">
-                    <rect x="515" y="62" width="18" height="12" rx="2" />
-                    <rect x="541" y="62" width="18" height="12" rx="2" />
-                    <rect x="567" y="62" width="18" height="12" rx="2" />
-                    <rect x="605" y="62" width="18" height="12" rx="2" />
-                    <rect x="631" y="62" width="18" height="12" rx="2" />
-                    <rect x="653" y="62" width="18" height="12" rx="2" />
+                    <rect x="515" y="42" width="18" height="12" rx="2" />
+                    <rect x="541" y="42" width="18" height="12" rx="2" />
+                    <rect x="567" y="42" width="18" height="12" rx="2" />
+                    <rect x="605" y="42" width="18" height="12" rx="2" />
+                    <rect x="631" y="42" width="18" height="12" rx="2" />
+                    <rect x="647" y="42" width="16" height="12" rx="2" />
                   </g>
-                  <text x="592" y="115" textAnchor="middle" fill={isNightMode ? "#f5d0fe" : "#581c87"} fontSize="20" fontWeight="900" fontFamily="Prompt">อาคาร 1</text>
+                  <text x="587" y="94" textAnchor="middle" fill={isNightMode ? "#f5d0fe" : "#581c87"} fontSize="20" fontWeight="900" fontFamily="Prompt">อาคาร 1</text>
                 </g>
 
                 {/* 3.5 Building 2 (อาคาร 2) */}
@@ -488,10 +505,10 @@ export default function CampusMap() {
                   onClick={() => setSelectedZone('b2')}
                   filter={selectedZone === 'b2' ? 'url(#clean-glow)' : 'none'}
                 >
-                  <rect x="690" y="65" width="95" height="87" fill={isNightMode ? "#4c0519" : "#fca5a5"} rx="7" stroke="#dc2626" strokeWidth="2.5" />
-                  <rect x="702" y="75" width="22" height="12" rx="2" fill={isNightMode ? "#fef08a" : "#fee2e2"} opacity="0.8" />
-                  <rect x="751" y="75" width="22" height="12" rx="2" fill={isNightMode ? "#fef08a" : "#fee2e2"} opacity="0.8" />
-                  <text x="737" y="118" textAnchor="middle" fill={isNightMode ? "#fecdd3" : "#991b1b"} fontSize="16" fontWeight="800" fontFamily="Prompt">อาคาร 2</text>
+                  <rect x="680" y="44" width="90" height="85" fill={isNightMode ? "#4c0519" : "#fca5a5"} rx="7" stroke="#dc2626" strokeWidth="2.5" />
+                  <rect x="692" y="54" width="22" height="12" rx="2" fill={isNightMode ? "#fef08a" : "#fee2e2"} opacity="0.8" />
+                  <rect x="736" y="54" width="22" height="12" rx="2" fill={isNightMode ? "#fef08a" : "#fee2e2"} opacity="0.8" />
+                  <text x="725" y="96" textAnchor="middle" fill={isNightMode ? "#fecdd3" : "#991b1b"} fontSize="16" fontWeight="800" fontFamily="Prompt">อาคาร 2</text>
                 </g>
 
                 {/* 3.6 Restroom 2 (ห้องน้ำ โซนอาคาร 2) */}
@@ -500,9 +517,9 @@ export default function CampusMap() {
                   onClick={() => setSelectedZone('restroom2')}
                   filter={selectedZone === 'restroom2' ? 'url(#clean-glow)' : 'none'}
                 >
-                  <rect x="795" y="60" width="65" height="92" fill={isNightMode ? "#075985" : "#bae6fd"} rx="6" stroke="#0284c7" strokeWidth="2" />
-                  <text x="827" y="102" textAnchor="middle" fill="#0369a1" fontSize="13" fontWeight="800" fontFamily="Prompt">ห้อง</text>
-                  <text x="827" y="122" textAnchor="middle" fill="#0369a1" fontSize="13" fontWeight="800" fontFamily="Prompt">น้ำ</text>
+                  <rect x="780" y="44" width="50" height="85" fill={isNightMode ? "#075985" : "#bae6fd"} rx="6" stroke="#0284c7" strokeWidth="2" />
+                  <text x="805" y="82" textAnchor="middle" fill="#0369a1" fontSize="13" fontWeight="800" fontFamily="Prompt">ห้อง</text>
+                  <text x="805" y="102" textAnchor="middle" fill="#0369a1" fontSize="13" fontWeight="800" fontFamily="Prompt">น้ำ</text>
                 </g>
 
                 {/* 3.7 Parking Lot (ลานจอดรถ) */}
@@ -511,17 +528,17 @@ export default function CampusMap() {
                   onClick={() => setSelectedZone('parking')}
                   filter={selectedZone === 'parking' ? 'url(#clean-glow)' : 'none'}
                 >
-                  <rect x="870" y="60" width="80" height="92" fill={isNightMode ? "#500724" : "#fce7f3"} rx="6" stroke="#db2777" strokeWidth="2" strokeDasharray="4 3" />
+                  <rect x="840" y="44" width="65" height="85" fill={isNightMode ? "#500724" : "#fce7f3"} rx="6" stroke="#db2777" strokeWidth="2" strokeDasharray="4 3" />
                   {/* Clean Parking Stalls */}
-                  <line x1="880" y1="75" x2="925" y2="75" stroke="#db2777" strokeWidth="1.5" />
-                  <line x1="880" y1="95" x2="925" y2="95" stroke="#db2777" strokeWidth="1.5" />
-                  <line x1="880" y1="115" x2="925" y2="115" stroke="#db2777" strokeWidth="1.5" />
-                  <text x="910" y="140" textAnchor="middle" fill="#9d174d" fontSize="11" fontWeight="800" fontFamily="Prompt">ลานจอดรถ</text>
+                  <line x1="848" y1="60" x2="897" y2="60" stroke="#db2777" strokeWidth="1.5" />
+                  <line x1="848" y1="80" x2="897" y2="80" stroke="#db2777" strokeWidth="1.5" />
+                  <line x1="848" y1="100" x2="897" y2="100" stroke="#db2777" strokeWidth="1.5" />
+                  <text x="872" y="122" textAnchor="middle" fill="#9d174d" fontSize="11" fontWeight="800" fontFamily="Prompt">ลานจอดรถ</text>
                 </g>
 
 
                 {/* ---------------------------------------------------- */}
-                {/* 4. CEREMONIAL STRIP: FLAGPOLE & BUDDHA SHRINE (y=215-265) */}
+                {/* 4. CEREMONIAL STRIP: FLAGPOLE & BUDDHA SHRINE (y=185-235) */}
                 {/* ---------------------------------------------------- */}
 
                 <g 
@@ -531,37 +548,37 @@ export default function CampusMap() {
                 >
                   {/* Flagpole (เสาธง) */}
                   <g>
-                    <rect x="579" y="215" width="2" height="24" fill="#334155" />
-                    <circle cx="580" cy="214" r="2.5" fill="#f59e0b" />
+                    <rect x="544" y="185" width="2" height="24" fill="#334155" />
+                    <circle cx="545" cy="184" r="2.5" fill="#f59e0b" />
                     {/* Thai Flag */}
-                    <rect x="581" y="215" width="16" height="3" fill="#ef4444" />
-                    <rect x="581" y="218" width="16" height="2.5" fill="#ffffff" />
-                    <rect x="581" y="220.5" width="16" height="4" fill="#1e3a8a" />
-                    <rect x="581" y="224.5" width="16" height="2.5" fill="#ffffff" />
-                    <rect x="581" y="227" width="16" height="3" fill="#ef4444" />
+                    <rect x="546" y="185" width="16" height="3" fill="#ef4444" />
+                    <rect x="546" y="188" width="16" height="2.5" fill="#ffffff" />
+                    <rect x="546" y="190.5" width="16" height="4" fill="#1e3a8a" />
+                    <rect x="546" y="194.5" width="16" height="2.5" fill="#ffffff" />
+                    <rect x="546" y="197" width="16" height="3" fill="#ef4444" />
 
-                    <path d="M 580 248 L 580 238 M 580 238 L 576 242 M 580 238 L 584 242" stroke={isNightMode ? "#cbd5e1" : "#1e293b"} strokeWidth="1.5" fill="none" />
+                    <path d="M 545 218 L 545 208 M 545 208 L 541 212 M 545 208 L 549 212" stroke={isNightMode ? "#cbd5e1" : "#1e293b"} strokeWidth="1.5" fill="none" />
                     {showLabels && (
-                      <text x="580" y="260" textAnchor="middle" fill={isNightMode ? "#f8fafc" : "#1e293b"} fontSize="12" fontWeight="700" fontFamily="Prompt">เสาธง</text>
+                      <text x="545" y="230" textAnchor="middle" fill={isNightMode ? "#f8fafc" : "#1e293b"} fontSize="12" fontWeight="700" fontFamily="Prompt">เสาธง</text>
                     )}
                   </g>
 
                   {/* Buddha Shrine (พระพุทธรูป) */}
                   <g>
-                    <rect x="640" y="225" width="20" height="5" fill="#78350f" rx="1" />
-                    <path d="M 645 225 C 645 219, 647 215, 650 213 C 653 215, 655 219, 655 225 Z" fill="#d97706" />
-                    <circle cx="650" cy="212" r="3" fill="#fbbf24" />
+                    <rect x="610" y="195" width="20" height="5" fill="#78350f" rx="1" />
+                    <path d="M 615 195 C 615 189, 617 185, 620 183 C 623 185, 625 189, 625 195 Z" fill="#d97706" />
+                    <circle cx="620" cy="182" r="3" fill="#fbbf24" />
 
-                    <path d="M 650 248 L 650 238 M 650 238 L 646 242 M 650 238 L 654 242" stroke={isNightMode ? "#cbd5e1" : "#1e293b"} strokeWidth="1.5" fill="none" />
+                    <path d="M 620 218 L 620 208 M 620 208 L 616 212 M 620 208 L 624 212" stroke={isNightMode ? "#cbd5e1" : "#1e293b"} strokeWidth="1.5" fill="none" />
                     {showLabels && (
-                      <text x="650" y="260" textAnchor="middle" fill={isNightMode ? "#f8fafc" : "#1e293b"} fontSize="12" fontWeight="700" fontFamily="Prompt">พระพุทธรูป</text>
+                      <text x="620" y="230" textAnchor="middle" fill={isNightMode ? "#f8fafc" : "#1e293b"} fontSize="12" fontWeight="700" fontFamily="Prompt">พระพุทธรูป</text>
                     )}
                   </g>
                 </g>
 
 
                 {/* ---------------------------------------------------- */}
-                {/* 5. FOOTBALL FIELD (สนามบอลใหญ่ - จัดวางตรงกลางอย่างสง่างาม) */}
+                {/* 5. FOOTBALL FIELD (สนามบอลใหญ่ - ตรงกลางพอดี) */}
                 {/* ---------------------------------------------------- */}
 
                 <g 
@@ -570,28 +587,28 @@ export default function CampusMap() {
                   filter={selectedZone === 'football' ? 'url(#clean-glow)' : 'none'}
                 >
                   {/* Field Green Grass Surface */}
-                  <rect x="450" y="275" width="440" height="210" fill={isNightMode ? "#15803d" : "#22c55e"} rx="10" stroke="#166534" strokeWidth="2.5" />
+                  <rect x="415" y="245" width="425" height="205" fill={isNightMode ? "#15803d" : "#22c55e"} rx="10" stroke="#166534" strokeWidth="2.5" />
                   
                   {/* Boundary Line */}
-                  <rect x="460" y="285" width="420" height="190" fill="none" stroke="#ffffff" strokeWidth="2" rx="4" />
+                  <rect x="425" y="255" width="405" height="185" fill="none" stroke="#ffffff" strokeWidth="2" rx="4" />
 
                   {/* Center Line and Center Circle */}
-                  <line x1="670" y1="285" x2="670" y2="475" stroke="#ffffff" strokeWidth="2" />
-                  <circle cx="670" cy="380" r="38" fill="none" stroke="#ffffff" strokeWidth="2" />
-                  <circle cx="670" cy="380" r="3" fill="#ffffff" />
+                  <line x1="627.5" y1="255" x2="627.5" y2="440" stroke="#ffffff" strokeWidth="2" />
+                  <circle cx="627.5" cy="347.5" r="38" fill="none" stroke="#ffffff" strokeWidth="2" />
+                  <circle cx="627.5" cy="347.5" r="3" fill="#ffffff" />
 
                   {/* Left Penalty Area */}
-                  <rect x="460" y="325" width="60" height="110" fill="none" stroke="#ffffff" strokeWidth="2" />
-                  <rect x="460" y="350" width="25" height="60" fill="none" stroke="#ffffff" strokeWidth="2" />
+                  <rect x="425" y="292.5" width="58" height="110" fill="none" stroke="#ffffff" strokeWidth="2" />
+                  <rect x="425" y="317.5" width="24" height="60" fill="none" stroke="#ffffff" strokeWidth="2" />
 
                   {/* Right Penalty Area */}
-                  <rect x="820" y="325" width="60" height="110" fill="none" stroke="#ffffff" strokeWidth="2" />
-                  <rect x="855" y="350" width="25" height="60" fill="none" stroke="#ffffff" strokeWidth="2" />
+                  <rect x="772" y="292.5" width="58" height="110" fill="none" stroke="#ffffff" strokeWidth="2" />
+                  <rect x="806" y="317.5" width="24" height="60" fill="none" stroke="#ffffff" strokeWidth="2" />
 
                   {/* Field Title */}
                   <text 
-                    x="670" 
-                    y="386" 
+                    x="627.5" 
+                    y="353" 
                     textAnchor="middle" 
                     fill="#ffffff" 
                     fontSize="22" 
@@ -613,29 +630,29 @@ export default function CampusMap() {
                   onClick={() => setSelectedZone('playground')}
                   filter={selectedZone === 'playground' ? 'url(#clean-glow)' : 'none'}
                 >
-                  {/* Clean row of 7 Trees along road (x=398) */}
+                  {/* Clean row of 7 Trees along road (x=362) */}
                   <g>
-                    {[295, 325, 355, 385, 415, 445, 475].map((yTr, idx) => (
+                    {[265, 295, 325, 355, 385, 415, 440].map((yTr, idx) => (
                       <g key={idx}>
-                        <circle cx="398" cy={yTr} r="9" fill="#16a34a" />
-                        <circle cx="396" cy={yTr - 2} r="6" fill="#4ade80" />
+                        <circle cx="362" cy={yTr} r="9" fill="#16a34a" />
+                        <circle cx="360" cy={yTr - 2} r="6" fill="#4ade80" />
                       </g>
                     ))}
                   </g>
 
-                  {/* Playground Purple Long Strip (x=414 to x=440) */}
-                  <rect x="414" y="285" width="26" height="195" fill={isNightMode ? "#581c87" : "#e9d5ff"} rx="13" stroke="#a855f7" strokeWidth="2" />
+                  {/* Playground Purple Long Strip (x=378 to x=404) */}
+                  <rect x="378" y="255" width="26" height="190" fill={isNightMode ? "#581c87" : "#e9d5ff"} rx="13" stroke="#a855f7" strokeWidth="2" />
 
                   {showLabels && (
                     <text 
-                      x="427" 
-                      y="385" 
+                      x="391" 
+                      y="350" 
                       textAnchor="middle" 
                       fill="#7e22ce" 
                       fontSize="12" 
                       fontWeight="700" 
                       fontFamily="Prompt"
-                      transform="rotate(-90 427 385)"
+                      transform="rotate(-90 391 350)"
                     >
                       สนามเด็กเล่น
                     </text>
@@ -644,7 +661,7 @@ export default function CampusMap() {
 
 
                 {/* ---------------------------------------------------- */}
-                {/* 7. WEST COMPLEX: KINDERGARTEN & 5 TEACHER COTTAGES */}
+                {/* 7. WEST COMPLEX: KINDERGARTEN & 5 TEACHER COTTAGES (สมดุลฝั่งซ้าย) */}
                 {/* ---------------------------------------------------- */}
 
                 {/* 7.1 Kindergarten & Heritage Tree (อนุบาล & ของ ผอ. & ต้นไม้ใหญ่) */}
@@ -653,35 +670,35 @@ export default function CampusMap() {
                   onClick={() => setSelectedZone('kindergarten')}
                   filter={selectedZone === 'kindergarten' ? 'url(#clean-glow)' : 'none'}
                 >
-                  {/* Big Tree (ต้นไม้ใหญ่) at x=290, y=295 */}
+                  {/* Big Tree (ต้นไม้ใหญ่) at x=235, y=165 */}
                   <g>
-                    <rect x="286" y="305" width="8" height="24" fill="#78350f" rx="2" />
-                    <circle cx="290" cy="290" r="22" fill="#16a34a" />
-                    <circle cx="282" cy="282" r="14" fill="#4ade80" />
-                    <circle cx="298" cy="282" r="14" fill="#4ade80" />
+                    <rect x="231" y="175" width="8" height="26" fill="#78350f" rx="2" />
+                    <circle cx="235" cy="160" r="24" fill="#16a34a" />
+                    <circle cx="226" cy="152" r="15" fill="#4ade80" />
+                    <circle cx="244" cy="152" r="15" fill="#4ade80" />
                     
                     {showLabels && (
                       <>
-                        <path d="M 290 332 L 290 342 M 290 332 L 287 337 M 290 332 L 293 337" stroke="#16a34a" strokeWidth="1.5" fill="none" />
-                        <text x="290" y="355" textAnchor="middle" fill="#15803d" fontSize="12" fontWeight="700" fontFamily="Prompt">ต้นไม้ใหญ่</text>
+                        <path d="M 235 204 L 235 214 M 235 204 L 232 209 M 235 204 L 238 209" stroke="#16a34a" strokeWidth="1.5" fill="none" />
+                        <text x="235" y="227" textAnchor="middle" fill="#15803d" fontSize="12" fontWeight="700" fontFamily="Prompt">ต้นไม้ใหญ่</text>
                       </>
                     )}
                   </g>
 
                   {/* Kindergarten Building (อนุบาล) */}
-                  <rect x="195" y="240" width="70" height="75" fill={isNightMode ? "#450a0a" : "#fca5a5"} rx="6" stroke="#dc2626" strokeWidth="2.5" />
-                  <rect x="202" y="248" width="56" height="22" fill={isNightMode ? "#7f1d1d" : "#fee2e2"} rx="3" />
-                  <text x="230" y="295" textAnchor="middle" fill="#991b1b" fontSize="14" fontWeight="800" fontFamily="Prompt">อนุบาล</text>
+                  <rect x="65" y="105" width="115" height="80" fill={isNightMode ? "#450a0a" : "#fca5a5"} rx="6" stroke="#dc2626" strokeWidth="2.5" />
+                  <rect x="75" y="113" width="95" height="22" fill={isNightMode ? "#7f1d1d" : "#fee2e2"} rx="3" />
+                  <text x="122" y="162" textAnchor="middle" fill="#991b1b" fontSize="16" fontWeight="800" fontFamily="Prompt">อนุบาล</text>
 
                   {/* Director Area Structure (ของ ผอ.) */}
-                  <rect x="200" y="325" width="60" height="48" fill={isNightMode ? "#1e293b" : "#ffffff"} rx="4" stroke="#64748b" strokeWidth="2" />
-                  <line x1="200" y1="349" x2="260" y2="349" stroke="#cbd5e1" strokeWidth="1.5" />
+                  <rect x="75" y="195" width="95" height="50" fill={isNightMode ? "#1e293b" : "#ffffff"} rx="4" stroke="#64748b" strokeWidth="2" />
+                  <line x1="75" y1="220" x2="170" y2="220" stroke="#cbd5e1" strokeWidth="1.5" />
                   
                   {showLabels && (
                     <>
-                      <path d="M 194 345 Q 175 342 180 328" fill="none" stroke={isNightMode ? "#cbd5e1" : "#334155"} strokeWidth="1.8" />
-                      <polygon points="192,342 196,346 190,348" fill={isNightMode ? "#cbd5e1" : "#334155"} />
-                      <text x="165" y="320" textAnchor="middle" fill={isNightMode ? "#f1f5f9" : "#334155"} fontSize="12" fontWeight="700" fontFamily="Prompt">ของ ผอ.</text>
+                      <path d="M 68 220 Q 48 217 52 203" fill="none" stroke={isNightMode ? "#cbd5e1" : "#334155"} strokeWidth="1.8" />
+                      <polygon points="66,217 70,221 64,223" fill={isNightMode ? "#cbd5e1" : "#334155"} />
+                      <text x="42" y="195" textAnchor="middle" fill={isNightMode ? "#f1f5f9" : "#334155"} fontSize="12" fontWeight="700" fontFamily="Prompt">ของ ผอ.</text>
                     </>
                   )}
                 </g>
@@ -692,25 +709,25 @@ export default function CampusMap() {
                   onClick={() => setSelectedZone('teachers_housing')}
                   filter={selectedZone === 'teachers_housing' ? 'url(#clean-glow)' : 'none'}
                 >
-                  {/* Clean 5 Houses Placed with Generous Margins */}
+                  {/* Clean 5 Houses Placed with Balanced Margins */}
                   {[
-                    { x: 130, y: 440 },
-                    { x: 215, y: 430 },
-                    { x: 215, y: 505 },
-                    { x: 130, y: 530 },
-                    { x: 215, y: 580 }
+                    { x: 65, y: 295 },
+                    { x: 165, y: 295 },
+                    { x: 65, y: 395 },
+                    { x: 165, y: 395 },
+                    { x: 115, y: 495 }
                   ].map((h, i) => (
                     <g key={i}>
-                      <polygon points={`${h.x},${h.y + 16} ${h.x + 16},${h.y} ${h.x + 32},${h.y + 16}`} fill="#b45309" stroke="#78350f" strokeWidth="1.5" />
-                      <rect x={h.x + 3} y={h.y + 16} width="26" height="20" fill={isNightMode ? "#78350f" : "#fed7aa"} stroke="#78350f" strokeWidth="1.5" />
-                      <rect x={h.x + 12} y={h.y + 22} width="8" height="14" fill="#b45309" />
+                      <polygon points={`${h.x},${h.y + 16} ${h.x + 21},${h.y} ${h.x + 42},${h.y + 16}`} fill="#b45309" stroke="#78350f" strokeWidth="1.5" />
+                      <rect x={h.x + 4} y={h.y + 16} width="34" height="24" fill={isNightMode ? "#78350f" : "#fed7aa"} stroke="#78350f" strokeWidth="1.5" />
+                      <rect x={h.x + 16} y={h.y + 24} width="10" height="16" fill="#b45309" />
                     </g>
                   ))}
 
                   {showLabels && (
                     <>
-                      <text x="145" y="505" textAnchor="middle" fill="#b45309" fontSize="13" fontWeight="800" fontFamily="Prompt">บ้านพักครู</text>
-                      <text x="145" y="595" textAnchor="middle" fill="#b45309" fontSize="13" fontWeight="800" fontFamily="Prompt">บ้านพักครู</text>
+                      <text x="115" y="375" textAnchor="middle" fill="#b45309" fontSize="13" fontWeight="800" fontFamily="Prompt">บ้านพักครู</text>
+                      <text x="115" y="575" textAnchor="middle" fill="#b45309" fontSize="13" fontWeight="800" fontFamily="Prompt">บ้านพักครู (5 หลัง)</text>
                     </>
                   )}
                 </g>
@@ -726,15 +743,15 @@ export default function CampusMap() {
                   onClick={() => setSelectedZone('volleyball')}
                   filter={selectedZone === 'volleyball' ? 'url(#clean-glow)' : 'none'}
                 >
-                  <rect x="485" y="505" width="90" height="75" fill={isNightMode ? "#064e3b" : "#86efac"} rx="6" stroke="#15803d" strokeWidth="2" />
-                  <rect x="493" y="513" width="74" height="59" fill={isNightMode ? "#047857" : "#a7f3d0"} stroke="#ffffff" strokeWidth="1.5" />
-                  <line x1="530" y1="513" x2="530" y2="572" stroke="#059669" strokeWidth="2.5" strokeDasharray="3 2" />
+                  <rect x="455" y="475" width="95" height="75" fill={isNightMode ? "#064e3b" : "#86efac"} rx="6" stroke="#15803d" strokeWidth="2" />
+                  <rect x="463" y="483" width="79" height="59" fill={isNightMode ? "#047857" : "#a7f3d0"} stroke="#ffffff" strokeWidth="1.5" />
+                  <line x1="502" y1="483" x2="502" y2="542" stroke="#059669" strokeWidth="2.5" strokeDasharray="3 2" />
 
                   {showLabels && (
                     <>
-                      <text x="510" y="545" textAnchor="middle" fill="#065f46" fontSize="10" fontWeight="700" fontFamily="Prompt" transform="rotate(-90 510 545)">สนาม</text>
-                      <text x="530" y="545" textAnchor="middle" fill="#047857" fontSize="10" fontWeight="700" fontFamily="Prompt" transform="rotate(-90 530 545)">วอลเลย์</text>
-                      <text x="550" y="545" textAnchor="middle" fill="#065f46" fontSize="10" fontWeight="700" fontFamily="Prompt" transform="rotate(-90 550 545)">บอล</text>
+                      <text x="480" y="515" textAnchor="middle" fill="#065f46" fontSize="10" fontWeight="700" fontFamily="Prompt" transform="rotate(-90 480 515)">สนาม</text>
+                      <text x="502" y="515" textAnchor="middle" fill="#047857" fontSize="10" fontWeight="700" fontFamily="Prompt" transform="rotate(-90 502 515)">วอลเลย์</text>
+                      <text x="524" y="515" textAnchor="middle" fill="#065f46" fontSize="10" fontWeight="700" fontFamily="Prompt" transform="rotate(-90 524 515)">บอล</text>
                     </>
                   )}
                 </g>
@@ -746,45 +763,35 @@ export default function CampusMap() {
                   filter={selectedZone === 'gate_fence' ? 'url(#clean-glow)' : 'none'}
                 >
                   {/* Gate (ประตูโรงเรียน) */}
-                  <rect x="330" y="615" width="50" height="25" fill="#334155" rx="3" stroke="#94a3b8" strokeWidth="1.5" />
-                  <line x1="355" y1="615" x2="355" y2="640" stroke="#94a3b8" strokeWidth="2" />
+                  <rect x="300" y="605" width="45" height="25" fill="#334155" rx="3" stroke="#94a3b8" strokeWidth="1.5" />
+                  <line x1="322.5" y1="605" x2="322.5" y2="630" stroke="#94a3b8" strokeWidth="2" />
 
                   {/* School Sign (ป้าย รร.) */}
-                  <rect x="395" y="612" width="70" height="28" fill="#0b2545" rx="4" stroke="#e5b326" strokeWidth="2" />
-                  <text x="430" y="630" textAnchor="middle" fill="#e5b326" fontSize="11" fontWeight="800" fontFamily="Prompt">ป้าย รร.</text>
+                  <rect x="360" y="602" width="75" height="28" fill="#0b2545" rx="4" stroke="#e5b326" strokeWidth="2" />
+                  <text x="397" y="620" textAnchor="middle" fill="#e5b326" fontSize="11" fontWeight="800" fontFamily="Prompt">ป้าย รร.</text>
 
                   {/* Boundary Fence */}
-                  <line x1="475" y1="626" x2="940" y2="626" stroke="#94a3b8" strokeWidth="4" strokeLinecap="round" />
-                  <line x1="475" y1="626" x2="940" y2="626" stroke="#cbd5e1" strokeWidth="1.5" strokeDasharray="10 8" />
+                  <line x1="445" y1="616" x2="905" y2="616" stroke="#94a3b8" strokeWidth="4" strokeLinecap="round" />
+                  <line x1="445" y1="616" x2="905" y2="616" stroke="#cbd5e1" strokeWidth="1.5" strokeDasharray="10 8" />
 
                   {/* Trees along Fence */}
                   <g>
-                    <circle cx="680" cy="612" r="16" fill="#16a34a" />
-                    <circle cx="702" cy="610" r="18" fill="#22c55e" />
-                    <circle cx="724" cy="614" r="14" fill="#16a34a" />
+                    <circle cx="630" cy="602" r="16" fill="#16a34a" />
+                    <circle cx="652" cy="600" r="18" fill="#22c55e" />
+                    <circle cx="674" cy="604" r="14" fill="#16a34a" />
 
-                    <circle cx="830" cy="612" r="16" fill="#16a34a" />
-                    <circle cx="852" cy="610" r="18" fill="#22c55e" />
-                    <circle cx="874" cy="614" r="14" fill="#16a34a" />
+                    <circle cx="780" cy="602" r="16" fill="#16a34a" />
+                    <circle cx="802" cy="600" r="18" fill="#22c55e" />
+                    <circle cx="824" cy="604" r="14" fill="#16a34a" />
                   </g>
 
                   {showLabels && (
                     <>
-                      <text x="355" y="660" textAnchor="middle" fill={isNightMode ? "#f8fafc" : "#1e293b"} fontSize="13" fontWeight="700" fontFamily="Prompt">ประตู</text>
-                      <text x="430" y="660" textAnchor="middle" fill="#0b2545" fontSize="13" fontWeight="700" fontFamily="Prompt">ป้าย รร.</text>
-                      <text x="770" y="660" textAnchor="middle" fill="#64748b" fontSize="13" fontWeight="700" fontFamily="Prompt">รั้วโรงเรียน & ต้นไม้</text>
+                      <text x="322.5" y="650" textAnchor="middle" fill={isNightMode ? "#f8fafc" : "#1e293b"} fontSize="13" fontWeight="700" fontFamily="Prompt">ประตู</text>
+                      <text x="397" y="650" textAnchor="middle" fill="#0b2545" fontSize="13" fontWeight="700" fontFamily="Prompt">ป้าย รร.</text>
+                      <text x="730" y="650" textAnchor="middle" fill="#64748b" fontSize="13" fontWeight="700" fontFamily="Prompt">รั้วโรงเรียน & ต้นไม้</text>
                     </>
                   )}
-                </g>
-
-                {/* Compass Rose in North-East */}
-                <g transform="translate(935, 45)">
-                  <circle cx="0" cy="0" r="20" fill={isNightMode ? "#1e293b" : "#ffffff"} stroke={isNightMode ? "#475569" : "#cbd5e1"} strokeWidth="1.5" />
-                  <polygon points="0,-16 5,-2 0,0" fill="#dc2626" />
-                  <polygon points="0,-16 -5,-2 0,0" fill="#ef4444" />
-                  <polygon points="0,16 5,2 0,0" fill="#64748b" />
-                  <polygon points="0,16 -5,2 0,0" fill="#94a3b8" />
-                  <text x="0" y="-20" textAnchor="middle" fill="#dc2626" fontSize="10" fontWeight="900">N</text>
                 </g>
 
               </svg>
