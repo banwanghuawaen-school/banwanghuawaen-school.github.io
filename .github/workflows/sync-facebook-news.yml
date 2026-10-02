@@ -4,6 +4,10 @@ on:
   schedule:
     # รันอัตโนมัติทุกๆ 2 ชั่วโมง (นาทีที่ 15 ของทุกคู่ชั่วโมง)
     - cron: '15 */2 * * *'
+  push:
+    paths:
+      - 'scripts/sync-facebook.js'
+      - '.github/workflows/sync-facebook-news.yml'
   workflow_dispatch: # เปิดให้กดรันด่วนได้ด้วยตนเองจากหน้าเว็บ GitHub Actions
 
 permissions:
