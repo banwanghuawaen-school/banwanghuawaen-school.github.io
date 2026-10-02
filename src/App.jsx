@@ -18,6 +18,7 @@ export default function App() {
   const [currentNewsItem, setCurrentNewsItem] = useState(null);
   const [user, setUser] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [lang, setLang] = useState('th'); // 'th' | 'en'
 
   // Initialize school info and user session on mount
   useEffect(() => {
@@ -137,7 +138,8 @@ export default function App() {
 
   // Dynamically update document title based on view for SEO & user orientation
   useEffect(() => {
-    const titles = {
+    const isEn = lang === 'en';
+    const titlesTh = {
       home: 'หน้าแรก | โรงเรียนบ้านวังหัวแหวนพัฒนา',
       news: 'ข่าวประชาสัมพันธ์และกิจกรรม | โรงเรียนบ้านวังหัวแหวนพัฒนา',
       'news-detail': currentNewsItem ? `${currentNewsItem.title} | โรงเรียนบ้านวังหัวแหวนพัฒนา` : 'รายละเอียดข่าว | โรงเรียนบ้านวังหัวแหวนพัฒนา',
@@ -147,8 +149,19 @@ export default function App() {
       login: 'เข้าสู่ระบบผู้ดูแล | โรงเรียนบ้านวังหัวแหวนพัฒนา',
       admin: 'ระบบบริหารจัดการเว็บไซต์ | โรงเรียนบ้านวังหัวแหวนพัฒนา'
     };
-    document.title = titles[view] || 'โรงเรียนบ้านวังหัวแหวนพัฒนา - สพป.กำแพงเพชร เขต 2 | เว็บไซต์ทางการ';
-  }, [view, currentNewsItem]);
+    const titlesEn = {
+      home: 'Home | Ban Wang Hua Waen Phatthana School',
+      news: 'News & Activities | Ban Wang Hua Waen Phatthana School',
+      'news-detail': currentNewsItem ? `${currentNewsItem.title} | Ban Wang Hua Waen Phatthana School` : 'News Detail | Ban Wang Hua Waen Phatthana School',
+      staff: 'Staff Directory | Ban Wang Hua Waen Phatthana School',
+      campus: 'Campus Map | Ban Wang Hua Waen Phatthana School',
+      contact: 'Contact Us | Ban Wang Hua Waen Phatthana School',
+      login: 'Admin Login | Ban Wang Hua Waen Phatthana School',
+      admin: 'Admin Portal | Ban Wang Hua Waen Phatthana School'
+    };
+    const titles = isEn ? titlesEn : titlesTh;
+    document.title = titles[view] || (isEn ? 'Ban Wang Hua Waen Phatthana School' : 'โรงเรียนบ้านวังหัวแหวนพัฒนา - สพป.กำแพงเพชร เขต 2');
+  }, [view, currentNewsItem, lang]);
 
   const handleLogout = () => {
     authService.logout();
@@ -163,19 +176,19 @@ export default function App() {
 
     switch (view) {
       case 'home':
-        return <Home schoolInfo={schoolInfo} setView={setView} setCurrentNewsItem={setCurrentNewsItem} />;
+        return <Home schoolInfo={schoolInfo} setView={setView} setCurrentNewsItem={setCurrentNewsItem} lang={lang} />;
       case 'news':
-        return <News setView={setView} setCurrentNewsItem={setCurrentNewsItem} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />;
+        return <News setView={setView} setCurrentNewsItem={setCurrentNewsItem} searchQuery={searchQuery} setSearchQuery={setSearchQuery} lang={lang} />;
       case 'news-detail':
-        return <NewsDetail newsItem={currentNewsItem} setView={setView} setCurrentNewsItem={setCurrentNewsItem} />;
+        return <NewsDetail newsItem={currentNewsItem} setView={setView} setCurrentNewsItem={setCurrentNewsItem} lang={lang} />;
       case 'staff':
-        return <Staff />;
+        return <Staff lang={lang} />;
       case 'campus':
-        return <CampusMap />;
+        return <CampusMap lang={lang} />;
       case 'contact':
-        return <Contact schoolInfo={schoolInfo} />;
+        return <Contact schoolInfo={schoolInfo} lang={lang} />;
       case 'login':
-        return <Login setView={setView} setUser={setUser} />;
+        return <Login setView={setView} setUser={setUser} lang={lang} />;
       case 'admin':
         return user ? (
           <AdminDashboard 
@@ -185,21 +198,30 @@ export default function App() {
           />
         ) : null;
       default:
-        return <Home schoolInfo={schoolInfo} setView={setView} setCurrentNewsItem={setCurrentNewsItem} />;
+        return <Home schoolInfo={schoolInfo} setView={setView} setCurrentNewsItem={setCurrentNewsItem} lang={lang} />;
     }
   };
 
   if (!schoolInfo) {
-    return <div className="loading-page flex-center">กำลังโหลดข้อมูลระบบเว็บไซต์โรงเรียน...</div>;
+    return <div className="loading-page flex-center">{lang === 'en' ? 'Loading school website...' : 'กำลังโหลดข้อมูลระบบเว็บไซต์โรงเรียน...'}</div>;
   }
 
   return (
     <>
-      <Header currentView={view} setView={setView} user={user} setUser={setUser} schoolInfo={schoolInfo} setSearchQuery={setSearchQuery} />
+      <Header 
+        currentView={view} 
+        setView={setView} 
+        user={user} 
+        setUser={setUser} 
+        schoolInfo={schoolInfo} 
+        setSearchQuery={setSearchQuery}
+        lang={lang}
+        setLang={setLang}
+      />
       <main className="main-content-layout">
         {renderView()}
       </main>
-      <Footer schoolInfo={schoolInfo} setView={setView} />
+      <Footer schoolInfo={schoolInfo} setView={setView} lang={lang} />
 
       <style>{`
         .loading-page {

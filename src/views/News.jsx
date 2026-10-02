@@ -3,12 +3,14 @@ import { dbService } from '../services/db';
 import NewsCard from '../components/NewsCard';
 import { Search, AlertCircle } from 'lucide-react';
 
-export default function News({ setView, setCurrentNewsItem, searchQuery: propSearchQuery, setSearchQuery: propSetSearchQuery }) {
+export default function News({ setView, setCurrentNewsItem, searchQuery: propSearchQuery, setSearchQuery: propSetSearchQuery, lang = 'th' }) {
   const [localSearchQuery, setLocalSearchQuery] = useState('');
   const searchQuery = propSearchQuery !== undefined ? propSearchQuery : localSearchQuery;
   const setSearchQuery = propSetSearchQuery || setLocalSearchQuery;
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [newsList, setNewsList] = useState([]);
+
+  const isEn = lang === 'en';
 
   useEffect(() => {
     const loadNews = () => {
@@ -22,7 +24,12 @@ export default function News({ setView, setCurrentNewsItem, searchQuery: propSea
   }, []);
 
   // Categories list
-  const categories = [
+  const categories = isEn ? [
+    { value: 'all', label: 'All News' },
+    { value: 'announcement', label: 'Announcements' },
+    { value: 'pr', label: 'Public Relations' },
+    { value: 'activity', label: 'Activities' }
+  ] : [
     { value: 'all', label: 'ข่าวสารทั้งหมด' },
     { value: 'announcement', label: 'ประกาศสำคัญ' },
     { value: 'pr', label: 'ข่าวประชาสัมพันธ์' },
@@ -40,18 +47,20 @@ export default function News({ setView, setCurrentNewsItem, searchQuery: propSea
     return matchesSearch && matchesCategory;
   });
 
-
-
   return (
     <div className="news-view container section-padding animate-fade-in">
       {/* Page Title Header */}
       <div className="page-header text-center">
-        <span className="section-tag">ANNOUNCEMENTS</span>
-        <h2 className="section-title">ข่าวสารและประกาศ</h2>
+        <span className="section-tag">{isEn ? 'ANNOUNCEMENTS & NEWS' : 'ข่าวสารและกิจกรรม'}</span>
+        <h2 className="section-title">{isEn ? 'News & Announcements' : 'ข่าวสารและประกาศ'}</h2>
         <div className="school-divider">
           <span className="school-divider-dot"></span>
         </div>
-        <p className="section-subtitle">ติดตามความเคลื่อนไหว ประกาศรับสมัคร กิจกรรม และข่าวสารประชาสัมพันธ์ต่างๆ ของโรงเรียน</p>
+        <p className="section-subtitle">
+          {isEn 
+            ? 'Stay informed about school admissions, events, student activities, and official notices.' 
+            : 'ติดตามความเคลื่อนไหว ประกาศรับสมัคร กิจกรรม และข่าวสารประชาสัมพันธ์ต่างๆ ของโรงเรียน'}
+        </p>
       </div>
 
       {/* Search & Filter Toolbar */}
@@ -61,7 +70,7 @@ export default function News({ setView, setCurrentNewsItem, searchQuery: propSea
           <Search size={18} className="search-icon" />
           <input 
             type="text" 
-            placeholder="พิมพ์คำค้นหาข่าวประกาศ..." 
+            placeholder={isEn ? "Search news, announcements..." : "พิมพ์คำค้นหาข่าวประกาศ..."} 
             className="search-input"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}

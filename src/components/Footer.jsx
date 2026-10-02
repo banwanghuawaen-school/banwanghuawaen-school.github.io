@@ -1,8 +1,10 @@
 import React from 'react';
 import { Phone, Mail, MapPin, ExternalLink } from 'lucide-react';
 
-export default function Footer({ schoolInfo, setView }) {
-  const currentYear = new Date().getFullYear() + 543; // Thai Buddhist Calendar Year
+export default function Footer({ schoolInfo, setView, lang = 'th' }) {
+  const currentYearCe = new Date().getFullYear();
+  const currentYearBe = currentYearCe + 543; // Thai Buddhist Calendar Year
+  const isEn = lang === 'en';
 
   const handleNav = (view) => {
     setView(view);
@@ -24,62 +26,62 @@ export default function Footer({ schoolInfo, setView }) {
                 style={{ objectFit: 'contain', width: '48px', height: '48px', borderRadius: '50%', backgroundColor: 'white', padding: '2px' }} 
               />
               <div>
-                <h3 className="footer-school-name">{schoolInfo.name}</h3>
-                <p className="footer-school-sub">{schoolInfo.nameEn}</p>
+                <h3 className="footer-school-name">{isEn ? (schoolInfo?.nameEn || 'Ban Wang Hua Waen Phatthana School') : schoolInfo?.name}</h3>
+                <p className="footer-school-sub">{isEn ? 'Kamphaeng Phet Primary Educational Service Area Office 2' : schoolInfo?.nameEn}</p>
               </div>
             </div>
-            <p className="school-motto-text">“{schoolInfo.slogan}”</p>
-            <p className="school-office-text">{schoolInfo.region}</p>
+            <p className="school-motto-text">“{schoolInfo?.slogan}”</p>
+            <p className="school-office-text">{schoolInfo?.region}</p>
           </div>
 
           {/* Contact Info Column */}
           <div className="footer-contact">
-            <h4 className="footer-heading">ติดต่อโรงเรียน</h4>
+            <h4 className="footer-heading">{isEn ? 'Contact School' : 'ติดต่อโรงเรียน'}</h4>
             <ul className="footer-contact-list">
               <li>
                 <MapPin size={18} className="footer-icon" />
-                <span>{schoolInfo.address}</span>
+                <span>{schoolInfo?.address}</span>
               </li>
               <li>
                 <Phone size={18} className="footer-icon" />
-                <a href={`tel:${schoolInfo.phone}`}>{schoolInfo.phone}</a>
+                <a href={`tel:${schoolInfo?.phone}`}>{schoolInfo?.phone}</a>
               </li>
               <li>
                 <Mail size={18} className="footer-icon" />
-                <a href={`mailto:${schoolInfo.email}`}>{schoolInfo.email}</a>
+                <a href={`mailto:${schoolInfo?.email}`}>{schoolInfo?.email}</a>
               </li>
             </ul>
           </div>
 
           {/* Quick Links Column */}
           <div className="footer-links">
-            <h4 className="footer-heading">แผนผังเว็บไซต์</h4>
+            <h4 className="footer-heading">{isEn ? 'Site Navigation' : 'แผนผังเว็บไซต์'}</h4>
             <ul className="footer-link-list">
-              <li><button onClick={() => handleNav('home')}>หน้าแรก</button></li>
-              <li><button onClick={() => handleNav('news')}>ข่าวประกาศ</button></li>
-              <li><button onClick={() => handleNav('staff')}>ทำเนียบบุคลากร</button></li>
-              <li><button onClick={() => handleNav('campus')}>แผนผังโรงเรียน</button></li>
-              <li><button onClick={() => handleNav('contact')}>ข้อมูลติดต่อ</button></li>
+              <li><button onClick={() => handleNav('home')}>{isEn ? 'Home' : 'หน้าแรก'}</button></li>
+              <li><button onClick={() => handleNav('news')}>{isEn ? 'News & Events' : 'ข่าวประกาศ'}</button></li>
+              <li><button onClick={() => handleNav('staff')}>{isEn ? 'Staff Directory' : 'ทำเนียบบุคลากร'}</button></li>
+              <li><button onClick={() => handleNav('campus')}>{isEn ? 'Campus Map' : 'แผนผังโรงเรียน'}</button></li>
+              <li><button onClick={() => handleNav('contact')}>{isEn ? 'Contact Us' : 'ข้อมูลติดต่อ'}</button></li>
             </ul>
           </div>
 
           {/* External Gov Links Column */}
           <div className="footer-external">
-            <h4 className="footer-heading">ลิงก์หน่วยงานที่เกี่ยวข้อง</h4>
+            <h4 className="footer-heading">{isEn ? 'Related Educational Agencies' : 'ลิงก์หน่วยงานที่เกี่ยวข้อง'}</h4>
             <ul className="footer-link-list">
               <li>
                 <a href="https://www.obec.go.th" target="_blank" rel="noopener noreferrer" className="ext-link">
-                  สพฐ. <ExternalLink size={12} />
+                  {isEn ? 'OBEC (สพฐ.)' : 'สพฐ.'} <ExternalLink size={12} />
                 </a>
               </li>
               <li>
                 <a href="https://www.kpp2.go.th/main/index.php" target="_blank" rel="noopener noreferrer" className="ext-link">
-                  สพป.กำแพงเพชร เขต 2 <ExternalLink size={12} />
+                  {isEn ? 'KPP2 (สพป.กำแพงเพชร เขต 2)' : 'สพป.กำแพงเพชร เขต 2'} <ExternalLink size={12} />
                 </a>
               </li>
               <li>
                 <a href="https://www.moe.go.th" target="_blank" rel="noopener noreferrer" className="ext-link">
-                  กระทรวงศึกษาธิการ <ExternalLink size={12} />
+                  {isEn ? 'Ministry of Education' : 'กระทรวงศึกษาธิการ'} <ExternalLink size={12} />
                 </a>
               </li>
             </ul>
@@ -90,14 +92,14 @@ export default function Footer({ schoolInfo, setView }) {
       {/* Footer Bottom bar */}
       <div className="footer-bottom">
         <div className="container footer-bottom-content">
-          <p>© พ.ศ. {currentYear} {schoolInfo.name}. สงวนลิขสิทธิ์ข้อมูลตามพระราชบัญญัติลิขสิทธิ์</p>
+          <p>© {isEn ? `Copyright ${currentYearCe}` : `พ.ศ. ${currentYearBe}`} {schoolInfo?.name}. {isEn ? 'All rights reserved.' : 'สงวนลิขสิทธิ์ข้อมูลตามพระราชบัญญัติลิขสิทธิ์'}</p>
           <div className="footer-credits-admin" style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
-            <p>พัฒนาและบำรุงรักษาโดย โรงเรียนบ้านวังหัวแหวนพัฒนา</p>
+            <p>{isEn ? 'Maintained by Ban Wang Hua Waen Phatthana School' : 'พัฒนาและบำรุงรักษาโดย โรงเรียนบ้านวังหัวแหวนพัฒนา'}</p>
             <button 
               onClick={() => handleNav('login')} 
               className="admin-login-footer-btn"
             >
-              สำหรับผู้ดูแลระบบ (Admin Login)
+              {isEn ? 'Admin Login' : 'สำหรับผู้ดูแลระบบ (Admin Login)'}
             </button>
           </div>
         </div>

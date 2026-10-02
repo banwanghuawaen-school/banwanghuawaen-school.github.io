@@ -14,12 +14,14 @@ import {
 } from 'lucide-react';
 import { authService } from '../services/auth';
 
-export default function Header({ currentView, setView, user, setUser, schoolInfo, setSearchQuery }) {
+export default function Header({ currentView, setView, user, setUser, schoolInfo, setSearchQuery, lang = 'th', setLang }) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [fontSize, setFontSize] = useState('normal'); // 'small', 'normal', 'large'
   const [contrastMode, setContrastMode] = useState('normal'); // 'normal', 'yellow-black', 'white-black'
   const [headerSearch, setHeaderSearch] = useState('');
+
+  const isEn = lang === 'en';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -85,45 +87,21 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
   return (
     <header className={`obec-school-header ${scrolled ? 'scrolled' : ''}`}>
       
-      {/* 1. TOP UTILITY BAR (Deep Green / MoE Government Style) */}
+      {/* 1. TOP UTILITY BAR (Deep Green / MoE Government Style - Clean No-Text Icons) */}
       <div className="obec-top-bar">
         <div className="container obec-top-content">
-          {/* Accessibility Font Resizer & Contrast */}
+          
+          {/* Left: Accessibility Controls (Contrast & Font Resizer - Pure Clean Icon Buttons) */}
           <div className="obec-access-group">
-            <span className="access-label d-none-sm">ขนาดตัวอักษร:</span>
-            <div className="font-size-pills">
-              <button 
-                type="button"
-                className={`font-pill ${fontSize === 'small' ? 'active' : ''}`}
-                onClick={() => changeFontSize('small')}
-                title="ลดขนาดตัวอักษร"
-              >
-                ก-
-              </button>
-              <button 
-                type="button"
-                className={`font-pill ${fontSize === 'normal' ? 'active' : ''}`}
-                onClick={() => changeFontSize('normal')}
-                title="ขนาดตัวอักษรปกติ"
-              >
-                ก
-              </button>
-              <button 
-                type="button"
-                className={`font-pill ${fontSize === 'large' ? 'active' : ''}`}
-                onClick={() => changeFontSize('large')}
-                title="เพิ่มขนาดตัวอักษร"
-              >
-                ก+
-              </button>
-            </div>
-
-            <div className="contrast-pills d-none-sm">
+            
+            {/* Contrast Color Buttons (White, Black/White, Black/Yellow) */}
+            <div className="contrast-pills">
               <button 
                 type="button"
                 className={`contrast-pill c-default ${contrastMode === 'normal' ? 'active' : ''}`}
                 onClick={() => changeContrast('normal')}
-                title="สีปกติ"
+                title={isEn ? "Default Colors" : "สีปกติ"}
+                aria-label="Default colors"
               >
                 ก
               </button>
@@ -131,7 +109,8 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
                 type="button"
                 className={`contrast-pill c-wb ${contrastMode === 'white-black' ? 'active' : ''}`}
                 onClick={() => changeContrast('white-black')}
-                title="ขาว-ดำ (White on Black)"
+                title={isEn ? "White on Black" : "ขาว-ดำ"}
+                aria-label="White on black"
               >
                 ก
               </button>
@@ -139,24 +118,96 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
                 type="button"
                 className={`contrast-pill c-yb ${contrastMode === 'yellow-black' ? 'active' : ''}`}
                 onClick={() => changeContrast('yellow-black')}
-                title="เหลือง-ดำ (Yellow on Black)"
+                title={isEn ? "Yellow on Black" : "เหลือง-ดำ"}
+                aria-label="Yellow on black"
               >
                 ก
               </button>
             </div>
+
+            <div className="top-divider-small"></div>
+
+            {/* Font Size Buttons: (-) (ก) (+) */}
+            <div className="font-size-pills">
+              <button 
+                type="button"
+                className={`font-pill ${fontSize === 'small' ? 'active' : ''}`}
+                onClick={() => changeFontSize('small')}
+                title={isEn ? "Decrease Font Size" : "ลดขนาดตัวอักษร"}
+                aria-label="Decrease font size"
+              >
+                -
+              </button>
+              <button 
+                type="button"
+                className={`font-pill ${fontSize === 'normal' ? 'active' : ''}`}
+                onClick={() => changeFontSize('normal')}
+                title={isEn ? "Normal Font Size" : "ขนาดตัวอักษรปกติ"}
+                aria-label="Normal font size"
+              >
+                ก
+              </button>
+              <button 
+                type="button"
+                className={`font-pill ${fontSize === 'large' ? 'active' : ''}`}
+                onClick={() => changeFontSize('large')}
+                title={isEn ? "Increase Font Size" : "เพิ่มขนาดตัวอักษร"}
+                aria-label="Increase font size"
+              >
+                +
+              </button>
+            </div>
+
           </div>
 
-          {/* Right Utility: Language & Contact */}
+          {/* Right: Language Switcher & Contact / Social Icons */}
           <div className="obec-top-right">
+            
+            {/* Interactive TH / EN Language Switcher */}
             <div className="lang-switcher">
-              <span className="lang-badge active">TH</span>
-              <span className="lang-badge">EN</span>
+              <button 
+                type="button"
+                className={`lang-btn ${lang === 'th' ? 'active' : ''}`}
+                onClick={() => setLang && setLang('th')}
+                title="ภาษาไทย (Thai)"
+              >
+                TH
+              </button>
+              <button 
+                type="button"
+                className={`lang-btn ${lang === 'en' ? 'active' : ''}`}
+                onClick={() => setLang && setLang('en')}
+                title="English"
+              >
+                EN
+              </button>
             </div>
+
             <span className="top-divider"></span>
-            <div className="top-phone d-none-sm">
-              <Phone size={13} className="text-secondary" />
-              <span>โทร: {schoolInfo?.phone || '0-5578-0246'}</span>
+
+            {/* Social & Phone Links */}
+            <div className="top-social-group d-none-sm">
+              <a 
+                href="https://www.facebook.com/profile.php?id=100057502268064" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="top-social-link"
+                title="Facebook โรงเรียน"
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+              </a>
+              <a 
+                href={`tel:${schoolInfo?.phone || '0-5578-0246'}`}
+                className="top-phone-link"
+                title={isEn ? "Call School" : "โทรศัพท์ติดต่อ"}
+              >
+                <Phone size={13} className="phone-icon" />
+                <span>{schoolInfo?.phone || '0-5578-0246'}</span>
+              </a>
             </div>
+
           </div>
         </div>
       </div>
@@ -177,9 +228,15 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
               />
             </div>
             <div className="school-text-unit">
-              <h1 className="school-main-name">โรงเรียนบ้านวังหัวแหวนพัฒนา</h1>
-              <p className="school-org-name">สำนักงานเขตพื้นที่การศึกษาประถมศึกษากำแพงเพชร เขต 2</p>
-              <p className="school-en-name">BAN WANG HUA WAEN PHATTHANA SCHOOL • สพป.กำแพงเพชร เขต 2</p>
+              <h1 className="school-main-name">
+                {isEn ? (schoolInfo?.nameEn || 'Ban Wang Hua Waen Phatthana School') : (schoolInfo?.name || 'โรงเรียนบ้านวังหัวแหวนพัฒนา')}
+              </h1>
+              <p className="school-org-name">
+                {isEn ? 'Kamphaeng Phet Primary Educational Service Area Office 2' : (schoolInfo?.region || 'สำนักงานเขตพื้นที่การศึกษาประถมศึกษากำแพงเพชร เขต 2')}
+              </p>
+              <p className="school-en-name">
+                {isEn ? 'Office of the Basic Education Commission • Ministry of Education' : 'Ban Wang Hua Waen Phatthana School'}
+              </p>
             </div>
           </div>
 
@@ -201,28 +258,28 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
           {/* Desktop Links with OBEC Gold Active Tab */}
           <div className="desktop-menu-list">
             <button onClick={() => handleNav('home')} className={isActive('home')}>
-              <Home size={16} /> หน้าแรก
+              <Home size={16} /> {isEn ? 'Home' : 'หน้าแรก'}
             </button>
             <button onClick={() => handleNav('news')} className={isActive('news')}>
-              <Newspaper size={16} /> ข่าวสารและกิจกรรม
+              <Newspaper size={16} /> {isEn ? 'News & Activities' : 'ข่าวสารและกิจกรรม'}
             </button>
             <button onClick={() => handleNav('staff')} className={isActive('staff')}>
-              <Users size={16} /> ทำเนียบบุคลากร
+              <Users size={16} /> {isEn ? 'Staff Directory' : 'ทำเนียบบุคลากร'}
             </button>
             <button onClick={() => handleNav('campus')} className={isActive('campus')}>
-              <Layers size={16} /> แผนผังโรงเรียน
+              <Layers size={16} /> {isEn ? 'Campus Map' : 'แผนผังโรงเรียน'}
             </button>
             <button onClick={() => handleNav('contact')} className={isActive('contact')}>
-              <PhoneCall size={16} /> ข้อมูลติดต่อ
+              <PhoneCall size={16} /> {isEn ? 'Contact Us' : 'ข้อมูลติดต่อ'}
             </button>
 
             {user && (
               <div className="admin-chip-group">
                 <button onClick={() => handleNav('admin')} className={isActive('admin')}>
-                  <ShieldAlert size={16} /> ระบบจัดการ (Admin)
+                  <ShieldAlert size={16} /> {isEn ? 'Admin' : 'ระบบจัดการ (Admin)'}
                 </button>
-                <button onClick={handleLogout} className="btn-logout-chip" title="ออกจากระบบ">
-                  <LogOut size={14} /> ออกจากระบบ
+                <button onClick={handleLogout} className="btn-logout-chip" title={isEn ? "Logout" : "ออกจากระบบ"}>
+                  <LogOut size={14} /> {isEn ? 'Logout' : 'ออกจากระบบ'}
                 </button>
               </div>
             )}
@@ -232,12 +289,12 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
           <form className="header-search-form" onSubmit={handleSearchSubmit}>
             <input 
               type="text" 
-              placeholder="กรอกคำเพื่อค้นหา..." 
+              placeholder={isEn ? "Search website..." : "กรอกคำเพื่อค้นหา..."} 
               className="header-search-input"
               value={headerSearch}
               onChange={(e) => setHeaderSearch(e.target.value)}
             />
-            <button type="submit" className="header-search-btn" title="ค้นหา">
+            <button type="submit" className="header-search-btn" title={isEn ? "Search" : "ค้นหา"}>
               <Search size={16} />
             </button>
           </form>
@@ -248,10 +305,32 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
       {/* 4. MOBILE NAVIGATION DRAWER */}
       {isOpen && (
         <div className="obec-mobile-drawer animate-fade-in">
+          
+          {/* Mobile Language Switcher */}
+          <div className="mobile-lang-row mb-3">
+            <span className="mobile-lang-label">{isEn ? 'Language:' : 'ภาษา:'}</span>
+            <div className="lang-switcher">
+              <button 
+                type="button"
+                className={`lang-btn ${lang === 'th' ? 'active' : ''}`}
+                onClick={() => setLang && setLang('th')}
+              >
+                TH
+              </button>
+              <button 
+                type="button"
+                className={`lang-btn ${lang === 'en' ? 'active' : ''}`}
+                onClick={() => setLang && setLang('en')}
+              >
+                EN
+              </button>
+            </div>
+          </div>
+
           <form className="mobile-search-form mb-3" onSubmit={handleSearchSubmit}>
             <input 
               type="text" 
-              placeholder="กรอกคำเพื่อค้นหา..." 
+              placeholder={isEn ? "Search website..." : "กรอกคำเพื่อค้นหา..."} 
               className="header-search-input w-100"
               value={headerSearch}
               onChange={(e) => setHeaderSearch(e.target.value)}
@@ -262,31 +341,31 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
           </form>
 
           <button onClick={() => handleNav('home')} className={isActive('home')}>
-            <Home size={18} /> หน้าแรก
+            <Home size={18} /> {isEn ? 'Home' : 'หน้าแรก'}
           </button>
           <button onClick={() => handleNav('news')} className={isActive('news')}>
-            <Newspaper size={18} /> ข่าวสารและกิจกรรม
+            <Newspaper size={18} /> {isEn ? 'News & Activities' : 'ข่าวสารและกิจกรรม'}
           </button>
           <button onClick={() => handleNav('staff')} className={isActive('staff')}>
-            <Users size={18} /> ทำเนียบบุคลากร
+            <Users size={18} /> {isEn ? 'Staff Directory' : 'ทำเนียบบุคลากร'}
           </button>
           <button onClick={() => handleNav('campus')} className={isActive('campus')}>
-            <Layers size={18} /> แผนผังโรงเรียน
+            <Layers size={18} /> {isEn ? 'Campus Map' : 'แผนผังโรงเรียน'}
           </button>
           <button onClick={() => handleNav('contact')} className={isActive('contact')}>
-            <PhoneCall size={18} /> ข้อมูลติดต่อ
+            <PhoneCall size={18} /> {isEn ? 'Contact Us' : 'ข้อมูลติดต่อ'}
           </button>
 
           {user && (
             <div className="mobile-admin-actions mt-3">
               <div className="mobile-user-tag">
-                ผู้ดูแลระบบ: <strong>{user.name}</strong>
+                {isEn ? 'Admin:' : 'ผู้ดูแลระบบ:'} <strong>{user.name}</strong>
               </div>
               <button onClick={() => handleNav('admin')} className="admin-mobile-nav-btn">
-                <ShieldAlert size={16} /> เข้าสู่ระบบจัดการ (Admin)
+                <ShieldAlert size={16} /> {isEn ? 'Admin Portal' : 'เข้าสู่ระบบจัดการ (Admin)'}
               </button>
               <button onClick={handleLogout} className="logout-mobile-nav-btn">
-                <LogOut size={16} /> ออกจากระบบ
+                <LogOut size={16} /> {isEn ? 'Logout' : 'ออกจากระบบ'}
               </button>
             </div>
           )}
@@ -323,19 +402,19 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
         .obec-access-group {
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 10px;
         }
 
-        .access-label {
-          color: #d1fae5;
-          font-size: 0.82rem;
-          font-weight: 500;
+        .top-divider-small {
+          width: 1px;
+          height: 16px;
+          background-color: rgba(255, 255, 255, 0.25);
         }
 
         .font-size-pills, .contrast-pills {
           display: flex;
           align-items: center;
-          gap: 4px;
+          gap: 5px;
         }
 
         .font-pill {
@@ -346,9 +425,9 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
           justify-content: center;
           background: rgba(255, 255, 255, 0.15);
           color: #ffffff;
-          border: 1px solid rgba(255, 255, 255, 0.3);
+          border: 1px solid rgba(255, 255, 255, 0.35);
           border-radius: 50%;
-          font-size: 0.76rem;
+          font-size: 0.8rem;
           font-weight: 700;
           cursor: pointer;
           transition: all 0.15s ease;
@@ -361,8 +440,8 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
         }
 
         .contrast-pill {
-          width: 24px;
-          height: 24px;
+          width: 25px;
+          height: 25px;
           display: inline-flex;
           align-items: center;
           justify-content: center;
@@ -371,12 +450,17 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
           font-weight: 800;
           cursor: pointer;
           border: 1px solid rgba(255, 255, 255, 0.4);
+          transition: transform 0.15s ease;
+        }
+
+        .contrast-pill:hover {
+          transform: scale(1.1);
         }
 
         .contrast-pill.c-default { background: #ffffff; color: #000000; }
         .contrast-pill.c-wb { background: #000000; color: #ffffff; }
         .contrast-pill.c-yb { background: #000000; color: #fde047; border-color: #fde047; }
-        .contrast-pill.active { outline: 2px solid #eab308; }
+        .contrast-pill.active { outline: 2px solid #eab308; outline-offset: 1px; }
 
         .obec-top-right {
           display: flex;
@@ -387,20 +471,24 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
         .lang-switcher {
           display: flex;
           align-items: center;
-          background: rgba(0, 0, 0, 0.25);
+          background: rgba(0, 0, 0, 0.3);
           border-radius: 4px;
           overflow: hidden;
-          border: 1px solid rgba(255, 255, 255, 0.2);
+          border: 1px solid rgba(255, 255, 255, 0.25);
         }
 
-        .lang-badge {
-          padding: 2px 8px;
-          font-size: 0.75rem;
+        .lang-btn {
+          padding: 3px 9px;
+          font-size: 0.74rem;
           font-weight: 700;
           color: #ffffff;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          transition: all 0.15s ease;
         }
 
-        .lang-badge.active {
+        .lang-btn.active {
           background-color: #eab308;
           color: #000000;
         }
@@ -411,13 +499,45 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
           background-color: rgba(255, 255, 255, 0.25);
         }
 
-        .top-phone {
+        .top-social-group {
           display: flex;
           align-items: center;
-          gap: 6px;
+          gap: 12px;
+        }
+
+        .top-social-link {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.15);
+          color: #ffffff;
+          transition: all 0.15s ease;
+        }
+
+        .top-social-link:hover {
+          background: #eab308;
+          color: #000000;
+        }
+
+        .top-phone-link {
+          display: flex;
+          align-items: center;
+          gap: 5px;
           color: #f1f5f9;
           font-size: 0.82rem;
           font-weight: 500;
+          transition: color 0.15s ease;
+        }
+
+        .top-phone-link:hover {
+          color: #eab308;
+        }
+
+        .phone-icon {
+          color: #eab308;
         }
 
         /* 2. Brand Row */
@@ -480,10 +600,10 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
         }
 
         .school-en-name {
-          font-size: 0.72rem;
+          font-size: 0.74rem;
           font-weight: 700;
           color: #94a3b8;
-          letter-spacing: 0.6px;
+          letter-spacing: 0.5px;
           margin: 0;
         }
 
@@ -529,7 +649,7 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
           cursor: pointer;
           transition: all 0.15s ease;
           border-bottom: 3px solid transparent;
-          margin-bottom: -3px; /* align with bottom border */
+          margin-bottom: -3px;
         }
 
         .nav-tab:hover {
@@ -537,9 +657,8 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
           background-color: #f8fafc;
         }
 
-        /* The signature OBEC / MoE active gold tab */
         .nav-tab.active-obec-tab {
-          background-color: #eab308 !important; /* Gold */
+          background-color: #eab308 !important;
           color: #000000 !important;
           font-weight: 800 !important;
           border-bottom: 3px solid #ca8a04;
@@ -623,6 +742,20 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
           padding: 16px 20px;
           background-color: #ffffff;
           border-bottom: 2px solid #eab308;
+        }
+
+        .mobile-lang-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding-bottom: 12px;
+          border-bottom: 1px solid #e2e8f0;
+        }
+
+        .mobile-lang-label {
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: #0b2545;
         }
 
         .obec-mobile-drawer .nav-tab {

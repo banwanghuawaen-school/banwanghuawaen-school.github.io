@@ -7,20 +7,118 @@ import {
   Compass, 
   Award, 
   ChevronRight, 
+  ChevronLeft,
   MapPin, 
   Sparkles, 
   GraduationCap, 
   Layers, 
   PhoneCall, 
-  Building2,
-  CheckCircle2,
   ArrowRight,
-  ShieldCheck
+  ShieldCheck,
+  Calendar
 } from 'lucide-react';
 
-export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
+export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = 'th' }) {
   const [latestNews, setLatestNews] = useState([]);
   const [directorInfo, setDirectorInfo] = useState(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  const isEn = lang === 'en';
+
+  // Base URL helper for images
+  const resolveImageUrl = (img) => {
+    if (!img) return '';
+    if (img.startsWith('http://') || img.startsWith('https://') || img.startsWith('data:')) return img;
+    const clean = img.replace(/^\/+/, '');
+    const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+    return `${base}${clean}`;
+  };
+
+  // 4 Featured Slides with real school photos
+  const heroSlides = [
+    {
+      id: 1,
+      image: resolveImageUrl('news/fb_1560176759242385_g1.jpg'),
+      tagTh: "ยินดีต้อนรับสู่ • สำนักงานคณะกรรมการการศึกษาขั้นพื้นฐาน",
+      tagEn: "WELCOME TO • OFFICE OF THE BASIC EDUCATION COMMISSION",
+      titleTh: "โรงเรียนบ้านวังหัวแหวนพัฒนา",
+      titleEn: "Ban Wang Hua Waen Phatthana School",
+      subtitleTh: "สำนักงานเขตพื้นที่การศึกษาประถมศึกษากำแพงเพชร เขต 2 • กระทรวงศึกษาธิการ",
+      subtitleEn: "Kamphaeng Phet Primary Educational Service Area Office 2 • Ministry of Education",
+      descTh: "“ปัญญา นรานัง รัตนัง : ปัญญาเป็นดวงแก้วของนรชน” มุ่งมั่นพัฒนาการศึกษา สร้างเสริมคุณธรรม สู่ความเป็นเลิศ",
+      descEn: "“Good Education, Disciplined, Eager to Learn, High Morals” Empowering students through quality education.",
+      primaryBtnTh: "สำรวจแผนผังโรงเรียน",
+      primaryBtnEn: "Explore Campus",
+      primaryAction: () => setView('campus'),
+      secondaryBtnTh: "อ่านข่าวประชาสัมพันธ์",
+      secondaryBtnEn: "Latest News",
+      secondaryAction: () => setView('news')
+    },
+    {
+      id: 2,
+      image: resolveImageUrl('news/fb_lunch_donation.jpg'),
+      tagTh: "กิจกรรมส่งเสริมสุขอนามัย • เพื่อโภชนาการนักเรียน",
+      tagEn: "HEALTH & NUTRITION • STUDENT DEVELOPMENT",
+      titleTh: "การส่งเสริมภาวะโภชนาการและคุณภาพชีวิตนักเรียน",
+      titleEn: "Student Health and Nutrition Program",
+      subtitleTh: "การดูแลอาหารกลางวันและสุขภาพอนามัยอย่างถูกสุขลักษณะ เพื่อการเรียนรู้ที่ดีที่สุด",
+      subtitleEn: "Ensuring proper nutrition and healthy environment for every student.",
+      descTh: "โรงเรียนให้ความสำคัญกับสุขอนามัยและโภชนาการ เพื่อพัฒนาการทั้งทางด้านร่างกายและสติปัญญาของนักเรียนทุกคน",
+      descEn: "Promoting student well-being through nutritious meals and collaborative community support.",
+      primaryBtnTh: "อ่านข่าวกิจกรรมนี้",
+      primaryBtnEn: "Read More",
+      primaryAction: () => setView('news'),
+      secondaryBtnTh: "ทำเนียบบุคลากร",
+      secondaryBtnEn: "Staff Directory",
+      secondaryAction: () => setView('staff')
+    },
+    {
+      id: 3,
+      image: resolveImageUrl('news/fb_honda_safety.jpg'),
+      tagTh: "ความปลอดภัยในสถานศึกษา • วินัยและทักษะชีวิต",
+      tagEn: "SCHOOL SAFETY • LIFE SKILLS & DISCIPLINE",
+      titleTh: "กิจกรรมเสริมสร้างความปลอดภัยและวินัยจราจร",
+      titleEn: "Road Safety and Discipline Building Program",
+      subtitleTh: "การฝึกอบรมการใช้รถใช้ถนนอย่างปลอดภัยร่วมกับภาคีเครือข่าย",
+      subtitleEn: "Safety training and traffic awareness in partnership with community organizations.",
+      descTh: "ปลูกฝังความตระหนักรู้ด้านความปลอดภัยในการเดินทาง และสร้างจิตสำนึกในการเคารพกฎจราจรแก่นักเรียน",
+      descEn: "Cultivating road safety awareness and lifelong safety habits for youth.",
+      primaryBtnTh: "ดูข่าวสารทั้งหมด",
+      primaryBtnEn: "All Announcements",
+      primaryAction: () => setView('news'),
+      secondaryBtnTh: "ติดต่อสอบถาม",
+      secondaryBtnEn: "Contact Us",
+      secondaryAction: () => setView('contact')
+    },
+    {
+      id: 4,
+      image: resolveImageUrl('news/fb_teacher_pa.jpg'),
+      tagTh: "การพัฒนาวิชาชีพครู • ยกระดับการเรียนรู้",
+      tagEn: "PROFESSIONAL DEVELOPMENT • ACADEMIC EXCELLENCE",
+      titleTh: "การขับเคลื่อนการจัดการเรียนรู้และการประเมินผล PA",
+      titleEn: "Performance Agreement (PA) & Instructional Development",
+      subtitleTh: "การประชุมเชิงปฏิบัติการพัฒนาศักยภาพครูผู้สอนเพื่อประโยชน์สูงสุดของผู้เรียน",
+      subtitleEn: "Continuous teacher development to elevate students' academic achievements.",
+      descTh: "มุ่งเน้นการจัดการเรียนรู้เชิงรุก (Active Learning) ที่ตอบสนองความต้องการของผู้เรียนในศตวรรษที่ 21",
+      descEn: "Focusing on active learning strategies and student-centered educational practices.",
+      primaryBtnTh: "ทำเนียบครูและบุคลากร",
+      primaryBtnEn: "Meet Our Teachers",
+      primaryAction: () => setView('staff'),
+      secondaryBtnTh: "ข้อมูลติดต่อโรงเรียน",
+      secondaryBtnEn: "Contact School",
+      secondaryAction: () => setView('contact')
+    }
+  ];
+
+  // Auto advance slides every 5.5s
+  useEffect(() => {
+    if (isPaused) return;
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 5500);
+    return () => clearInterval(timer);
+  }, [isPaused, heroSlides.length]);
 
   useEffect(() => {
     const loadData = () => {
@@ -43,94 +141,115 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
     setView('news-detail');
   };
 
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+  };
+
+  const currentHero = heroSlides[currentSlide];
+
   return (
     <div className="home-view animate-fade-in">
       
-      {/* 1. CLEAN OFFICIAL OBEC PORTAL HERO BANNER */}
-      <section className="obec-hero-section">
+      {/* 1. MAJESTIC OBEC HERO SHOWCASE BANNER & SLIDER (ดึงรูปจริงมาแสดงอย่างสวยงามที่สุด) */}
+      <section 
+        className="obec-hero-slider-section"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+      >
         <div className="container">
           
-          <div className="obec-welcome-card">
-            {/* Top gold accent line */}
-            <div className="obec-gold-accent-bar"></div>
+          <div className="obec-slider-frame">
+            {/* Traditional Thai Golden Corner Accents */}
+            <div className="gold-corner corner-top-left"></div>
+            <div className="gold-corner corner-top-right"></div>
+            <div className="gold-corner corner-bottom-left"></div>
+            <div className="gold-corner corner-bottom-right"></div>
 
-            <div className="obec-welcome-content">
-              {/* Official Seal / Badge tag */}
-              <div className="obec-hero-badge">
-                <span className="badge-seal-dot"></span>
-                <span>สำนักงานคณะกรรมการการศึกษาขั้นพื้นฐาน (สพฐ.) • กระทรวงศึกษาธิการ</span>
+            {/* Slide Background Images with Crossfade */}
+            {heroSlides.map((slide, index) => (
+              <div 
+                key={slide.id}
+                className={`slider-bg-layer ${index === currentSlide ? 'active-layer' : ''}`}
+                style={{ backgroundImage: `url(${slide.image})` }}
+              >
+                <div className="slider-gradient-overlay"></div>
+              </div>
+            ))}
+
+            {/* Slide Foreground Content */}
+            <div className="slider-content-wrap">
+              <div className="slider-badge-pill">
+                <span className="badge-glow-dot"></span>
+                <span>{isEn ? currentHero.tagEn : currentHero.tagTh}</span>
               </div>
 
-              {/* School Main Names */}
-              <h1 className="obec-hero-title">
-                {schoolInfo.name}
-              </h1>
-              <p className="obec-hero-org">
-                {schoolInfo.region || 'สำนักงานเขตพื้นที่การศึกษาประถมศึกษากำแพงเพชร เขต 2'}
+              <h2 className="slider-title">
+                {isEn ? currentHero.titleEn : currentHero.titleTh}
+              </h2>
+
+              <p className="slider-subtitle">
+                {isEn ? currentHero.subtitleEn : currentHero.subtitleTh}
               </p>
-              <p className="obec-hero-sub">
-                {schoolInfo.nameEn || 'BAN WANG HUA WAEN PHATTHANA SCHOOL'}
-              </p>
-              
-              {/* Formal Slogan Card */}
-              <div className="obec-slogan-card">
-                <span className="slogan-badge-label">ปรัชญา / คำขวัญประจำโรงเรียน</span>
-                <p className="obec-slogan-text">“{schoolInfo.slogan}”</p>
+
+              <div className="slider-desc-box">
+                <p className="slider-desc">
+                  {isEn ? currentHero.descEn : currentHero.descTh}
+                </p>
               </div>
 
-              <div className="obec-location-tag">
-                <MapPin size={16} className="text-primary" />
-                <span>{schoolInfo.address || 'ตำบลพานทอง อำเภอไทรงาม จังหวัดกำแพงเพชร'}</span>
+              {/* Action Buttons */}
+              <div className="slider-btn-group">
+                <button 
+                  type="button" 
+                  className="btn-slider-primary"
+                  onClick={currentHero.primaryAction}
+                >
+                  {isEn ? currentHero.primaryBtnEn : currentHero.primaryBtnTh}
+                  <ChevronRight size={18} />
+                </button>
+                <button 
+                  type="button" 
+                  className="btn-slider-secondary"
+                  onClick={currentHero.secondaryAction}
+                >
+                  {isEn ? currentHero.secondaryBtnEn : currentHero.secondaryBtnTh}
+                </button>
               </div>
             </div>
 
-            {/* 4 Quick Access Portal Cards (Clean, Easy to read, Dignified) */}
-            <div className="obec-portals-grid">
-              
-              <div className="obec-portal-card card-hover-lift" onClick={() => setView('campus')}>
-                <div className="portal-icon-circle icon-bg-blue">
-                  <Layers size={24} />
-                </div>
-                <div className="portal-info-box">
-                  <h4 className="portal-heading">แผนผังโรงเรียน</h4>
-                  <p className="portal-subheading">สำรวจ 14 อาคารและสิ่งอำนวยความสะดวก</p>
-                </div>
-                <ChevronRight size={18} className="portal-chevron" />
-              </div>
+            {/* Prev / Next Navigation Arrows */}
+            <button 
+              type="button" 
+              className="slider-arrow-btn arrow-prev" 
+              onClick={prevSlide}
+              aria-label="Previous Slide"
+            >
+              <ChevronLeft size={24} />
+            </button>
+            <button 
+              type="button" 
+              className="slider-arrow-btn arrow-next" 
+              onClick={nextSlide}
+              aria-label="Next Slide"
+            >
+              <ChevronRight size={24} />
+            </button>
 
-              <div className="obec-portal-card card-hover-lift" onClick={() => setView('news')}>
-                <div className="portal-icon-circle icon-bg-gold">
-                  <BookOpen size={24} />
-                </div>
-                <div className="portal-info-box">
-                  <h4 className="portal-heading">ข่าวสาร & กิจกรรม</h4>
-                  <p className="portal-subheading">ประกาศสำคัญ ข่าวสาร และกิจกรรมนักเรียน</p>
-                </div>
-                <ChevronRight size={18} className="portal-chevron" />
-              </div>
-
-              <div className="obec-portal-card card-hover-lift" onClick={() => setView('staff')}>
-                <div className="portal-icon-circle icon-bg-green">
-                  <Users size={24} />
-                </div>
-                <div className="portal-info-box">
-                  <h4 className="portal-heading">ทำเนียบบุคลากร</h4>
-                  <p className="portal-subheading">คณะผู้บริหารและข้าราชการครูผู้สอน</p>
-                </div>
-                <ChevronRight size={18} className="portal-chevron" />
-              </div>
-
-              <div className="obec-portal-card card-hover-lift" onClick={() => setView('contact')}>
-                <div className="portal-icon-circle icon-bg-teal">
-                  <PhoneCall size={24} />
-                </div>
-                <div className="portal-info-box">
-                  <h4 className="portal-heading">ติดต่อ & สมัครเรียน</h4>
-                  <p className="portal-subheading">ข้อมูลติดต่อ สอบถาม และที่ตั้งโรงเรียน</p>
-                </div>
-                <ChevronRight size={18} className="portal-chevron" />
-              </div>
-
+            {/* Indicator Dots */}
+            <div className="slider-indicators">
+              {heroSlides.map((slide, index) => (
+                <button
+                  key={slide.id}
+                  type="button"
+                  className={`indicator-dot ${index === currentSlide ? 'active' : ''}`}
+                  onClick={() => setCurrentSlide(index)}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
             </div>
 
           </div>
@@ -139,7 +258,61 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
       </section>
 
 
-      {/* 2. STATS RIBBON (ข้อมูลสถิติพื้นฐาน) */}
+      {/* 2. 4 QUICK ACCESS PORTAL CARDS (การ์ดทางลัด 4 ระบบ คลีน สว่าง สบายตา) */}
+      <section className="obec-portals-section">
+        <div className="container">
+          <div className="obec-portals-grid">
+            
+            <div className="obec-portal-card card-hover-lift" onClick={() => setView('campus')}>
+              <div className="portal-icon-circle icon-bg-blue">
+                <Layers size={24} />
+              </div>
+              <div className="portal-info-box">
+                <h4 className="portal-heading">{isEn ? 'Campus Map' : 'แผนผังโรงเรียน'}</h4>
+                <p className="portal-subheading">{isEn ? 'Explore 14 buildings & facilities' : 'สำรวจ 14 อาคารและสิ่งอำนวยความสะดวก'}</p>
+              </div>
+              <ChevronRight size={18} className="portal-chevron" />
+            </div>
+
+            <div className="obec-portal-card card-hover-lift" onClick={() => setView('news')}>
+              <div className="portal-icon-circle icon-bg-gold">
+                <BookOpen size={24} />
+              </div>
+              <div className="portal-info-box">
+                <h4 className="portal-heading">{isEn ? 'News & Events' : 'ข่าวสาร & กิจกรรม'}</h4>
+                <p className="portal-subheading">{isEn ? 'Announcements & student activities' : 'ประกาศสำคัญ ข่าวสาร และกิจกรรมนักเรียน'}</p>
+              </div>
+              <ChevronRight size={18} className="portal-chevron" />
+            </div>
+
+            <div className="obec-portal-card card-hover-lift" onClick={() => setView('staff')}>
+              <div className="portal-icon-circle icon-bg-green">
+                <Users size={24} />
+              </div>
+              <div className="portal-info-box">
+                <h4 className="portal-heading">{isEn ? 'Staff Directory' : 'ทำเนียบบุคลากร'}</h4>
+                <p className="portal-subheading">{isEn ? 'Administrators & faculty members' : 'คณะผู้บริหารและข้าราชการครูผู้สอน'}</p>
+              </div>
+              <ChevronRight size={18} className="portal-chevron" />
+            </div>
+
+            <div className="obec-portal-card card-hover-lift" onClick={() => setView('contact')}>
+              <div className="portal-icon-circle icon-bg-teal">
+                <PhoneCall size={24} />
+              </div>
+              <div className="portal-info-box">
+                <h4 className="portal-heading">{isEn ? 'Contact & Admissions' : 'ติดต่อ & สมัครเรียน'}</h4>
+                <p className="portal-subheading">{isEn ? 'Location, inquiries & admissions' : 'ข้อมูลติดต่อ สอบถาม และที่ตั้งโรงเรียน'}</p>
+              </div>
+              <ChevronRight size={18} className="portal-chevron" />
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+
+      {/* 3. STATS RIBBON (ข้อมูลสถิติพื้นฐาน) */}
       <section className="stats-ribbon-section">
         <div className="container">
           <div className="stats-ribbon-card">
@@ -148,8 +321,8 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
                 <Users size={28} className="text-primary" />
               </div>
               <div className="stat-info">
-                <h3 className="stat-number">{schoolInfo.stats ? schoolInfo.stats.students : 65}<span className="stat-plus">+</span></h3>
-                <p className="stat-label">จำนวนนักเรียนคุณภาพ</p>
+                <h3 className="stat-number">{schoolInfo?.stats ? schoolInfo.stats.students : 65}<span className="stat-plus">+</span></h3>
+                <p className="stat-label">{isEn ? 'Quality Students' : 'จำนวนนักเรียนคุณภาพ'}</p>
               </div>
             </div>
 
@@ -160,8 +333,8 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
                 <GraduationCap size={28} className="text-secondary" />
               </div>
               <div className="stat-info">
-                <h3 className="stat-number">{schoolInfo.stats ? schoolInfo.stats.teachers : 5}</h3>
-                <p className="stat-label">ข้าราชการครูและบุคลากร</p>
+                <h3 className="stat-number">{schoolInfo?.stats ? schoolInfo.stats.teachers : 5}</h3>
+                <p className="stat-label">{isEn ? 'Teachers & Staff' : 'ข้าราชการครูและบุคลากร'}</p>
               </div>
             </div>
 
@@ -173,7 +346,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
               </div>
               <div className="stat-info">
                 <h3 className="stat-number">8</h3>
-                <p className="stat-label">ระดับชั้นเรียน (อ.2 - ป.6)</p>
+                <p className="stat-label">{isEn ? 'Grade Levels (K.2 - G.6)' : 'ระดับชั้นเรียน (อ.2 - ป.6)'}</p>
               </div>
             </div>
           </div>
@@ -181,7 +354,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
       </section>
 
 
-      {/* 3. DIRECTOR'S PRESIDENTIAL GREETING (สารจากผู้อำนวยการ) */}
+      {/* 4. DIRECTOR'S PRESIDENTIAL GREETING (สารจากผู้อำนวยการ) */}
       <section className="section-padding greeting-section">
         <div className="container">
           <div className="director-executive-wrapper">
@@ -194,8 +367,8 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
                   <div className="portrait-inner">
                     {directorInfo && directorInfo.imageUrl ? (
                       <img 
-                        src={directorInfo.imageUrl} 
-                        alt={schoolInfo.directorName} 
+                        src={resolveImageUrl(directorInfo.imageUrl)} 
+                        alt={schoolInfo?.directorName} 
                         className="director-img" 
                       />
                     ) : (
@@ -212,26 +385,30 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
                 </div>
 
                 <div className="director-official-badge">
-                  <h4 className="dir-name">{schoolInfo.directorName}</h4>
-                  <p className="dir-position">{schoolInfo.directorPosition}</p>
+                  <h4 className="dir-name">{schoolInfo?.directorName}</h4>
+                  <p className="dir-position">{isEn ? 'School Director' : schoolInfo?.directorPosition}</p>
                 </div>
               </div>
 
               {/* Right Column: Presidential Message */}
               <div className="greeting-content-side">
-                <div className="section-tag-gold mb-2 d-inline-block">WELCOME MESSAGE</div>
-                <h3 className="section-title text-left mb-2">สารจากผู้อำนวยการโรงเรียน</h3>
+                <div className="section-tag-gold mb-2 d-inline-block">
+                  {isEn ? 'EXECUTIVE MESSAGE' : 'สารจากผู้บริหาร'}
+                </div>
+                <h3 className="section-title text-left mb-2">
+                  {isEn ? 'Message from the School Director' : 'สารจากผู้อำนวยการโรงเรียน'}
+                </h3>
                 <div className="title-gold-bar mb-3"></div>
 
                 <blockquote className="director-quote-text">
-                  “{schoolInfo.directorMsg}”
+                  “{schoolInfo?.directorMsg}”
                 </blockquote>
 
                 <div className="director-formal-sign mt-4">
                   <div className="sign-line"></div>
-                  <p className="sign-author">({schoolInfo.directorName})</p>
-                  <p className="sign-rank">{schoolInfo.directorPosition}</p>
-                  <p className="sign-org">โรงเรียนบ้านวังหัวแหวนพัฒนา</p>
+                  <p className="sign-author">({schoolInfo?.directorName})</p>
+                  <p className="sign-rank">{isEn ? 'Director of Ban Wang Hua Waen Phatthana School' : schoolInfo?.directorPosition}</p>
+                  <p className="sign-org">{isEn ? 'Kamphaeng Phet Primary Educational Service Area Office 2' : 'โรงเรียนบ้านวังหัวแหวนพัฒนา'}</p>
                 </div>
               </div>
 
@@ -241,16 +418,24 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
       </section>
 
 
-      {/* 4. COMMITMENTS & IDENTITY (วิสัยทัศน์ พันธกิจ อัตลักษณ์) */}
+      {/* 5. COMMITMENTS & IDENTITY (วิสัยทัศน์ พันธกิจ อัตลักษณ์) */}
       <section className="section-padding vision-section">
         <div className="container">
           <div className="text-center mb-5">
-            <span className="section-tag-gold d-inline-block mb-2">OUR COMMITMENTS</span>
-            <h3 className="section-title">วิสัยทัศน์และพันธกิจ</h3>
+            <span className="section-tag-gold d-inline-block mb-2">
+              {isEn ? 'OUR COMMITMENTS' : 'วิสัยทัศน์และจุดเน้น'}
+            </span>
+            <h3 className="section-title">
+              {isEn ? 'Vision, Mission & Identity' : 'วิสัยทัศน์และพันธกิจ'}
+            </h3>
             <div className="school-divider">
               <span className="school-divider-dot"></span>
             </div>
-            <p className="section-subtitle">ความมุ่งมั่นในการขับเคลื่อนการศึกษาที่มีคุณภาพ เพื่อลูกหลานชาวบ้านวังหัวแหวนพัฒนา</p>
+            <p className="section-subtitle">
+              {isEn 
+                ? 'Dedicated to high-quality education and character building for every student.' 
+                : 'ความมุ่งมั่นในการขับเคลื่อนการศึกษาที่มีคุณภาพ เพื่อลูกหลานชาวบ้านวังหัวแหวนพัฒนา'}
+            </p>
           </div>
 
           <div className="grid-3 bento-commitments">
@@ -258,9 +443,9 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
               <div className="bento-icon bg-primary">
                 <Compass size={24} className="text-white" />
               </div>
-              <h4 className="bento-title">วิสัยทัศน์ (Vision)</h4>
+              <h4 className="bento-title">{isEn ? 'Vision' : 'วิสัยทัศน์ (Vision)'}</h4>
               <p className="bento-desc">
-                {schoolInfo.vision || 'มุ่งพัฒนาผู้เรียนให้มีคุณภาพตามมาตรฐานการศึกษา สร้างเสริมคุณธรรมนำความรู้ ควบคู่เทคโนโลยี ร่วมใจสืบสานวัฒนธรรมไทย ใส่ใจสิ่งแวดล้อม น้อมนำปรัชญาของเศรษฐกิจพอเพียง'}
+                {schoolInfo?.vision || 'มุ่งพัฒนาผู้เรียนให้มีคุณภาพตามมาตรฐานการศึกษา สร้างเสริมคุณธรรมนำความรู้ ควบคู่เทคโนโลยี ร่วมใจสืบสานวัฒนธรรมไทย ใส่ใจสิ่งแวดล้อม น้อมนำปรัชญาของเศรษฐกิจพอเพียง'}
               </p>
             </div>
 
@@ -268,9 +453,9 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
               <div className="bento-icon bg-gold">
                 <Award size={24} className="text-white" />
               </div>
-              <h4 className="bento-title">พันธกิจ (Mission)</h4>
+              <h4 className="bento-title">{isEn ? 'Mission' : 'พันธกิจ (Mission)'}</h4>
               <p className="bento-desc">
-                {schoolInfo.mission || 'จัดการศึกษาตั้งแต่ระดับปฐมวัยถึงประถมศึกษาอย่างทั่วถึง พัฒนาระบบการเรียนรู้ เน้นผู้เรียนเป็นสำคัญ ส่งเสริมบุคลากรให้มีคุณภาพ และบริหารจัดการโดยชุมชนมีส่วนร่วม'}
+                {schoolInfo?.mission || 'จัดการศึกษาตั้งแต่ระดับปฐมวัยถึงประถมศึกษาอย่างทั่วถึง พัฒนาระบบการเรียนรู้ เน้นผู้เรียนเป็นสำคัญ ส่งเสริมบุคลากรให้มีคุณภาพ และบริหารจัดการโดยชุมชนมีส่วนร่วม'}
               </p>
             </div>
 
@@ -278,9 +463,9 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
               <div className="bento-icon bg-emerald">
                 <Users size={24} className="text-white" />
               </div>
-              <h4 className="bento-title">อัตลักษณ์ (Identity)</h4>
+              <h4 className="bento-title">{isEn ? 'Identity' : 'อัตลักษณ์ (Identity)'}</h4>
               <p className="bento-desc">
-                {schoolInfo.identity || 'ยิ้มง่าย ไหว้สวย รวยน้ำใจ มีวินัยใฝ่การศึกษา ซึ่งเป็นจุดเน้นการหล่อหลอมพฤติกรรมพื้นฐานของเยาวชนและนักเรียนโรงเรียนบ้านวังหัวแหวนพัฒนาทุกคน'}
+                {schoolInfo?.identity || 'ยิ้มง่าย ไหว้สวย รวยน้ำใจ มีวินัยใฝ่การศึกษา ซึ่งเป็นจุดเน้นการหล่อหลอมพฤติกรรมพื้นฐานของเยาวชนและนักเรียนโรงเรียนบ้านวังหัวแหวนพัฒนาทุกคน'}
               </p>
             </div>
           </div>
@@ -288,17 +473,25 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
       </section>
 
 
-      {/* 5. LATEST NEWS HIGHLIGHTS */}
+      {/* 6. LATEST NEWS HIGHLIGHTS (ดึงภาพจริงมาแสดงในการ์ดข่าว) */}
       <section className="section-padding news-highlights">
         <div className="container">
           <div className="flex-between-title mb-4">
             <div>
-              <span className="section-tag-gold d-inline-block mb-1">NEWS & ANNOUNCEMENTS</span>
-              <h3 className="section-title text-left mb-1">ข่าวประชาสัมพันธ์ล่าสุด</h3>
-              <p className="text-muted">ติดตามข่าวสาร กิจกรรม และประกาศสำคัญของโรงเรียนบ้านวังหัวแหวนพัฒนา</p>
+              <span className="section-tag-gold d-inline-block mb-1">
+                {isEn ? 'NEWS & ANNOUNCEMENTS' : 'ข่าวประชาสัมพันธ์'}
+              </span>
+              <h3 className="section-title text-left mb-1">
+                {isEn ? 'Latest School Announcements' : 'ข่าวประชาสัมพันธ์ล่าสุด'}
+              </h3>
+              <p className="text-muted">
+                {isEn 
+                  ? 'Keep up to date with events, achievements, and notifications.' 
+                  : 'ติดตามข่าวสาร กิจกรรม และประกาศสำคัญของโรงเรียนบ้านวังหัวแหวนพัฒนา'}
+              </p>
             </div>
             <button className="btn btn-outline" onClick={() => setView('news')}>
-              ดูข่าวสารทั้งหมด <ChevronRight size={16} />
+              {isEn ? 'View All News' : 'ดูข่าวสารทั้งหมด'} <ChevronRight size={16} />
             </button>
           </div>
 
@@ -314,132 +507,284 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
             </div>
           ) : (
             <div className="empty-state text-center py-5">
-              <p className="text-muted">ขณะนี้ยังไม่มีข้อมูลข่าวประชาสัมพันธ์ประกาศในระบบ</p>
+              <p className="text-muted">{isEn ? 'No news available at the moment.' : 'ขณะนี้ยังไม่มีข้อมูลข่าวประชาสัมพันธ์ประกาศในระบบ'}</p>
             </div>
           )}
         </div>
       </section>
 
 
-      {/* Scoped CSS for Clean OBEC Layout */}
+      {/* Scoped CSS for Clean OBEC Layout with Dynamic Image Slider */}
       <style>{`
-        /* Hero Section (Clean OBEC Style) */
-        .obec-hero-section {
-          background-color: #f8fafc;
-          padding: 36px 0 44px;
-          border-bottom: 1px solid #e2e8f0;
+        /* Hero Slider Section */
+        .obec-hero-slider-section {
+          background-color: #f1f5f9;
+          padding: 24px 0 16px;
         }
 
-        .obec-welcome-card {
-          background: #ffffff;
-          border: 1px solid #e2e8f0;
-          border-radius: 16px;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-          overflow: hidden;
+        .obec-slider-frame {
           position: relative;
+          height: 480px;
+          border-radius: 16px;
+          overflow: hidden;
+          border: 2px solid #eab308; /* Signature Gold Frame */
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+          background-color: #061527;
         }
 
-        .obec-gold-accent-bar {
-          height: 6px;
-          background: linear-gradient(90deg, #063b27 0%, #eab308 50%, #0b2545 100%);
+        /* Traditional Thai Golden Corners */
+        .gold-corner {
+          position: absolute;
+          width: 24px;
+          height: 24px;
+          z-index: 10;
+          pointer-events: none;
         }
 
-        .obec-welcome-content {
-          padding: 44px 36px 28px;
-          text-align: center;
-          max-width: 900px;
-          margin: 0 auto;
+        .corner-top-left {
+          top: 8px;
+          left: 8px;
+          border-top: 3px solid #fde047;
+          border-left: 3px solid #fde047;
         }
 
-        .obec-hero-badge {
+        .corner-top-right {
+          top: 8px;
+          right: 8px;
+          border-top: 3px solid #fde047;
+          border-right: 3px solid #fde047;
+        }
+
+        .corner-bottom-left {
+          bottom: 8px;
+          left: 8px;
+          border-bottom: 3px solid #fde047;
+          border-left: 3px solid #fde047;
+        }
+
+        .corner-bottom-right {
+          bottom: 8px;
+          right: 8px;
+          border-bottom: 3px solid #fde047;
+          border-right: 3px solid #fde047;
+        }
+
+        /* Slider Background Layer with Crossfade */
+        .slider-bg-layer {
+          position: absolute;
+          inset: 0;
+          background-size: cover;
+          background-position: center;
+          opacity: 0;
+          transition: opacity 0.8s ease-in-out, transform 6s ease-out;
+          transform: scale(1.02);
+          z-index: 1;
+        }
+
+        .slider-bg-layer.active-layer {
+          opacity: 1;
+          transform: scale(1);
+          z-index: 2;
+        }
+
+        .slider-gradient-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            90deg, 
+            rgba(6, 21, 39, 0.92) 0%, 
+            rgba(6, 21, 39, 0.78) 45%, 
+            rgba(6, 21, 39, 0.4) 100%
+          );
+        }
+
+        /* Slider Foreground Content */
+        .slider-content-wrap {
+          position: relative;
+          z-index: 5;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          padding: 40px 60px;
+          max-width: 780px;
+          color: #ffffff;
+        }
+
+        .slider-badge-pill {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          background: #f0fdf4;
-          border: 1px solid #bbf7d0;
-          color: #166534;
-          padding: 6px 18px;
+          background: rgba(234, 179, 8, 0.2);
+          border: 1px solid rgba(253, 224, 71, 0.6);
+          color: #fde047;
+          padding: 4px 14px;
           border-radius: 9999px;
-          font-size: 0.85rem;
-          font-family: var(--font-heading);
-          font-weight: 600;
-          margin-bottom: 18px;
+          font-size: 0.82rem;
+          font-weight: 700;
+          letter-spacing: 0.5px;
+          margin-bottom: 14px;
+          align-self: flex-start;
+          backdrop-filter: blur(4px);
         }
 
-        .badge-seal-dot {
-          width: 8px;
-          height: 8px;
+        .badge-glow-dot {
+          width: 7px;
+          height: 7px;
           border-radius: 50%;
-          background-color: #16a34a;
+          background-color: #fde047;
+          box-shadow: 0 0 8px #fde047;
         }
 
-        .obec-hero-title {
-          font-size: 2.5rem;
+        .slider-title {
+          font-size: 2.35rem;
           font-weight: 800;
-          color: #0b2545;
-          margin-bottom: 8px;
+          color: #ffffff;
           line-height: 1.25;
+          margin-bottom: 8px;
+          text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
           letter-spacing: -0.3px;
         }
 
-        .obec-hero-org {
-          font-size: 1.12rem;
+        .slider-subtitle {
+          font-size: 1.05rem;
+          color: #e2e8f0;
           font-weight: 600;
-          color: #063b27;
-          margin-bottom: 4px;
+          margin-bottom: 14px;
+          text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
         }
 
-        .obec-hero-sub {
-          font-size: 0.84rem;
-          font-weight: 700;
-          color: #94a3b8;
-          letter-spacing: 0.8px;
+        .slider-desc-box {
+          background: rgba(0, 0, 0, 0.35);
+          border-left: 3px solid #eab308;
+          padding: 10px 16px;
+          border-radius: 0 6px 6px 0;
           margin-bottom: 24px;
+          backdrop-filter: blur(6px);
         }
 
-        .obec-slogan-card {
-          background: #fffdf5;
-          border: 1px solid #fde68a;
-          border-left: 4px solid #eab308;
-          padding: 14px 24px;
-          border-radius: 8px;
-          margin: 0 auto 20px;
-          display: inline-block;
-          text-align: center;
-        }
-
-        .slogan-badge-label {
-          display: block;
-          font-size: 0.76rem;
-          font-weight: 700;
-          color: #b45309;
-          margin-bottom: 4px;
-          text-transform: uppercase;
-        }
-
-        .obec-slogan-text {
-          font-size: 1.15rem;
-          font-weight: 600;
-          color: #1e293b;
+        .slider-desc {
+          font-size: 0.96rem;
+          color: #f8fafc;
+          line-height: 1.6;
           margin: 0;
           font-style: italic;
         }
 
-        .obec-location-tag {
+        .slider-btn-group {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          flex-wrap: wrap;
+        }
+
+        .btn-slider-primary {
           display: inline-flex;
           align-items: center;
           gap: 6px;
-          font-size: 0.9rem;
-          color: #64748b;
-          font-weight: 500;
+          background: #eab308;
+          color: #000000;
+          padding: 11px 22px;
+          border-radius: 6px;
+          font-weight: 700;
+          font-size: 0.95rem;
+          border: none;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          box-shadow: 0 4px 14px rgba(234, 179, 8, 0.4);
+        }
+
+        .btn-slider-primary:hover {
+          background: #facc15;
+          transform: translateY(-2px);
+          box-shadow: 0 6px 18px rgba(234, 179, 8, 0.6);
+        }
+
+        .btn-slider-secondary {
+          display: inline-flex;
+          align-items: center;
+          background: rgba(255, 255, 255, 0.15);
+          color: #ffffff;
+          padding: 10px 20px;
+          border-radius: 6px;
+          font-weight: 600;
+          font-size: 0.95rem;
+          border: 1px solid rgba(255, 255, 255, 0.4);
+          cursor: pointer;
+          transition: all 0.2s ease;
+          backdrop-filter: blur(4px);
+        }
+
+        .btn-slider-secondary:hover {
+          background: rgba(255, 255, 255, 0.3);
+          transform: translateY(-2px);
+        }
+
+        /* Prev / Next Buttons */
+        .slider-arrow-btn {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          z-index: 10;
+          width: 44px;
+          height: 44px;
+          border-radius: 50%;
+          background: rgba(0, 0, 0, 0.4);
+          color: #ffffff;
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .slider-arrow-btn:hover {
+          background: #eab308;
+          color: #000000;
+          border-color: #eab308;
+        }
+
+        .arrow-prev { left: 16px; }
+        .arrow-next { right: 16px; }
+
+        /* Indicators */
+        .slider-indicators {
+          position: absolute;
+          bottom: 18px;
+          right: 24px;
+          z-index: 10;
+          display: flex;
+          gap: 8px;
+        }
+
+        .indicator-dot {
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.35);
+          border: 1px solid rgba(255, 255, 255, 0.6);
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .indicator-dot.active {
+          width: 32px;
+          border-radius: 9999px;
+          background: #eab308;
+          border-color: #eab308;
         }
 
         /* 4 Quick Access Portal Cards */
+        .obec-portals-section {
+          background-color: #f1f5f9;
+          padding: 8px 0 28px;
+        }
+
         .obec-portals-grid {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
           gap: 16px;
-          padding: 12px 32px 36px;
         }
 
         .obec-portal-card {
@@ -508,27 +853,25 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
         }
 
         @media (max-width: 992px) {
-          .obec-portals-grid {
-            grid-template-columns: repeat(2, 1fr);
-            padding: 12px 20px 28px;
-          }
-          .obec-hero-title { font-size: 2rem; }
-          .obec-welcome-content { padding: 32px 20px 20px; }
+          .obec-slider-frame { height: 420px; }
+          .slider-content-wrap { padding: 30px; }
+          .slider-title { font-size: 1.85rem; }
+          .obec-portals-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
         @media (max-width: 576px) {
-          .obec-portals-grid {
-            grid-template-columns: 1fr;
-            padding: 8px 16px 24px;
-          }
-          .obec-hero-title { font-size: 1.6rem; }
+          .obec-slider-frame { height: 380px; }
+          .slider-content-wrap { padding: 20px; }
+          .slider-title { font-size: 1.4rem; }
+          .slider-subtitle { font-size: 0.88rem; }
+          .slider-desc-box { display: none; }
+          .obec-portals-grid { grid-template-columns: 1fr; }
         }
 
         /* Stats Ribbon */
         .stats-ribbon-section {
-          margin-top: -24px;
-          position: relative;
-          z-index: 10;
+          padding: 16px 0;
+          background: #ffffff;
         }
 
         .stats-ribbon-card {
@@ -540,7 +883,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
           justify-content: space-around;
           align-items: center;
           gap: 20px;
-          box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.06);
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
         }
 
         @media (max-width: 768px) {
@@ -598,7 +941,11 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
           background: #e2e8f0;
         }
 
-        /* Director Executive Card (Clean Official Style) */
+        /* Director Executive Card */
+        .greeting-section {
+          background-color: #f8fafc;
+        }
+
         .director-executive-wrapper {
           background: #ffffff;
           border: 1px solid #e2e8f0;
@@ -724,6 +1071,10 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
         }
 
         /* Bento Commitments */
+        .vision-section {
+          background-color: #ffffff;
+        }
+
         .bento-commitments {
           margin-top: 24px;
         }
@@ -767,7 +1118,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
 
         /* News Highlights */
         .news-highlights {
-          background: #ffffff;
+          background: #f8fafc;
           border-top: 1px solid #e2e8f0;
         }
 
