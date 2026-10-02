@@ -40,64 +40,76 @@ const DEFAULT_SCHOOL_INFO = {
 const DEFAULT_NEWS = [
   {
     id: "news-1",
-    title: "กิจกรรมส่งเสริมการเรียนรู้และพัฒนาทักษะชีวิตนักเรียน โรงเรียนบ้านวังหัวแหวนพัฒนา",
-    subtitle: "ภาพบรรยากาศการจัดกิจกรรมการเรียนรู้เชิงรุกและพัฒนาทักษะชีวิตของนักเรียน",
-    category: "activity",
-    content: "โรงเรียนบ้านวังหัวแหวนพัฒนา ดำเนินการจัดกิจกรรมการเรียนรู้เพื่อส่งเสริมศักยภาพและพัฒนาทักษะชีวิตของผู้เรียน เพื่อให้นักเรียนได้ลงมือปฏิบัติจริง มีความสุขในการเรียนรู้ และเติบโตอย่างมีคุณภาพ",
+    title: "โรงเรียนบ้านวังหัวแหวนพัฒนา ได้รับรางวัลสถานศึกษาต้นแบบการนิเทศภายใน (ISMS Award) ระดับยอดเยี่ยม",
+    titleEn: "Ban Wang Hua Waen Phatthana School Receives ISMS Excellence Award",
+    subtitle: "ความภาคภูมิใจแห่งการพัฒนาคุณภาพการศึกษาและระบบนิเทศภายใน ระดับสำนักงานคณะกรรมการการศึกษาขั้นพื้นฐาน",
+    subtitleEn: "A proud achievement in educational excellence and instructional supervision from OBEC",
+    category: "announcement",
+    content: "โรงเรียนบ้านวังหัวแหวนพัฒนา สำนักงานเขตพื้นที่การศึกษาประถมศึกษากำแพงเพชร เขต 2 ได้รับการคัดเลือกและยกย่องเชิดชูเกียรติให้เป็น 'สถานศึกษาต้นแบบการนิเทศภายใน (Internal Supervision Model School : ISMS Award)' ระดับสำนักงานคณะกรรมการการศึกษาขั้นพื้นฐาน (สพฐ.) ระดับยอดเยี่ยม ประจำปีการศึกษา 2568 สะท้อนถึงความมุ่งมั่นทุ่มเทของผู้บริหาร คณะครู และบุคลากรทางการศึกษาในการยกระดับคุณภาพการเรียนรู้ของผู้เรียนอย่างต่อเนื่อง",
+    contentEn: "Ban Wang Hua Waen Phatthana School under Kamphaeng Phet Primary Educational Service Area Office 2 has been recognized as an Internal Supervision Model School (ISMS Award) at the Excellent Level by the Office of the Basic Education Commission (OBEC) for academic year 2025-2026. This award honors our administrators, teachers, and educational staff for their tireless dedication to instructional quality and active student learning.",
     date: "2026-03-28",
     author: "งานประชาสัมพันธ์โรงเรียน",
-    imageUrl: "news/fb_1560176759242385.jpg",
+    imageUrl: "news/school_award_honor.jpg",
     isPinned: true,
     status: "published",
-    views: 142,
+    views: 188,
     attachmentName: "",
     attachmentUrl: "",
-    galleryUrls: "news/fb_1560176759242385_g1.jpg,news/fb_1560176759242385_g2.jpg,news/fb_1560176759242385_g3.jpg"
+    galleryUrls: "news/school_teachers_group.jpg,news/school_entrance_sign.jpg,news/fb_lunch_donation.jpg"
   },
   {
     id: "news-2",
     title: "กิจกรรมส่งเสริมสุขอนามัยและโภชนาการที่ดีสำหรับนักเรียน",
+    titleEn: "Student Health, Hygiene and Nutrition Program",
     subtitle: "การดูแลคุณภาพชีวิตและอาหารกลางวันนักเรียนอย่างถูกหลักโภชนาการ",
+    subtitleEn: "Ensuring student well-being and balanced lunch nutrition",
     category: "activity",
-    content: "โรงเรียนบ้านวังหัวแหวนพัฒนา ให้ความสำคัญกับสุขภาพอนามัยและโภชนาการของนักเรียนทุกคน โดยได้รับความร่วมมือและการสนับสนุนจากชุมชนและผู้มีอุปการคุณ เพื่อให้เด็กๆ ได้รับประทานอาหารที่มีประโยชน์และถูกสุขลักษณะ",
+    content: "โรงเรียนบ้านวังหัวแหวนพัฒนา ให้ความสำคัญกับสุขภาพอนามัยและโภชนาการของนักเรียนทุกคน โดยได้รับความร่วมมือและการสนับสนุนจากชุมชนและผู้มีอุปการคุณ เพื่อให้เด็กๆ ได้รับประทานอาหารที่มีประโยชน์และถูกสุขลักษณะ ช่วยส่งเสริมพัฒนาการทั้งทางร่างกายและสติปัญญา",
+    contentEn: "Ban Wang Hua Waen Phatthana School places high priority on student health, hygiene, and balanced nutrition. With strong cooperation from the community and benevolent donors, students receive wholesome meals supporting their physical and cognitive growth.",
     date: "2026-03-20",
     author: "กลุ่มงานกิจกรรมนักเรียน",
     imageUrl: "news/fb_lunch_donation.jpg",
     isPinned: false,
     status: "published",
-    views: 98,
+    views: 142,
     attachmentName: "",
     attachmentUrl: "",
     galleryUrls: ""
   },
   {
     id: "news-3",
-    title: "กิจกรรมเสริมสร้างความปลอดภัยและวินัยจราจรในสถานศึกษา",
-    subtitle: "การให้ความรู้เรื่องความปลอดภัยในการเดินทางและการสัญจรอย่างปลอดภัย",
-    category: "pr",
-    content: "โรงเรียนบ้านวังหัวแหวนพัฒนา จัดกิจกรรมสร้างเสริมความตระหนักรู้ด้านความปลอดภัยในการใช้รถใช้ถนนร่วมกับภาคีเครือข่าย เพื่อเสริมสร้างความปลอดภัยในการเดินทางมาเรียนของนักเรียนทุกคน",
+    title: "การขับเคลื่อนการจัดการเรียนรู้และการประเมินผลการปฏิบัติงาน (PA) คณะครู",
+    titleEn: "Teacher Professional Development & Performance Agreement (PA)",
+    subtitle: "การประชุมเชิงปฏิบัติการพัฒนาสมรรถนะครูผู้สอนเพื่อประโยชน์สูงสุดของผู้เรียน",
+    subtitleEn: "Instructional leadership workshop to elevate student learning outcomes",
+    category: "announcement",
+    content: "คณะผู้บริหารและข้าราชการครูโรงเรียนบ้านวังหัวแหวนพัฒนา ร่วมประชุมวางแผนและประเมินผลการจัดการเรียนรู้ตามข้อตกลงในการพัฒนางาน (PA) มุ่งเน้นการจัดการเรียนรู้เชิงรุก (Active Learning) ที่ตอบสนองความต้องการของผู้เรียนในศตวรรษที่ 21",
+    contentEn: "School leadership and teaching faculty convened for the Performance Agreement (PA) instructional development workshop, focusing on active learning methodologies and 21st-century learner competency development.",
     date: "2026-03-15",
-    author: "งานบริหารงานทั่วไป",
-    imageUrl: "news/fb_honda_safety.jpg",
+    author: "กลุ่มงานบริหารวิชาการ",
+    imageUrl: "news/school_teachers_group.jpg",
     isPinned: false,
     status: "published",
-    views: 86,
+    views: 126,
     attachmentName: "",
     attachmentUrl: "",
-    galleryUrls: ""
+    galleryUrls: "news/fb_teacher_pa.jpg,news/school_award_honor.jpg"
   },
   {
     id: "news-4",
-    title: "การขับเคลื่อนการจัดการเรียนรู้และการประเมินผลการปฏิบัติงาน (PA) คณะครู",
-    subtitle: "การประชุมและพัฒนากระบวนการจัดการเรียนการสอนเพื่อประโยชน์สูงสุดของนักเรียน",
-    category: "announcement",
-    content: "คณะผู้บริหารและข้าราชการครูโรงเรียนบ้านวังหัวแหวนพัฒนา ร่วมประชุมวางแผนและประเมินผลการจัดการเรียนรู้ เพื่อยกระดับผลสัมฤทธิ์ทางการศึกษาและพัฒนาการเรียนรู้ของผู้เรียนอย่างต่อเนื่อง",
+    title: "พัฒนาการเรียนรู้และสภาพแวดล้อมน่าอยู่ โรงเรียนบ้านวังหัวแหวนพัฒนา",
+    titleEn: "Campus Environment & Interactive Learning Spaces Development",
+    subtitle: "ปรับปรุงภูมิทัศน์และบรรยากาศสถานศึกษาให้เอื้อต่อการเรียนรู้ของนักเรียน",
+    subtitleEn: "Enhancing school grounds and vibrant student activity zones",
+    category: "pr",
+    content: "โรงเรียนบ้านวังหัวแหวนพัฒนา ดำเนินการปรับปรุงภูมิทัศน์ ป้ายสถานศึกษา และพื้นที่กิจกรรมการเรียนรู้ เพื่อให้นักเรียนได้เรียนรู้ในบรรยากาศที่ปลอดภัย สะอาด ร่มรื่น และมีความสุขในการมาโรงเรียนทุกวัน",
+    contentEn: "Continuous enhancement of school entrance, gardens, and learning spaces to provide a clean, safe, and joyful educational atmosphere for all students.",
     date: "2026-03-10",
-    author: "กลุ่มงานบริหารวิชาการ",
-    imageUrl: "news/fb_teacher_pa.jpg",
+    author: "งานบริหารงานทั่วไป",
+    imageUrl: "news/school_entrance_sign.jpg",
     isPinned: false,
     status: "published",
-    views: 120,
+    views: 95,
     attachmentName: "",
     attachmentUrl: "",
     galleryUrls: ""
@@ -166,8 +178,36 @@ const initializeStorage = () => {
   if (!localStorage.getItem(STORAGE_KEYS.SCHOOL_INFO)) {
     localStorage.setItem(STORAGE_KEYS.SCHOOL_INFO, JSON.stringify(DEFAULT_SCHOOL_INFO));
   }
-  if (!localStorage.getItem(STORAGE_KEYS.NEWS)) {
+  const existingNews = localStorage.getItem(STORAGE_KEYS.NEWS);
+  if (!existingNews) {
     localStorage.setItem(STORAGE_KEYS.NEWS, JSON.stringify(DEFAULT_NEWS));
+  } else {
+    try {
+      const parsed = JSON.parse(existingNews);
+      let changed = false;
+      const updated = parsed.map(item => {
+        if (item.imageUrl && item.imageUrl.includes('fb_1560176759242385')) {
+          changed = true;
+          return {
+            ...item,
+            title: item.title.includes('กิจกรรมส่งเสริม') ? DEFAULT_NEWS[0].title : item.title,
+            titleEn: DEFAULT_NEWS[0].titleEn,
+            subtitle: item.subtitle.includes('ภาพบรรยากาศ') ? DEFAULT_NEWS[0].subtitle : item.subtitle,
+            subtitleEn: DEFAULT_NEWS[0].subtitleEn,
+            content: item.content.includes('ส่งเสริมศักยภาพ') ? DEFAULT_NEWS[0].content : item.content,
+            contentEn: DEFAULT_NEWS[0].contentEn,
+            imageUrl: 'news/school_award_honor.jpg',
+            galleryUrls: 'news/school_teachers_group.jpg,news/school_entrance_sign.jpg,news/fb_lunch_donation.jpg'
+          };
+        }
+        return item;
+      });
+      if (changed) {
+        localStorage.setItem(STORAGE_KEYS.NEWS, JSON.stringify(updated));
+      }
+    } catch (e) {
+      console.error("Error migrating news storage:", e);
+    }
   }
   if (!localStorage.getItem(STORAGE_KEYS.STAFF)) {
     localStorage.setItem(STORAGE_KEYS.STAFF, JSON.stringify(DEFAULT_STAFF));
@@ -382,14 +422,45 @@ export const dbService = {
   getNews() {
     initializeStorage();
     try {
+      const rawStored = localStorage.getItem(STORAGE_KEYS.NEWS);
+      let newsList = rawStored ? JSON.parse(rawStored) : DEFAULT_NEWS;
+      if (!Array.isArray(newsList) || newsList.length === 0) {
+        newsList = DEFAULT_NEWS;
+      }
+
       const fallbackPhotos = [
-        'news/fb_1560176759242385.jpg',
+        'news/school_award_honor.jpg',
         'news/fb_lunch_donation.jpg',
-        'news/fb_honda_safety.jpg',
-        'news/fb_teacher_pa.jpg',
-        'news/fb_1560176759242385_g1.jpg'
+        'news/school_teachers_group.jpg',
+        'news/school_entrance_sign.jpg',
+        'news/fb_teacher_pa.jpg'
       ];
-      const sanitized = news.map((item, idx) => {
+      const sanitized = newsList.map((item, idx) => {
+        // 1. Completely eliminate any legacy water truck post or photo
+        if (
+          (item.title && (item.title.includes('รถน้ำ') || item.title.includes('องค์การบริหารส่วนตำบล') || item.title.includes('กิจกรรมส่งเสริมการเรียนรู้และพัฒนาทักษะชีวิต'))) ||
+          (item.content && item.content.includes('รถน้ำ')) ||
+          (item.imageUrl && item.imageUrl.includes('fb_1560176759242385'))
+        ) {
+          return {
+            views: 188,
+            status: 'published',
+            isPinned: true,
+            attachmentName: '',
+            attachmentUrl: '',
+            ...item,
+            title: DEFAULT_NEWS[0].title,
+            titleEn: DEFAULT_NEWS[0].titleEn,
+            subtitle: DEFAULT_NEWS[0].subtitle,
+            subtitleEn: DEFAULT_NEWS[0].subtitleEn,
+            content: DEFAULT_NEWS[0].content,
+            contentEn: DEFAULT_NEWS[0].contentEn,
+            imageUrl: 'news/school_award_honor.jpg',
+            galleryUrls: 'news/school_teachers_group.jpg,news/school_entrance_sign.jpg,news/fb_lunch_donation.jpg',
+            category: 'announcement'
+          };
+        }
+
         let cleanSubtitle = item.subtitle || '';
         let cleanContent = item.content || '';
 
@@ -402,7 +473,35 @@ export const dbService = {
           cleanContent = cleanContent.replace(fbJunkRegex, '').trim();
         }
 
-        const resolvedImage = item.imageUrl || fallbackPhotos[idx % fallbackPhotos.length];
+        let resolvedImage = item.imageUrl || fallbackPhotos[idx % fallbackPhotos.length];
+        if (resolvedImage.includes('fb_1560176759242385')) {
+          resolvedImage = 'news/school_award_honor.jpg';
+        }
+
+        // 2. Provide automatic high-quality English translations for known categories/posts if missing
+        let titleEn = item.titleEn || '';
+        let subtitleEn = item.subtitleEn || '';
+        let contentEn = item.contentEn || '';
+
+        if (!titleEn) {
+          if (item.title && (item.title.includes('สมัครเข้าเรียน') || item.title.includes('รับสมัคร'))) {
+            titleEn = 'Student Admissions for Kindergarten and Primary Grade 1';
+            subtitleEn = 'Official enrollment announcement for academic year 2026';
+            contentEn = 'Ban Wang Hua Waen Phatthana School announces open admissions for kindergarten and primary grade 1. Parents and guardians are invited to submit applications during official school hours.';
+          } else if (item.title && (item.title.includes('ฮอนด้า') || item.title.includes('ความปลอดภัย'))) {
+            titleEn = 'School Safety and Youth Helmet Support Initiative';
+            subtitleEn = 'Promoting student safety and road discipline in partnership with Thai Honda';
+            contentEn = 'Ban Wang Hua Waen Phatthana School conducted a safety awareness and helmet distribution program supported by Thai Honda to ensure child safety on roads.';
+          } else if (item.title && (item.title.includes('โภชนาการ') || item.title.includes('อาหารกลางวัน'))) {
+            titleEn = 'Student Health, Hygiene and Nutrition Program';
+            subtitleEn = 'Ensuring balanced lunch meals and hygiene for our students';
+            contentEn = 'Ban Wang Hua Waen Phatthana School prioritizes student well-being and wholesome nutrition with warm support from our community.';
+          } else if (item.title && (item.title.includes('PA') || item.title.includes('วิชาชีพครู'))) {
+            titleEn = 'Teacher Professional Development & Performance Agreement (PA)';
+            subtitleEn = 'Advancing instructional leadership and active learning methods';
+            contentEn = 'Faculty and school leadership held a professional development session to elevate instructional quality and active learning in every classroom.';
+          }
+        }
 
         return {
           views: 0,
@@ -412,6 +511,9 @@ export const dbService = {
           attachmentUrl: '',
           galleryUrls: '',
           ...item,
+          titleEn: titleEn || item.titleEn,
+          subtitleEn: subtitleEn || item.subtitleEn,
+          contentEn: contentEn || item.contentEn,
           imageUrl: resolvedImage,
           subtitle: cleanSubtitle,
           content: cleanContent

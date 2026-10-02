@@ -35,11 +35,11 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
     return `${base}${clean}`;
   };
 
-  // 4 Featured Slides with real school photos
+  // 3 Featured Slides with real, authentic school photos
   const heroSlides = [
     {
       id: 1,
-      image: resolveImageUrl('news/fb_1560176759242385_g1.jpg'),
+      image: resolveImageUrl('news/fb_lunch_donation.jpg'),
       tagTh: "ยินดีต้อนรับสู่ • สำนักงานคณะกรรมการการศึกษาขั้นพื้นฐาน",
       tagEn: "WELCOME TO • OFFICE OF THE BASIC EDUCATION COMMISSION",
       titleTh: "โรงเรียนบ้านวังหัวแหวนพัฒนา",
@@ -57,17 +57,17 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
     },
     {
       id: 2,
-      image: resolveImageUrl('news/fb_lunch_donation.jpg'),
-      tagTh: "กิจกรรมส่งเสริมสุขอนามัย • เพื่อโภชนาการนักเรียน",
-      tagEn: "HEALTH & NUTRITION • STUDENT DEVELOPMENT",
-      titleTh: "การส่งเสริมภาวะโภชนาการและคุณภาพชีวิตนักเรียน",
-      titleEn: "Student Health and Nutrition Program",
-      subtitleTh: "การดูแลอาหารกลางวันและสุขภาพอนามัยอย่างถูกสุขลักษณะ เพื่อการเรียนรู้ที่ดีที่สุด",
-      subtitleEn: "Ensuring proper nutrition and healthy environment for every student.",
-      descTh: "โรงเรียนให้ความสำคัญกับสุขอนามัยและโภชนาการ เพื่อพัฒนาการทั้งทางด้านร่างกายและสติปัญญาของนักเรียนทุกคน",
-      descEn: "Promoting student well-being through nutritious meals and collaborative community support.",
-      primaryBtnTh: "อ่านข่าวกิจกรรมนี้",
-      primaryBtnEn: "Read More",
+      image: resolveImageUrl('news/school_award_honor.jpg'),
+      tagTh: "รางวัลเชิดชูเกียรติ สพฐ. • ความภาคภูมิใจของโรงเรียน",
+      tagEn: "OBEC EXCELLENCE AWARD • ACADEMIC PRESTIGE",
+      titleTh: "สถานศึกษาต้นแบบการนิเทศภายใน (ISMS Award) ระดับยอดเยี่ยม",
+      titleEn: "Internal Supervision Model School (ISMS) Excellence Award",
+      subtitleTh: "รางวัลระดับยอดเยี่ยม สำนักงานคณะกรรมการการศึกษาขั้นพื้นฐาน (สพฐ.) ประจำปีการศึกษา 2568",
+      subtitleEn: "Excellence Recognition from the Office of the Basic Education Commission",
+      descTh: "“มุ่งมั่นพัฒนาการศึกษา สร้างเสริมคุณธรรม สู่ความเป็นเลิศ” ยกระดับคุณภาพการเรียนรู้และการบริหารจัดการอย่างยั่งยืน",
+      descEn: "“Committed to Educational Quality and Excellence” Elevating instructional supervision and student learning.",
+      primaryBtnTh: "อ่านรายละเอียดรางวัล",
+      primaryBtnEn: "Read Award Details",
       primaryAction: () => setView('news'),
       secondaryBtnTh: "ทำเนียบบุคลากร",
       secondaryBtnEn: "Staff Directory",
@@ -75,33 +75,15 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
     },
     {
       id: 3,
-      image: resolveImageUrl('news/fb_honda_safety.jpg'),
-      tagTh: "ความปลอดภัยในสถานศึกษา • วินัยและทักษะชีวิต",
-      tagEn: "SCHOOL SAFETY • LIFE SKILLS & DISCIPLINE",
-      titleTh: "กิจกรรมเสริมสร้างความปลอดภัยและวินัยจราจร",
-      titleEn: "Road Safety and Discipline Building Program",
-      subtitleTh: "การฝึกอบรมการใช้รถใช้ถนนอย่างปลอดภัยร่วมกับภาคีเครือข่าย",
-      subtitleEn: "Safety training and traffic awareness in partnership with community organizations.",
-      descTh: "ปลูกฝังความตระหนักรู้ด้านความปลอดภัยในการเดินทาง และสร้างจิตสำนึกในการเคารพกฎจราจรแก่นักเรียน",
-      descEn: "Cultivating road safety awareness and lifelong safety habits for youth.",
-      primaryBtnTh: "ดูข่าวสารทั้งหมด",
-      primaryBtnEn: "All Announcements",
-      primaryAction: () => setView('news'),
-      secondaryBtnTh: "ติดต่อสอบถาม",
-      secondaryBtnEn: "Contact Us",
-      secondaryAction: () => setView('contact')
-    },
-    {
-      id: 4,
-      image: resolveImageUrl('news/fb_teacher_pa.jpg'),
-      tagTh: "การพัฒนาวิชาชีพครู • ยกระดับการเรียนรู้",
-      tagEn: "PROFESSIONAL DEVELOPMENT • ACADEMIC EXCELLENCE",
-      titleTh: "การขับเคลื่อนการจัดการเรียนรู้และการประเมินผล PA",
-      titleEn: "Performance Agreement (PA) & Instructional Development",
-      subtitleTh: "การประชุมเชิงปฏิบัติการพัฒนาศักยภาพครูผู้สอนเพื่อประโยชน์สูงสุดของผู้เรียน",
-      subtitleEn: "Continuous teacher development to elevate students' academic achievements.",
-      descTh: "มุ่งเน้นการจัดการเรียนรู้เชิงรุก (Active Learning) ที่ตอบสนองความต้องการของผู้เรียนในศตวรรษที่ 21",
-      descEn: "Focusing on active learning strategies and student-centered educational practices.",
+      image: resolveImageUrl('news/school_teachers_group.jpg'),
+      tagTh: "คณะครูและบุคลากร • มุ่งมั่นพัฒนาผู้เรียน",
+      tagEn: "FACULTY & STAFF • DEDICATED EDUCATORS",
+      titleTh: "คณะครูและบุคลากรทางการศึกษา โรงเรียนบ้านวังหัวแหวนพัฒนา",
+      titleEn: "Faculty & Staff of Ban Wang Hua Waen Phatthana School",
+      subtitleTh: "ร่วมสร้างอนาคตเยาวชน ด้วยหัวใจและความรู้ สู่ความเป็นเลิศในศตวรรษที่ 21",
+      subtitleEn: "Empowering young minds with care, discipline, and modern 21st-century knowledge.",
+      descTh: "มุ่งเน้นการจัดการเรียนรู้เชิงรุก (Active Learning) ปลูกฝังระเบียบวินัย และพัฒนาทักษะชีวิตรอบด้านของนักเรียนทุกคน",
+      descEn: "Focusing on active learning strategies, moral character, and essential life skills for every student.",
       primaryBtnTh: "ทำเนียบครูและบุคลากร",
       primaryBtnEn: "Meet Our Teachers",
       primaryAction: () => setView('staff'),
@@ -501,7 +483,8 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
                 <NewsCard 
                   key={item.id} 
                   item={item} 
-                  onClick={() => handleNewsClick(item)} 
+                  onClick={() => handleNewsClick(item)}
+                  lang={lang}
                 />
               ))}
             </div>

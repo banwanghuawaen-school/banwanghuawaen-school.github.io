@@ -3,9 +3,10 @@ import { createPortal } from 'react-dom';
 import { Calendar, User, ArrowLeft, Newspaper, ChevronRight, Download, Eye, Pin, Image as ImageIcon, ExternalLink } from 'lucide-react';
 import { dbService } from '../services/db';
 
-export default function NewsDetail({ newsItem, setView, setCurrentNewsItem }) {
+export default function NewsDetail({ newsItem, setView, setCurrentNewsItem, lang = 'th' }) {
   const [lightboxImage, setLightboxImage] = useState(null);
   const [allNews, setAllNews] = useState([]);
+  const isEn = lang === 'en';
 
   useEffect(() => {
     const loadNews = () => {
@@ -52,13 +53,19 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem }) {
   if (!newsItem) {
     return (
       <div className="container section-padding text-center" style={{ minHeight: '50vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
-        <p className="text-muted" style={{ fontSize: '1.1rem', margin: 0 }}>ไม่พบข้อมูลข่าวสารที่คุณต้องการ หรือระบบกำลังโหลดข้อมูล...</p>
+        <p className="text-muted" style={{ fontSize: '1.1rem', margin: 0 }}>
+          {isEn ? 'The requested article could not be found or is loading...' : 'ไม่พบข้อมูลข่าวสารที่คุณต้องการ หรือระบบกำลังโหลดข้อมูล...'}
+        </p>
         <button onClick={() => setView('news')} className="btn btn-primary" style={{ fontFamily: 'var(--font-heading)' }}>
-          ย้อนกลับไปหน้าข่าวประกาศทั้งหมด
+          {isEn ? 'Back to All Announcements' : 'ย้อนกลับไปหน้าข่าวประกาศทั้งหมด'}
         </button>
       </div>
     );
   }
+
+  const currentTitle = isEn && newsItem.titleEn ? newsItem.titleEn : newsItem.title;
+  const currentSubtitle = isEn && newsItem.subtitleEn ? newsItem.subtitleEn : newsItem.subtitle;
+  const currentContent = isEn && newsItem.contentEn ? newsItem.contentEn : newsItem.content;
 
   const handleBack = () => {
     setView('news');
@@ -71,26 +78,35 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem }) {
 
   const getCategoryText = (category) => {
     switch (category) {
-      case 'announcement': return 'ประกาศสำคัญ';
-      case 'pr': return 'ข่าวประชาสัมพันธ์';
-      case 'activity': return 'ข่าวกิจกรรม';
-      default: return 'ทั่วไป';
+      case 'announcement': return isEn ? 'Announcement' : 'ประกาศสำคัญ';
+      case 'pr': return isEn ? 'Public Relations' : 'ข่าวประชาสัมพันธ์';
+      case 'activity': return isEn ? 'Activity' : 'ข่าวกิจกรรม';
+      default: return isEn ? 'General' : 'ทั่วไป';
     }
   };
 
-  const formatThaiDate = (dateStr) => {
+  const formatDate = (dateStr) => {
     if (!dateStr) return '';
-    const months = [
+    const monthsTh = [
       'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
       'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
+    ];
+    const monthsEn = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
     ];
     try {
       const parts = dateStr.split('-');
       if (parts.length === 3) {
         const day = parseInt(parts[2]);
         const monthIndex = parseInt(parts[1]) - 1;
-        const year = parseInt(parts[0]) + 543;
-        return `${day} ${months[monthIndex]} พ.ศ. ${year}`;
+        if (isEn) {
+          const year = parseInt(parts[0]);
+          return `${monthsEn[monthIndex]} ${day}, ${year}`;
+        } else {
+          const year = parseInt(parts[0]) + 543;
+          return `${day} ${monthsTh[monthIndex]} พ.ศ. ${year}`;
+        }
       }
     } catch (e) {
       console.error(e);
@@ -102,7 +118,7 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem }) {
     <div className="news-detail-page container section-padding animate-fade-in">
       {/* Back button */}
       <button onClick={handleBack} className="btn-back-link">
-        <ArrowLeft size={16} /> ย้อนกลับไปยังหน้าข่าวประกาศทั้งหมด
+        <ArrowLeft size={16} /> {isEn ? 'Back to All Announcements' : 'ย้อนกลับไปยังหน้าข่าวประกาศทั้งหมด'}
       </button>
 
       <div className="news-detail-layout mt-4">
@@ -115,17 +131,17 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem }) {
               </span>
               {newsItem.isPinned && (
                 <span className="badge badge-pinned mb-2" style={{ backgroundColor: '#f97316', color: 'white', display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '4px 10px', fontSize: '0.75rem', fontWeight: '600', borderRadius: '4px' }}>
-                  <Pin size={12} fill="white" /> ปักหมุดประกาศ
+                  <Pin size={12} fill="white" /> {isEn ? 'Pinned Notice' : 'ปักหมุดประกาศ'}
                 </span>
               )}
             </div>
-            <h1 className="article-title">{newsItem.title}</h1>
-            <p className="article-subtitle">{newsItem.subtitle}</p>
+            <h1 className="article-title">{currentTitle}</h1>
+            {currentSubtitle && <p className="article-subtitle">{currentSubtitle}</p>}
 
             <div className="article-meta">
-              <span className="meta-item"><Calendar size={14} /> เผยแพร่เมื่อ: {formatThaiDate(newsItem.date)}</span>
-              <span className="meta-item"><User size={14} /> โดย: {newsItem.author || 'งานประชาสัมพันธ์โรงเรียน'}</span>
-              <span className="meta-item"><Eye size={14} /> ผู้เข้าชม: {(newsItem.views || 0).toLocaleString()} ครั้ง</span>
+              <span className="meta-item"><Calendar size={14} /> {isEn ? 'Published: ' : 'เผยแพร่เมื่อ: '}{formatDate(newsItem.date)}</span>
+              <span className="meta-item"><User size={14} /> {isEn ? 'By: ' : 'โดย: '}{newsItem.author || (isEn ? 'School PR' : 'งานประชาสัมพันธ์โรงเรียน')}</span>
+              <span className="meta-item"><Eye size={14} /> {isEn ? 'Views: ' : 'ผู้เข้าชม: '}{(newsItem.views || 0).toLocaleString()} {isEn ? 'times' : 'ครั้ง'}</span>
             </div>
           </header>
 
@@ -141,22 +157,22 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem }) {
             }}
           >
             {coverImage ? (
-              <img src={coverImage} alt={newsItem.title} className="article-cover-img" />
+              <img src={coverImage} alt={currentTitle} className="article-cover-img" />
             ) : galleryImages.length > 0 ? (
-              <img src={galleryImages[0]} alt={newsItem.title} className="article-cover-img" />
+              <img src={galleryImages[0]} alt={currentTitle} className="article-cover-img" />
             ) : (
               <div className={`article-cover-fallback bg-gradient-${newsItem.category || 'pr'}`}>
                 <div className="fallback-pattern"></div>
                 <Newspaper size={48} className="fallback-icon" />
-                <h4 className="fallback-title">โรงเรียนบ้านวังหัวแหวนพัฒนา</h4>
-                <p className="fallback-desc">ข่าวสารอย่างเป็นทางการของสถาบัน</p>
+                <h4 className="fallback-title">{isEn ? 'Ban Wang Hua Waen Phatthana School' : 'โรงเรียนบ้านวังหัวแหวนพัฒนา'}</h4>
+                <p className="fallback-desc">{isEn ? 'Official School Publication' : 'ข่าวสารอย่างเป็นทางการของสถาบัน'}</p>
               </div>
             )}
           </div>
 
           {/* Article Body Content */}
           <div className="article-body">
-            {newsItem.content.split('\n\n').map((para, i) => {
+            {currentContent.split('\n\n').map((para, i) => {
               if (para.startsWith('**') && para.includes('**\n')) {
                 const titleEnd = para.indexOf('**\n');
                 const headerText = para.substring(2, titleEnd);
@@ -177,7 +193,7 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem }) {
             <div className="article-attachment-download-box">
               <Download size={24} className="download-icon" />
               <div className="download-info">
-                <h4 className="download-title">เอกสารแนบข่าวประกาศ:</h4>
+                <h4 className="download-title">{isEn ? 'Attached Document:' : 'เอกสารแนบข่าวประกาศ:'}</h4>
                 <p className="download-filename">{newsItem.attachmentName}</p>
               </div>
               <a 
@@ -186,7 +202,7 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem }) {
                 rel="noopener noreferrer" 
                 className="btn btn-secondary download-btn"
               >
-                ดาวน์โหลดไฟล์แนบ
+                {isEn ? 'Download Attachment' : 'ดาวน์โหลดไฟล์แนบ'}
               </a>
             </div>
           )}
@@ -194,7 +210,7 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem }) {
           {/* Image Gallery Section */}
           {galleryImages.length > 0 && (
             <div className="article-gallery-section mt-5">
-              <h3 className="gallery-section-title"><ImageIcon size={18} /> รูปภาพประกอบเพิ่มเติม</h3>
+              <h3 className="gallery-section-title"><ImageIcon size={18} /> {isEn ? 'Additional Photos' : 'รูปภาพประกอบเพิ่มเติม'}</h3>
               <div className="gallery-section-divider"></div>
               <div className="gallery-grid">
                 {galleryImages.map((trimmedUrl, index) => (
@@ -206,7 +222,7 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem }) {
                   >
                     <img 
                       src={trimmedUrl} 
-                      alt={`ภาพประกอบข่าวที่ ${index + 1}`} 
+                      alt={isEn ? `Photo ${index + 1}` : `ภาพประกอบข่าวที่ ${index + 1}`} 
                       className="gallery-image" 
                     />
                   </div>
@@ -223,8 +239,8 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem }) {
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                 </svg>
                 <div>
-                  <strong style={{ fontSize: '0.95rem', color: '#1877F2', display: 'block' }}>ข่าวและภาพจาก Facebook เพจโรงเรียน</strong>
-                  <span style={{ fontSize: '0.84rem', color: 'var(--color-text-muted)' }}>สามารถเข้าชม ร่วมแสดงความคิดเห็น หรือแชร์โพสต์ต้นฉบับได้</span>
+                  <strong style={{ fontSize: '0.95rem', color: '#1877F2', display: 'block' }}>{isEn ? 'Official School Facebook Page' : 'ข่าวและภาพจาก Facebook เพจโรงเรียน'}</strong>
+                  <span style={{ fontSize: '0.84rem', color: 'var(--color-text-muted)' }}>{isEn ? 'View the original post, leave a comment, or share.' : 'สามารถเข้าชม ร่วมแสดงความคิดเห็น หรือแชร์โพสต์ต้นฉบับได้'}</span>
                 </div>
               </div>
               <a 
@@ -234,7 +250,7 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem }) {
                 className="btn"
                 style={{ backgroundColor: '#1877F2', color: '#ffffff', display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '8px 16px', borderRadius: '8px', fontSize: '0.88rem', textDecoration: 'none', fontWeight: '500' }}
               >
-                ดูโพสต์ต้นฉบับ <ExternalLink size={14} />
+                {isEn ? 'View Original Post' : 'ดูโพสต์ต้นฉบับ'} <ExternalLink size={14} />
               </a>
             </div>
           )}
@@ -243,7 +259,7 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem }) {
         {/* Sidebar suggestions */}
         <aside className="news-sidebar-suggestions">
           <div className="sidebar-sticky-box">
-            <h3 className="sidebar-section-title">ข่าวสารประกาศอื่นๆ</h3>
+            <h3 className="sidebar-section-title">{isEn ? 'Other Announcements' : 'ข่าวสารประกาศอื่นๆ'}</h3>
             <div className="sidebar-divider"></div>
             
             <div className="suggested-news-stack">
@@ -255,25 +271,27 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem }) {
                 >
                   <div className="suggested-thumb-wrapper">
                     {item.imageUrl ? (
-                      <img src={item.imageUrl} alt="" className="suggested-thumb" />
+                      <img src={resolveImageUrl(item.imageUrl)} alt="" className="suggested-thumb" />
                     ) : (
                       <div className={`suggested-thumb-fallback bg-gradient-${item.category || 'pr'}`}>
-                        C
+                        N
                       </div>
                     )}
                   </div>
                   <div className="suggested-info">
-                    <span className="suggested-date">{formatThaiDate(item.date)}</span>
-                    <h4 className="suggested-title" title={item.title}>{item.title}</h4>
+                    <span className="suggested-date">{formatDate(item.date)}</span>
+                    <h4 className="suggested-title" title={isEn && item.titleEn ? item.titleEn : item.title}>
+                      {isEn && item.titleEn ? item.titleEn : item.title}
+                    </h4>
                     <span className="suggested-action">
-                      อ่านต่อ <ChevronRight size={12} />
+                      {isEn ? 'Read article' : 'อ่านต่อ'} <ChevronRight size={12} />
                     </span>
                   </div>
                 </div>
               ))}
               
               {relatedNews.length === 0 && (
-                <p className="text-muted text-center py-4">ไม่มีข่าวประชาสัมพันธ์อื่นแนะนำในขณะนี้</p>
+                <p className="text-muted text-center py-4">{isEn ? 'No other announcements at this time.' : 'ไม่มีข่าวประชาสัมพันธ์อื่นแนะนำในขณะนี้'}</p>
               )}
             </div>
           </div>

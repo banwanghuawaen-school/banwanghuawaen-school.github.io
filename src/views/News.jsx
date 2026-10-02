@@ -98,6 +98,7 @@ export default function News({ setView, setCurrentNewsItem, searchQuery: propSea
              <NewsCard 
                key={item.id} 
                item={item} 
+               lang={lang}
                onClick={() => {
                  setCurrentNewsItem(item);
                  setView('news-detail');
@@ -108,10 +109,10 @@ export default function News({ setView, setCurrentNewsItem, searchQuery: propSea
       ) : (
         <div className="empty-results-state text-center">
           <AlertCircle size={48} className="empty-icon text-muted" />
-          <h4>ไม่พบข้อมูลข่าวประกาศ</h4>
-          <p className="text-muted">ไม่พบข้อมูลที่ตรงกับการค้นหาหรือตัวกรองของคุณ กรุณาลองใช้คำอื่น</p>
+          <h4>{isEn ? 'No Announcements Found' : 'ไม่พบข้อมูลข่าวประกาศ'}</h4>
+          <p className="text-muted">{isEn ? 'No articles match your search or filter. Try a different keyword.' : 'ไม่พบข้อมูลที่ตรงกับการค้นหาหรือตัวกรองของคุณ กรุณาลองใช้คำอื่น'}</p>
           <button className="btn btn-outline btn-sm mt-3" onClick={() => { setSearchQuery(''); setSelectedCategory('all'); }}>
-            ล้างคำค้นหาและตัวกรอง
+            {isEn ? 'Clear search & filters' : 'ล้างคำค้นหาและตัวกรอง'}
           </button>
         </div>
       )}

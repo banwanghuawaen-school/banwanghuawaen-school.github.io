@@ -1,18 +1,19 @@
 import React from 'react';
 import { Calendar, ArrowRight, BookOpen, Volume2, Award, Eye, Download, Pin } from 'lucide-react';
 
-export default function NewsCard({ item, onClick }) {
+export default function NewsCard({ item, onClick, lang = 'th' }) {
+  const isEn = lang === 'en';
+
   const getCategoryBadge = (category) => {
-    switch (category) {
-      case 'announcement':
-        return <span className="badge badge-announcement">ประกาศสำคัญ</span>;
-      case 'pr':
-        return <span className="badge badge-pr">ข่าวประชาสัมพันธ์</span>;
-      case 'activity':
-        return <span className="badge badge-activity">ข่าวกิจกรรม</span>;
-      default:
-        return <span className="badge badge-pr">ข่าวสาร</span>;
-    }
+    const labels = {
+      announcement: { th: 'ประกาศสำคัญ', en: 'Announcement' },
+      pr: { th: 'ข่าวประชาสัมพันธ์', en: 'Public Relations' },
+      activity: { th: 'ข่าวกิจกรรม', en: 'Activity' },
+      default: { th: 'ข่าวสาร', en: 'News' }
+    };
+    const key = labels[category] ? category : 'default';
+    const badgeClass = category === 'announcement' ? 'badge-announcement' : category === 'activity' ? 'badge-activity' : 'badge-pr';
+    return <span className={`badge ${badgeClass}`}>{isEn ? labels[key].en : labels[key].th}</span>;
   };
 
   const getCategoryIcon = (category) => {
@@ -28,20 +29,29 @@ export default function NewsCard({ item, onClick }) {
     }
   };
 
-  // Convert date format from YYYY-MM-DD to formal Thai date
-  const formatThaiDate = (dateStr) => {
+  // Convert date format from YYYY-MM-DD to formal Thai/English date
+  const formatDate = (dateStr) => {
     if (!dateStr) return '';
-    const months = [
+    const monthsTh = [
       'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
       'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
+    ];
+    const monthsEn = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
     ];
     try {
       const parts = dateStr.split('-');
       if (parts.length === 3) {
         const day = parseInt(parts[2]);
         const monthIndex = parseInt(parts[1]) - 1;
-        const year = parseInt(parts[0]) + 543; // convert to Buddhist Era
-        return `${day} ${months[monthIndex]} พ.ศ. ${year}`;
+        if (isEn) {
+          const year = parseInt(parts[0]);
+          return `${monthsEn[monthIndex]} ${day}, ${year}`;
+        } else {
+          const year = parseInt(parts[0]) + 543; // convert to Buddhist Era
+          return `${day} ${monthsTh[monthIndex]} พ.ศ. ${year}`;
+        }
       }
     } catch (e) {
       console.error("Error formatting date:", e);
@@ -76,10 +86,14 @@ export default function NewsCard({ item, onClick }) {
     return cleaned;
   };
 
-  const cleanSubtitle = cleanTextExcerpt(item.subtitle);
-  const cleanContent = cleanTextExcerpt(item.content);
+  const currentTitle = isEn && item.titleEn ? item.titleEn : item.title;
+  const currentSubtitle = isEn && item.subtitleEn ? item.subtitleEn : item.subtitle;
+  const currentContent = isEn && item.contentEn ? item.contentEn : item.content;
+
+  const cleanSubtitle = cleanTextExcerpt(currentSubtitle);
+  const cleanContent = cleanTextExcerpt(currentContent);
   const excerpt = cleanSubtitle || cleanContent;
-  const displayExcerpt = excerpt ? (excerpt.length > 95 ? excerpt.slice(0, 95) + '...' : excerpt) : 'ไม่มีรายละเอียดเพิ่มเติม';
+  const displayExcerpt = excerpt ? (excerpt.length > 95 ? excerpt.slice(0, 95) + '...' : excerpt) : (isEn ? 'No additional details available.' : 'ไม่มีรายละเอียดเพิ่มเติม');
 
   return (
     <article className="news-card" onClick={onClick}>
@@ -88,7 +102,7 @@ export default function NewsCard({ item, onClick }) {
         {displayImage ? (
           <img 
             src={displayImage} 
-            alt={item.title} 
+            alt={currentTitle} 
             className="card-image"
             onError={(e) => {
               // Fallback: hide broken image and show text-only style
@@ -105,15 +119,15 @@ export default function NewsCard({ item, onClick }) {
                 <line x1="16" y1="13" x2="8" y2="13"></line>
                 <line x1="16" y1="17" x2="8" y2="17"></line>
               </svg>
-              <span>ข่าวสารโรงเรียน</span>
+              <span>{isEn ? 'School News' : 'ข่าวสารโรงเรียน'}</span>
             </div>
-            <p className="text-only-preview">{cleanContent ? cleanContent.slice(0, 120) : item.title}</p>
+            <p className="text-only-preview">{cleanContent ? cleanContent.slice(0, 120) : currentTitle}</p>
           </div>
         )}
         <div className="card-category-floating" style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
           {item.isPinned && (
             <span className="badge badge-pinned" style={{ backgroundColor: '#f97316', color: 'white', display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '4px 8px', fontSize: '0.75rem', fontWeight: '600', borderRadius: '4px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-              <Pin size={11} fill="white" /> ปักหมุด
+              <Pin size={11} fill="white" /> {isEn ? 'Pinned' : 'ปักหมุด'}
             </span>
           )}
           {item.fbUrl && (
@@ -132,21 +146,21 @@ export default function NewsCard({ item, onClick }) {
         <div className="card-meta">
           <span className="meta-item">
             <Calendar size={14} />
-            {formatThaiDate(item.date)}
+            {formatDate(item.date)}
           </span>
-          <span className="meta-item" title={`เข้าชม ${(item.views || 0).toLocaleString()} ครั้ง`}>
+          <span className="meta-item" title={isEn ? `${(item.views || 0).toLocaleString()} views` : `เข้าชม ${(item.views || 0).toLocaleString()} ครั้ง`}>
             <Eye size={14} />
             {(item.views || 0).toLocaleString()}
           </span>
           {item.attachmentUrl && !item.attachmentUrl.includes('example.com') && (
-            <span className="meta-item text-primary" title="มีไฟล์เอกสารดาวน์โหลดแนบ" style={{ color: 'var(--color-primary)' }}>
+            <span className="meta-item text-primary" title={isEn ? 'Attachment available' : 'มีไฟล์เอกสารดาวน์โหลดแนบ'} style={{ color: 'var(--color-primary)' }}>
               <Download size={14} />
             </span>
           )}
         </div>
         
-        <h3 className="card-title" title={item.title}>
-          {item.title}
+        <h3 className="card-title" title={currentTitle}>
+          {currentTitle}
         </h3>
         
         <p className="card-description">
@@ -155,7 +169,7 @@ export default function NewsCard({ item, onClick }) {
         
         <div className="card-footer-action">
           <span className="read-more-btn">
-            อ่านรายละเอียดเพิ่มเติม
+            {isEn ? 'Read more' : 'อ่านรายละเอียดเพิ่มเติม'}
             <ArrowRight size={14} className="arrow-icon" />
           </span>
         </div>
