@@ -258,27 +258,27 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
           {/* Desktop Links with OBEC Gold Active Tab */}
           <div className="desktop-menu-list">
             <button onClick={() => handleNav('home')} className={isActive('home')}>
-              <Home size={16} /> {isEn ? 'Home' : 'หน้าแรก'}
+              <Home size={16} /> {isEn ? 'Home' : 'หน้าหลัก'}
             </button>
             <button onClick={() => handleNav('news')} className={isActive('news')}>
-              <Newspaper size={16} /> {isEn ? 'News & Activities' : 'ข่าวสารและกิจกรรม'}
+              <Newspaper size={16} /> {isEn ? 'News & Announcements' : 'ข่าวประชาสัมพันธ์'}
             </button>
             <button onClick={() => handleNav('staff')} className={isActive('staff')}>
-              <Users size={16} /> {isEn ? 'Staff Directory' : 'ทำเนียบบุคลากร'}
+              <Users size={16} /> {isEn ? 'Staff Directory' : 'ทำเนียบบุคลากรทางการศึกษา'}
             </button>
             <button onClick={() => handleNav('campus')} className={isActive('campus')}>
-              <Layers size={16} /> {isEn ? 'Campus Map' : 'แผนผังโรงเรียน'}
+              <Layers size={16} /> {isEn ? 'Campus Map' : 'แผนผังสถานศึกษา'}
             </button>
             <button onClick={() => handleNav('contact')} className={isActive('contact')}>
-              <PhoneCall size={16} /> {isEn ? 'Contact Us' : 'ข้อมูลติดต่อ'}
+              <PhoneCall size={16} /> {isEn ? 'Contact Us' : 'ติดต่อราชการ'}
             </button>
 
             {user && (
               <div className="admin-chip-group">
                 <button onClick={() => handleNav('admin')} className={isActive('admin')}>
-                  <ShieldAlert size={16} /> {isEn ? 'Admin' : 'ระบบจัดการ (Admin)'}
+                  <ShieldAlert size={16} /> {isEn ? 'Admin Portal' : 'ระบบบริหารจัดการข้อมูล'}
                 </button>
-                <button onClick={handleLogout} className="btn-logout-chip" title={isEn ? "Logout" : "ออกจากระบบ"}>
+                <button onClick={handleLogout} className="btn-logout-chip" title={isEn ? "Logout" : "ออกจากระบบงาน"}>
                   <LogOut size={14} /> {isEn ? 'Logout' : 'ออกจากระบบ'}
                 </button>
               </div>
@@ -289,12 +289,12 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
           <form className="header-search-form" onSubmit={handleSearchSubmit}>
             <input 
               type="text" 
-              placeholder={isEn ? "Search website..." : "กรอกคำเพื่อค้นหา..."} 
+              placeholder={isEn ? "Search announcements..." : "ระบุข้อความเพื่อสืบค้น..."} 
               className="header-search-input"
               value={headerSearch}
               onChange={(e) => setHeaderSearch(e.target.value)}
             />
-            <button type="submit" className="header-search-btn" title={isEn ? "Search" : "ค้นหา"}>
+            <button type="submit" className="header-search-btn" title={isEn ? "Search" : "สืบค้น"}>
               <Search size={16} />
             </button>
           </form>
@@ -330,7 +330,7 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
           <form className="mobile-search-form mb-3" onSubmit={handleSearchSubmit}>
             <input 
               type="text" 
-              placeholder={isEn ? "Search website..." : "กรอกคำเพื่อค้นหา..."} 
+              placeholder={isEn ? "Search announcements..." : "ระบุข้อความเพื่อสืบค้น..."} 
               className="header-search-input w-100"
               value={headerSearch}
               onChange={(e) => setHeaderSearch(e.target.value)}
@@ -341,19 +341,19 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
           </form>
 
           <button onClick={() => handleNav('home')} className={isActive('home')}>
-            <Home size={18} /> {isEn ? 'Home' : 'หน้าแรก'}
+            <Home size={18} /> {isEn ? 'Home' : 'หน้าหลัก'}
           </button>
           <button onClick={() => handleNav('news')} className={isActive('news')}>
-            <Newspaper size={18} /> {isEn ? 'News & Activities' : 'ข่าวสารและกิจกรรม'}
+            <Newspaper size={18} /> {isEn ? 'News & Announcements' : 'ข่าวประชาสัมพันธ์'}
           </button>
           <button onClick={() => handleNav('staff')} className={isActive('staff')}>
-            <Users size={18} /> {isEn ? 'Staff Directory' : 'ทำเนียบบุคลากร'}
+            <Users size={18} /> {isEn ? 'Staff Directory' : 'ทำเนียบบุคลากรทางการศึกษา'}
           </button>
           <button onClick={() => handleNav('campus')} className={isActive('campus')}>
-            <Layers size={18} /> {isEn ? 'Campus Map' : 'แผนผังโรงเรียน'}
+            <Layers size={18} /> {isEn ? 'Campus Map' : 'แผนผังสถานศึกษา'}
           </button>
           <button onClick={() => handleNav('contact')} className={isActive('contact')}>
-            <PhoneCall size={18} /> {isEn ? 'Contact Us' : 'ข้อมูลติดต่อ'}
+            <PhoneCall size={18} /> {isEn ? 'Contact Us' : 'ติดต่อราชการ'}
           </button>
 
           {user && (
@@ -362,10 +362,10 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
                 {isEn ? 'Admin:' : 'ผู้ดูแลระบบ:'} <strong>{user.name}</strong>
               </div>
               <button onClick={() => handleNav('admin')} className="admin-mobile-nav-btn">
-                <ShieldAlert size={16} /> {isEn ? 'Admin Portal' : 'เข้าสู่ระบบจัดการ (Admin)'}
+                <ShieldAlert size={16} /> {isEn ? 'Admin Portal' : 'ระบบบริหารจัดการข้อมูลสถานศึกษา'}
               </button>
               <button onClick={handleLogout} className="logout-mobile-nav-btn">
-                <LogOut size={16} /> {isEn ? 'Logout' : 'ออกจากระบบ'}
+                <LogOut size={16} /> {isEn ? 'Logout' : 'ออกจากระบบงาน'}
               </button>
             </div>
           )}

@@ -36,12 +36,12 @@ export default function Contact({ schoolInfo }) {
     <div className="contact-view container section-padding animate-fade-in">
       {/* Header */}
       <div className="page-header text-center">
-        <span className="section-tag">GET IN TOUCH</span>
-        <h2 className="section-title">ติดต่อโรงเรียน</h2>
+        <span className="section-tag">OFFICIAL CONTACT</span>
+        <h2 className="section-title">ข้อมูลการติดต่อราชการ</h2>
         <div className="school-divider">
           <span className="school-divider-dot"></span>
         </div>
-        <p className="section-subtitle">ติดต่อสอบถามข้อมูลการสมัครเรียน การจัดกิจกรรม หรือติดต่อฝ่ายบริหารโรงเรียนบ้านวังหัวแหวนพัฒนา</p>
+        <p className="section-subtitle">ช่องทางการติดต่อราชการ การประสานงาน และแบบฟอร์มสอบถามข้อมูล โรงเรียนบ้านวังหัวแหวนพัฒนา</p>
       </div>
 
       <div className="grid-2 contact-grid">
@@ -52,7 +52,7 @@ export default function Contact({ schoolInfo }) {
               <MapPin size={24} />
             </div>
             <div className="content">
-              <h4>ที่อยู่โรงเรียน</h4>
+              <h4>ที่ตั้งสถานศึกษา</h4>
               <p>{schoolInfo.address}</p>
             </div>
           </div>
@@ -62,7 +62,7 @@ export default function Contact({ schoolInfo }) {
               <Phone size={24} />
             </div>
             <div className="content">
-              <h4>เบอร์โทรศัพท์</h4>
+              <h4>หมายเลขโทรศัพท์ติดต่อราชการ</h4>
               <p><a href={`tel:${schoolInfo.phone}`}>{schoolInfo.phone}</a></p>
               <span className="muted-note">ในวันและเวลาราชการ (08.30 น. - 16.30 น.)</span>
             </div>
@@ -73,7 +73,7 @@ export default function Contact({ schoolInfo }) {
               <Mail size={24} />
             </div>
             <div className="content">
-              <h4>อีเมลติดต่อ</h4>
+              <h4>ไปรษณีย์อิเล็กทรอนิกส์ (อีเมล)</h4>
               <p><a href={`mailto:${schoolInfo.email}`}>{schoolInfo.email}</a></p>
             </div>
           </div>
@@ -83,38 +83,38 @@ export default function Contact({ schoolInfo }) {
               <Clock size={24} />
             </div>
             <div className="content">
-              <h4>วันและเวลาทำการ</h4>
-              <p>วันจันทร์ - วันศุกร์ (หยุดวันเสาร์-อาทิตย์ และวันหยุดนักขัตฤกษ์)</p>
-              <p>เวลา 08.00 น. - 16.30 น.</p>
+              <h4>วันและเวลาปฏิบัติราชการ</h4>
+              <p>วันจันทร์ - วันศุกร์ (เว้นวันหยุดราชการและวันหยุดนักขัตฤกษ์)</p>
+              <p>เวลา 08.30 น. - 16.30 น.</p>
             </div>
           </div>
         </div>
 
         {/* Right: Contact Form */}
         <div className="contact-form-card">
-          <h3 className="form-card-title">แบบฟอร์มติดต่อสอบถาม</h3>
+          <h3 className="form-card-title">แบบฟอร์มติดต่อราชการและสอบถามข้อมูล</h3>
           <div className="title-underline text-left"></div>
           
           {submitted ? (
             <div className="submit-success-alert animate-fade-in">
               <CheckCircle size={36} className="success-icon" />
               <div>
-                <h4>ส่งข้อความสำเร็จแล้ว</h4>
-                <p>ทางโรงเรียนได้รับข้อความของคุณเรียบร้อยแล้ว เจ้าหน้าที่ที่เกี่ยวข้องจะดำเนินการติดต่อกลับโดยเร็วที่สุด</p>
+                <h4>ส่งข้อความประสานงานสำเร็จ</h4>
+                <p>ทางสถานศึกษาได้รับข้อมูลของท่านเรียบร้อยแล้ว เจ้าหน้าที่ผู้เกี่ยวข้องจะดำเนินการติดต่อกลับโดยเร็ว</p>
               </div>
             </div>
           ) : null}
 
           <form onSubmit={handleSubmit} className="contact-form">
             <div className="form-group">
-              <label htmlFor="name" className="form-label">ชื่อ-นามสกุล ของคุณ</label>
+              <label htmlFor="name" className="form-label">ชื่อ-นามสกุล ผู้ติดต่อ</label>
               <input 
                 type="text" 
                 id="name" 
                 name="name" 
                 className="form-input" 
                 required 
-                placeholder="กรอกชื่อและนามสกุล"
+                placeholder="ระบุชื่อและนามสกุล"
                 value={formData.name}
                 onChange={handleChange}
               />
@@ -122,7 +122,7 @@ export default function Contact({ schoolInfo }) {
 
             <div className="form-row-2">
               <div className="form-group">
-                <label htmlFor="email" className="form-label">อีเมล</label>
+                <label htmlFor="email" className="form-label">ไปรษณีย์อิเล็กทรอนิกส์ (อีเมล)</label>
                 <input 
                   type="email" 
                   id="email" 
@@ -134,7 +134,7 @@ export default function Contact({ schoolInfo }) {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="phone" className="form-label">เบอร์โทรศัพท์ติดต่อกลับ</label>
+                <label htmlFor="phone" className="form-label">หมายเลขโทรศัพท์ติดต่อ</label>
                 <input 
                   type="tel" 
                   id="phone" 
@@ -149,7 +149,7 @@ export default function Contact({ schoolInfo }) {
             </div>
 
             <div className="form-group">
-              <label htmlFor="subject" className="form-label">เรื่องที่ติดต่อ</label>
+              <label htmlFor="subject" className="form-label">เรื่องที่ประสงค์ติดต่อราชการ</label>
               <select 
                 id="subject" 
                 name="subject" 
@@ -157,27 +157,27 @@ export default function Contact({ schoolInfo }) {
                 value={formData.subject}
                 onChange={handleChange}
               >
-                <option value="ทั่วไป">สอบถามข้อมูลทั่วไป</option>
-                <option value="สมัครเรียน">สอบถามเรื่องการรับสมัครนักเรียนใหม่</option>
-                <option value="เสนอแนะ">ข้อเสนอแนะ / แจ้งปัญหา</option>
+                <option value="ทั่วไป">สอบถามข้อมูลทั่วไปและการประสานงาน</option>
+                <option value="สมัครเรียน">สอบถามข้อมูลการรับสมัครและเข้าศึกษาต่อ</option>
+                <option value="เสนอแนะ">ข้อเสนอแนะเพื่อการพัฒนาสถานศึกษา</option>
               </select>
             </div>
 
             <div className="form-group">
-              <label htmlFor="message" className="form-label">รายละเอียดข้อความ</label>
+              <label htmlFor="message" className="form-label">รายละเอียดข้อความที่ประสงค์ติดต่อ</label>
               <textarea 
                 id="message" 
                 name="message" 
                 className="form-input" 
                 required 
-                placeholder="พิมพ์ข้อความรายละเอียดที่ต้องการสอบถามที่นี่..."
+                placeholder="ระบุข้อความรายละเอียดที่ประสงค์ติดต่อราชการหรือสอบถามข้อมูลที่นี่..."
                 value={formData.message}
                 onChange={handleChange}
               />
             </div>
 
             <button type="submit" className="btn btn-primary w-100">
-              <Send size={16} /> ส่งข้อความติดต่อ
+              <Send size={16} /> ส่งข้อความติดต่อราชการ
             </button>
           </form>
         </div>
@@ -185,7 +185,7 @@ export default function Contact({ schoolInfo }) {
 
       {/* Google Maps Map Area */}
       <section className="map-embed-section mt-5">
-        <h3 className="map-title text-center">แผนที่และตำแหน่งที่ตั้งโรงเรียน</h3>
+        <h3 className="map-title text-center">แผนที่และพิกัดที่ตั้งสถานศึกษา</h3>
         <div className="school-divider">
           <span className="school-divider-dot"></span>
         </div>

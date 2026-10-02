@@ -54,10 +54,10 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem, lang
     return (
       <div className="container section-padding text-center" style={{ minHeight: '50vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
         <p className="text-muted" style={{ fontSize: '1.1rem', margin: 0 }}>
-          {isEn ? 'The requested article could not be found or is loading...' : 'ไม่พบข้อมูลข่าวสารที่คุณต้องการ หรือระบบกำลังโหลดข้อมูล...'}
+          {isEn ? 'The requested article could not be found or is loading...' : 'ไม่พบข้อมูลข่าวประชาสัมพันธ์ที่ท่านต้องการ หรือระบบกำลังอยู่ระหว่างการประมวลผล'}
         </p>
         <button onClick={() => setView('news')} className="btn btn-primary" style={{ fontFamily: 'var(--font-heading)' }}>
-          {isEn ? 'Back to All Announcements' : 'ย้อนกลับไปหน้าข่าวประกาศทั้งหมด'}
+          {isEn ? 'Back to All Announcements' : 'ย้อนกลับสู่หน้ารายการข่าวประชาสัมพันธ์'}
         </button>
       </div>
     );
@@ -78,10 +78,10 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem, lang
 
   const getCategoryText = (category) => {
     switch (category) {
-      case 'announcement': return isEn ? 'Announcement' : 'ประกาศสำคัญ';
+      case 'announcement': return isEn ? 'Announcement' : 'ประกาศทางราชการ';
       case 'pr': return isEn ? 'Public Relations' : 'ข่าวประชาสัมพันธ์';
-      case 'activity': return isEn ? 'Activity' : 'ข่าวกิจกรรม';
-      default: return isEn ? 'General' : 'ทั่วไป';
+      case 'activity': return isEn ? 'Activity' : 'ข่าวกิจกรรมและผลงาน';
+      default: return isEn ? 'General' : 'ข่าวประชาสัมพันธ์';
     }
   };
 
@@ -118,7 +118,7 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem, lang
     <div className="news-detail-page container section-padding animate-fade-in">
       {/* Back button */}
       <button onClick={handleBack} className="btn-back-link">
-        <ArrowLeft size={16} /> {isEn ? 'Back to All Announcements' : 'ย้อนกลับไปยังหน้าข่าวประกาศทั้งหมด'}
+        <ArrowLeft size={16} /> {isEn ? 'Back to All Announcements' : 'ย้อนกลับสู่หน้ารายการข่าวประชาสัมพันธ์'}
       </button>
 
       <div className="news-detail-layout mt-4">
@@ -131,7 +131,7 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem, lang
               </span>
               {newsItem.isPinned && (
                 <span className="badge badge-pinned mb-2" style={{ backgroundColor: '#f97316', color: 'white', display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '4px 10px', fontSize: '0.75rem', fontWeight: '600', borderRadius: '4px' }}>
-                  <Pin size={12} fill="white" /> {isEn ? 'Pinned Notice' : 'ปักหมุดประกาศ'}
+                  <Pin size={12} fill="white" /> {isEn ? 'Pinned Notice' : 'ประกาศปักหมุด'}
                 </span>
               )}
             </div>
@@ -139,9 +139,9 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem, lang
             {currentSubtitle && <p className="article-subtitle">{currentSubtitle}</p>}
 
             <div className="article-meta">
-              <span className="meta-item"><Calendar size={14} /> {isEn ? 'Published: ' : 'เผยแพร่เมื่อ: '}{formatDate(newsItem.date)}</span>
-              <span className="meta-item"><User size={14} /> {isEn ? 'By: ' : 'โดย: '}{newsItem.author || (isEn ? 'School PR' : 'งานประชาสัมพันธ์โรงเรียน')}</span>
-              <span className="meta-item"><Eye size={14} /> {isEn ? 'Views: ' : 'ผู้เข้าชม: '}{(newsItem.views || 0).toLocaleString()} {isEn ? 'times' : 'ครั้ง'}</span>
+              <span className="meta-item"><Calendar size={14} /> {isEn ? 'Published: ' : 'เผยแพร่วันที่: '}{formatDate(newsItem.date)}</span>
+              <span className="meta-item"><User size={14} /> {isEn ? 'By: ' : 'หน่วยงานที่เผยแพร่: '}{newsItem.author || (isEn ? 'School Administration' : 'กลุ่มงานบริหารทั่วไป')}</span>
+              <span className="meta-item"><Eye size={14} /> {isEn ? 'Views: ' : 'จำนวนผู้เข้าชม: '}{(newsItem.views || 0).toLocaleString()} {isEn ? 'times' : 'ครั้ง'}</span>
             </div>
           </header>
 
@@ -165,7 +165,7 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem, lang
                 <div className="fallback-pattern"></div>
                 <Newspaper size={48} className="fallback-icon" />
                 <h4 className="fallback-title">{isEn ? 'Ban Wang Hua Waen Phatthana School' : 'โรงเรียนบ้านวังหัวแหวนพัฒนา'}</h4>
-                <p className="fallback-desc">{isEn ? 'Official School Publication' : 'ข่าวสารอย่างเป็นทางการของสถาบัน'}</p>
+                <p className="fallback-desc">{isEn ? 'Official School Publication' : 'ข่าวประชาสัมพันธ์ทางการของสถานศึกษา'}</p>
               </div>
             )}
           </div>
@@ -193,7 +193,7 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem, lang
             <div className="article-attachment-download-box">
               <Download size={24} className="download-icon" />
               <div className="download-info">
-                <h4 className="download-title">{isEn ? 'Attached Document:' : 'เอกสารแนบข่าวประกาศ:'}</h4>
+                <h4 className="download-title">{isEn ? 'Attached Document:' : 'เอกสารแนบประกอบข่าวประชาสัมพันธ์:'}</h4>
                 <p className="download-filename">{newsItem.attachmentName}</p>
               </div>
               <a 
@@ -202,7 +202,7 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem, lang
                 rel="noopener noreferrer" 
                 className="btn btn-secondary download-btn"
               >
-                {isEn ? 'Download Attachment' : 'ดาวน์โหลดไฟล์แนบ'}
+                {isEn ? 'Download Attachment' : 'ดาวน์โหลดเอกสารแนบ'}
               </a>
             </div>
           )}
@@ -210,7 +210,7 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem, lang
           {/* Image Gallery Section */}
           {galleryImages.length > 0 && (
             <div className="article-gallery-section mt-5">
-              <h3 className="gallery-section-title"><ImageIcon size={18} /> {isEn ? 'Additional Photos' : 'รูปภาพประกอบเพิ่มเติม'}</h3>
+              <h3 className="gallery-section-title"><ImageIcon size={18} /> {isEn ? 'Additional Photos' : 'ภาพกิจกรรมประกอบข่าวประชาสัมพันธ์'}</h3>
               <div className="gallery-section-divider"></div>
               <div className="gallery-grid">
                 {galleryImages.map((trimmedUrl, index) => (
@@ -222,7 +222,7 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem, lang
                   >
                     <img 
                       src={trimmedUrl} 
-                      alt={isEn ? `Photo ${index + 1}` : `ภาพประกอบข่าวที่ ${index + 1}`} 
+                      alt={isEn ? `Photo ${index + 1}` : `ภาพกิจกรรมลำดับที่ ${index + 1}`} 
                       className="gallery-image" 
                     />
                   </div>
@@ -239,8 +239,8 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem, lang
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                 </svg>
                 <div>
-                  <strong style={{ fontSize: '0.95rem', color: '#1877F2', display: 'block' }}>{isEn ? 'Official School Facebook Page' : 'ข่าวและภาพจาก Facebook เพจโรงเรียน'}</strong>
-                  <span style={{ fontSize: '0.84rem', color: 'var(--color-text-muted)' }}>{isEn ? 'View the original post, leave a comment, or share.' : 'สามารถเข้าชม ร่วมแสดงความคิดเห็น หรือแชร์โพสต์ต้นฉบับได้'}</span>
+                  <strong style={{ fontSize: '0.95rem', color: '#1877F2', display: 'block' }}>{isEn ? 'Official School Facebook Page' : 'ช่องทางสื่อสารออนไลน์ Facebook สถานศึกษา'}</strong>
+                  <span style={{ fontSize: '0.84rem', color: 'var(--color-text-muted)' }}>{isEn ? 'View the original post, leave a comment, or share.' : 'สามารถเข้าชมและติดตามข้อมูลเพิ่มเติมได้ที่โพสต์ต้นทาง'}</span>
                 </div>
               </div>
               <a 
@@ -250,7 +250,7 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem, lang
                 className="btn"
                 style={{ backgroundColor: '#1877F2', color: '#ffffff', display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '8px 16px', borderRadius: '8px', fontSize: '0.88rem', textDecoration: 'none', fontWeight: '500' }}
               >
-                {isEn ? 'View Original Post' : 'ดูโพสต์ต้นฉบับ'} <ExternalLink size={14} />
+                {isEn ? 'View Original Post' : 'เข้าชมโพสต์ต้นทาง'} <ExternalLink size={14} />
               </a>
             </div>
           )}
@@ -259,7 +259,7 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem, lang
         {/* Sidebar suggestions */}
         <aside className="news-sidebar-suggestions">
           <div className="sidebar-sticky-box">
-            <h3 className="sidebar-section-title">{isEn ? 'Other Announcements' : 'ข่าวสารประกาศอื่นๆ'}</h3>
+            <h3 className="sidebar-section-title">{isEn ? 'Other Announcements' : 'ข่าวประชาสัมพันธ์อื่นๆ'}</h3>
             <div className="sidebar-divider"></div>
             
             <div className="suggested-news-stack">
@@ -284,14 +284,14 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem, lang
                       {isEn && item.titleEn ? item.titleEn : item.title}
                     </h4>
                     <span className="suggested-action">
-                      {isEn ? 'Read article' : 'อ่านต่อ'} <ChevronRight size={12} />
+                      {isEn ? 'Read article' : 'อ่านรายละเอียด'} <ChevronRight size={12} />
                     </span>
                   </div>
                 </div>
               ))}
               
               {relatedNews.length === 0 && (
-                <p className="text-muted text-center py-4">{isEn ? 'No other announcements at this time.' : 'ไม่มีข่าวประชาสัมพันธ์อื่นแนะนำในขณะนี้'}</p>
+                <p className="text-muted text-center py-4">{isEn ? 'No other announcements at this time.' : 'ไม่มีรายการข่าวประชาสัมพันธ์อื่นเพิ่มเติมในขณะนี้'}</p>
               )}
             </div>
           </div>

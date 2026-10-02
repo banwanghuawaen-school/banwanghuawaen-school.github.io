@@ -30,10 +30,10 @@ export default function News({ setView, setCurrentNewsItem, searchQuery: propSea
     { value: 'pr', label: 'Public Relations' },
     { value: 'activity', label: 'Activities' }
   ] : [
-    { value: 'all', label: 'ข่าวสารทั้งหมด' },
-    { value: 'announcement', label: 'ประกาศสำคัญ' },
+    { value: 'all', label: 'ข่าวประชาสัมพันธ์ทั้งหมด' },
+    { value: 'announcement', label: 'ประกาศทางราชการ' },
     { value: 'pr', label: 'ข่าวประชาสัมพันธ์' },
-    { value: 'activity', label: 'ข่าวกิจกรรม' }
+    { value: 'activity', label: 'ข่าวกิจกรรมและผลงาน' }
   ];
 
   // Filtering news based on search query and category tab
@@ -51,15 +51,15 @@ export default function News({ setView, setCurrentNewsItem, searchQuery: propSea
     <div className="news-view container section-padding animate-fade-in">
       {/* Page Title Header */}
       <div className="page-header text-center">
-        <span className="section-tag">{isEn ? 'ANNOUNCEMENTS & NEWS' : 'ข่าวสารและกิจกรรม'}</span>
-        <h2 className="section-title">{isEn ? 'News & Announcements' : 'ข่าวสารและประกาศ'}</h2>
+        <span className="section-tag">{isEn ? 'ANNOUNCEMENTS & NEWS' : 'ข่าวประชาสัมพันธ์และประกาศทางราชการ'}</span>
+        <h2 className="section-title">{isEn ? 'News & Announcements' : 'ข่าวประชาสัมพันธ์และประกาศทางราชการ'}</h2>
         <div className="school-divider">
           <span className="school-divider-dot"></span>
         </div>
         <p className="section-subtitle">
           {isEn 
             ? 'Stay informed about school admissions, events, student activities, and official notices.' 
-            : 'ติดตามความเคลื่อนไหว ประกาศรับสมัคร กิจกรรม และข่าวสารประชาสัมพันธ์ต่างๆ ของโรงเรียน'}
+            : 'ติดตามข้อมูลข่าวสาร ประกาศทางราชการ กิจกรรมการเรียนรู้ และผลงานการศึกษาของสถานศึกษา'}
         </p>
       </div>
 
@@ -70,7 +70,7 @@ export default function News({ setView, setCurrentNewsItem, searchQuery: propSea
           <Search size={18} className="search-icon" />
           <input 
             type="text" 
-            placeholder={isEn ? "Search news, announcements..." : "พิมพ์คำค้นหาข่าวประกาศ..."} 
+            placeholder={isEn ? "Search news, announcements..." : "ระบุข้อความเพื่อสืบค้นข่าวประชาสัมพันธ์..."} 
             className="search-input"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -109,10 +109,10 @@ export default function News({ setView, setCurrentNewsItem, searchQuery: propSea
       ) : (
         <div className="empty-results-state text-center">
           <AlertCircle size={48} className="empty-icon text-muted" />
-          <h4>{isEn ? 'No Announcements Found' : 'ไม่พบข้อมูลข่าวประกาศ'}</h4>
-          <p className="text-muted">{isEn ? 'No articles match your search or filter. Try a different keyword.' : 'ไม่พบข้อมูลที่ตรงกับการค้นหาหรือตัวกรองของคุณ กรุณาลองใช้คำอื่น'}</p>
+          <h4>{isEn ? 'No Announcements Found' : 'ไม่พบข้อมูลข่าวประชาสัมพันธ์'}</h4>
+          <p className="text-muted">{isEn ? 'No articles match your search or filter. Try a different keyword.' : 'ไม่พบข้อมูลที่ตรงกับเงื่อนไขการสืบค้นหรือตัวกรองที่เลือก กรุณาระบุคำค้นหาใหม่อีกครั้ง'}</p>
           <button className="btn btn-outline btn-sm mt-3" onClick={() => { setSearchQuery(''); setSelectedCategory('all'); }}>
-            {isEn ? 'Clear search & filters' : 'ล้างคำค้นหาและตัวกรอง'}
+            {isEn ? 'Clear search & filters' : 'ล้างเงื่อนไขการสืบค้น'}
           </button>
         </div>
       )}

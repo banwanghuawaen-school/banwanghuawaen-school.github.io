@@ -40,25 +40,25 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
     {
       id: 1,
       image: resolveImageUrl('news/fb_lunch_donation.jpg'),
-      tagTh: "ยินดีต้อนรับสู่ • สำนักงานคณะกรรมการการศึกษาขั้นพื้นฐาน",
-      tagEn: "WELCOME TO • OFFICE OF THE BASIC EDUCATION COMMISSION",
+      tagTh: "สำนักงานคณะกรรมการการศึกษาขั้นพื้นฐาน • กระทรวงศึกษาธิการ",
+      tagEn: "OFFICE OF THE BASIC EDUCATION COMMISSION • MINISTRY OF EDUCATION",
       titleTh: "โรงเรียนบ้านวังหัวแหวนพัฒนา",
       titleEn: "Ban Wang Hua Waen Phatthana School",
       subtitleTh: "สำนักงานเขตพื้นที่การศึกษาประถมศึกษากำแพงเพชร เขต 2 • กระทรวงศึกษาธิการ",
       subtitleEn: "Kamphaeng Phet Primary Educational Service Area Office 2 • Ministry of Education",
       descTh: "“ปัญญา นรานัง รัตนัง : ปัญญาเป็นดวงแก้วของนรชน” มุ่งมั่นพัฒนาการศึกษา สร้างเสริมคุณธรรม สู่ความเป็นเลิศ",
       descEn: "“Good Education, Disciplined, Eager to Learn, High Morals” Empowering students through quality education.",
-      primaryBtnTh: "สำรวจแผนผังโรงเรียน",
+      primaryBtnTh: "แผนผังบริเวณสถานศึกษา",
       primaryBtnEn: "Explore Campus",
       primaryAction: () => setView('campus'),
-      secondaryBtnTh: "อ่านข่าวประชาสัมพันธ์",
+      secondaryBtnTh: "ข่าวประชาสัมพันธ์",
       secondaryBtnEn: "Latest News",
       secondaryAction: () => setView('news')
     },
     {
       id: 2,
       image: resolveImageUrl('news/school_award_honor.jpg'),
-      tagTh: "รางวัลเชิดชูเกียรติ สพฐ. • ความภาคภูมิใจของโรงเรียน",
+      tagTh: "รางวัลเชิดชูเกียรติ สพฐ. • ความภาคภูมิใจของสถานศึกษา",
       tagEn: "OBEC EXCELLENCE AWARD • ACADEMIC PRESTIGE",
       titleTh: "สถานศึกษาต้นแบบการนิเทศภายใน (ISMS Award) ระดับยอดเยี่ยม",
       titleEn: "Internal Supervision Model School (ISMS) Excellence Award",
@@ -66,28 +66,28 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
       subtitleEn: "Excellence Recognition from the Office of the Basic Education Commission",
       descTh: "“มุ่งมั่นพัฒนาการศึกษา สร้างเสริมคุณธรรม สู่ความเป็นเลิศ” ยกระดับคุณภาพการเรียนรู้และการบริหารจัดการอย่างยั่งยืน",
       descEn: "“Committed to Educational Quality and Excellence” Elevating instructional supervision and student learning.",
-      primaryBtnTh: "อ่านรายละเอียดรางวัล",
+      primaryBtnTh: "รายละเอียดเกียรติประวัติ",
       primaryBtnEn: "Read Award Details",
       primaryAction: () => setView('news'),
-      secondaryBtnTh: "ทำเนียบบุคลากร",
+      secondaryBtnTh: "ทำเนียบข้าราชการครูและบุคลากร",
       secondaryBtnEn: "Staff Directory",
       secondaryAction: () => setView('staff')
     },
     {
       id: 3,
       image: resolveImageUrl('news/school_teachers_group.jpg'),
-      tagTh: "คณะครูและบุคลากร • มุ่งมั่นพัฒนาผู้เรียน",
+      tagTh: "ข้าราชการครูและบุคลากร • มุ่งมั่นพัฒนาคุณภาพผู้เรียน",
       tagEn: "FACULTY & STAFF • DEDICATED EDUCATORS",
       titleTh: "คณะครูและบุคลากรทางการศึกษา โรงเรียนบ้านวังหัวแหวนพัฒนา",
       titleEn: "Faculty & Staff of Ban Wang Hua Waen Phatthana School",
-      subtitleTh: "ร่วมสร้างอนาคตเยาวชน ด้วยหัวใจและความรู้ สู่ความเป็นเลิศในศตวรรษที่ 21",
+      subtitleTh: "ร่วมเสริมสร้างศักยภาพผู้เรียน ปลูกฝังคุณธรรมและวินัย สู่ความเป็นเลิศทางวิชาการ",
       subtitleEn: "Empowering young minds with care, discipline, and modern 21st-century knowledge.",
       descTh: "มุ่งเน้นการจัดการเรียนรู้เชิงรุก (Active Learning) ปลูกฝังระเบียบวินัย และพัฒนาทักษะชีวิตรอบด้านของนักเรียนทุกคน",
       descEn: "Focusing on active learning strategies, moral character, and essential life skills for every student.",
-      primaryBtnTh: "ทำเนียบครูและบุคลากร",
+      primaryBtnTh: "ทำเนียบบุคลากรทางการศึกษา",
       primaryBtnEn: "Meet Our Teachers",
       primaryAction: () => setView('staff'),
-      secondaryBtnTh: "ข้อมูลติดต่อโรงเรียน",
+      secondaryBtnTh: "ข้อมูลการติดต่อราชการ",
       secondaryBtnEn: "Contact School",
       secondaryAction: () => setView('contact')
     }
@@ -250,8 +250,8 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
                 <Layers size={24} />
               </div>
               <div className="portal-info-box">
-                <h4 className="portal-heading">{isEn ? 'Campus Map' : 'แผนผังโรงเรียน'}</h4>
-                <p className="portal-subheading">{isEn ? 'Explore 14 buildings & facilities' : 'สำรวจ 14 อาคารและสิ่งอำนวยความสะดวก'}</p>
+                <h4 className="portal-heading">{isEn ? 'Campus Map' : 'แผนผังบริเวณสถานศึกษา'}</h4>
+                <p className="portal-subheading">{isEn ? 'Explore buildings & facilities' : 'ข้อมูลอาคารสถานที่และแหล่งเรียนรู้'}</p>
               </div>
               <ChevronRight size={18} className="portal-chevron" />
             </div>
@@ -261,8 +261,8 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
                 <BookOpen size={24} />
               </div>
               <div className="portal-info-box">
-                <h4 className="portal-heading">{isEn ? 'News & Events' : 'ข่าวสาร & กิจกรรม'}</h4>
-                <p className="portal-subheading">{isEn ? 'Announcements & student activities' : 'ประกาศสำคัญ ข่าวสาร และกิจกรรมนักเรียน'}</p>
+                <h4 className="portal-heading">{isEn ? 'News & Announcements' : 'ข่าวประชาสัมพันธ์'}</h4>
+                <p className="portal-subheading">{isEn ? 'Official notices & activities' : 'ประกาศทางราชการและกิจกรรมสถานศึกษา'}</p>
               </div>
               <ChevronRight size={18} className="portal-chevron" />
             </div>
@@ -273,7 +273,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
               </div>
               <div className="portal-info-box">
                 <h4 className="portal-heading">{isEn ? 'Staff Directory' : 'ทำเนียบบุคลากร'}</h4>
-                <p className="portal-subheading">{isEn ? 'Administrators & faculty members' : 'คณะผู้บริหารและข้าราชการครูผู้สอน'}</p>
+                <p className="portal-subheading">{isEn ? 'Administrators & faculty members' : 'ผู้บริหารสถานศึกษาและคณะครูอาจารย์'}</p>
               </div>
               <ChevronRight size={18} className="portal-chevron" />
             </div>
@@ -283,8 +283,8 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
                 <PhoneCall size={24} />
               </div>
               <div className="portal-info-box">
-                <h4 className="portal-heading">{isEn ? 'Contact & Admissions' : 'ติดต่อ & สมัครเรียน'}</h4>
-                <p className="portal-subheading">{isEn ? 'Location, inquiries & admissions' : 'ข้อมูลติดต่อ สอบถาม และที่ตั้งโรงเรียน'}</p>
+                <h4 className="portal-heading">{isEn ? 'Contact School' : 'ติดต่อราชการ'}</h4>
+                <p className="portal-subheading">{isEn ? 'Location & official inquiries' : 'ข้อมูลที่ตั้งและการติดต่อราชการ'}</p>
               </div>
               <ChevronRight size={18} className="portal-chevron" />
             </div>
@@ -292,7 +292,6 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
           </div>
         </div>
       </section>
-
 
       {/* 3. STATS RIBBON (ข้อมูลสถิติพื้นฐาน) */}
       <section className="stats-ribbon-section">
@@ -304,7 +303,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
               </div>
               <div className="stat-info">
                 <h3 className="stat-number">{schoolInfo?.stats ? schoolInfo.stats.students : 65}<span className="stat-plus">+</span></h3>
-                <p className="stat-label">{isEn ? 'Quality Students' : 'จำนวนนักเรียนคุณภาพ'}</p>
+                <p className="stat-label">{isEn ? 'Enrolled Students' : 'จำนวนนักเรียนทั้งหมด'}</p>
               </div>
             </div>
 
@@ -316,7 +315,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
               </div>
               <div className="stat-info">
                 <h3 className="stat-number">{schoolInfo?.stats ? schoolInfo.stats.teachers : 5}</h3>
-                <p className="stat-label">{isEn ? 'Teachers & Staff' : 'ข้าราชการครูและบุคลากร'}</p>
+                <p className="stat-label">{isEn ? 'Teachers & Educational Personnel' : 'ข้าราชการครูและบุคลากรทางการศึกษา'}</p>
               </div>
             </div>
 
@@ -328,7 +327,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
               </div>
               <div className="stat-info">
                 <h3 className="stat-number">8</h3>
-                <p className="stat-label">{isEn ? 'Grade Levels (K.2 - G.6)' : 'ระดับชั้นเรียน (อ.2 - ป.6)'}</p>
+                <p className="stat-label">{isEn ? 'Grade Levels (K.2 - G.6)' : 'ระดับชั้นการศึกษาที่เปิดสอน (อนุบาล 2 - ประถมศึกษาปีที่ 6)'}</p>
               </div>
             </div>
           </div>
@@ -336,7 +335,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
       </section>
 
 
-      {/* 4. DIRECTOR'S PRESIDENTIAL GREETING (สารจากผู้อำนวยการ) */}
+      {/* 4. DIRECTOR'S PRESIDENTIAL GREETING (สารจากผู้อำนวยการสถานศึกษา) */}
       <section className="section-padding greeting-section">
         <div className="container">
           <div className="director-executive-wrapper">
@@ -375,10 +374,10 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
               {/* Right Column: Presidential Message */}
               <div className="greeting-content-side">
                 <div className="section-tag-gold mb-2 d-inline-block">
-                  {isEn ? 'EXECUTIVE MESSAGE' : 'สารจากผู้บริหาร'}
+                  {isEn ? 'EXECUTIVE MESSAGE' : 'สารจากผู้บริหารสถานศึกษา'}
                 </div>
                 <h3 className="section-title text-left mb-2">
-                  {isEn ? 'Message from the School Director' : 'สารจากผู้อำนวยการโรงเรียน'}
+                  {isEn ? 'Message from the School Director' : 'สารจากผู้อำนวยการสถานศึกษา'}
                 </h3>
                 <div className="title-gold-bar mb-3"></div>
 
@@ -400,15 +399,15 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
       </section>
 
 
-      {/* 5. COMMITMENTS & IDENTITY (วิสัยทัศน์ พันธกิจ อัตลักษณ์) */}
+      {/* 5. COMMITMENTS & IDENTITY (วิสัยทัศน์ พันธกิจ และเป้าประสงค์) */}
       <section className="section-padding vision-section">
         <div className="container">
           <div className="text-center mb-5">
             <span className="section-tag-gold d-inline-block mb-2">
-              {isEn ? 'OUR COMMITMENTS' : 'วิสัยทัศน์และจุดเน้น'}
+              {isEn ? 'OUR COMMITMENTS' : 'วิสัยทัศน์ พันธกิจ และเป้าประสงค์'}
             </span>
             <h3 className="section-title">
-              {isEn ? 'Vision, Mission & Identity' : 'วิสัยทัศน์และพันธกิจ'}
+              {isEn ? 'Vision, Mission & Goals' : 'วิสัยทัศน์ พันธกิจ และอัตลักษณ์สถานศึกษา'}
             </h3>
             <div className="school-divider">
               <span className="school-divider-dot"></span>
@@ -416,7 +415,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
             <p className="section-subtitle">
               {isEn 
                 ? 'Dedicated to high-quality education and character building for every student.' 
-                : 'ความมุ่งมั่นในการขับเคลื่อนการศึกษาที่มีคุณภาพ เพื่อลูกหลานชาวบ้านวังหัวแหวนพัฒนา'}
+                : 'ความมุ่งมั่นในการขับเคลื่อนคุณภาพการศึกษาและการบริหารจัดการสถานศึกษาอย่างมีประสิทธิภาพ'}
             </p>
           </div>
 
@@ -445,7 +444,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
               <div className="bento-icon bg-emerald">
                 <Users size={24} className="text-white" />
               </div>
-              <h4 className="bento-title">{isEn ? 'Identity' : 'อัตลักษณ์ (Identity)'}</h4>
+              <h4 className="bento-title">{isEn ? 'Identity' : 'อัตลักษณ์สถานศึกษา (Identity)'}</h4>
               <p className="bento-desc">
                 {schoolInfo?.identity || 'ยิ้มง่าย ไหว้สวย รวยน้ำใจ มีวินัยใฝ่การศึกษา ซึ่งเป็นจุดเน้นการหล่อหลอมพฤติกรรมพื้นฐานของเยาวชนและนักเรียนโรงเรียนบ้านวังหัวแหวนพัฒนาทุกคน'}
               </p>
@@ -455,7 +454,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
       </section>
 
 
-      {/* 6. LATEST NEWS HIGHLIGHTS (ดึงภาพจริงมาแสดงในการ์ดข่าว) */}
+      {/* 6. LATEST NEWS HIGHLIGHTS (ข่าวประชาสัมพันธ์และประกาศทางราชการ) */}
       <section className="section-padding news-highlights">
         <div className="container">
           <div className="flex-between-title mb-4">
@@ -464,16 +463,16 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
                 {isEn ? 'NEWS & ANNOUNCEMENTS' : 'ข่าวประชาสัมพันธ์'}
               </span>
               <h3 className="section-title text-left mb-1">
-                {isEn ? 'Latest School Announcements' : 'ข่าวประชาสัมพันธ์ล่าสุด'}
+                {isEn ? 'Latest Announcements' : 'ข่าวประชาสัมพันธ์และกิจกรรมล่าสุด'}
               </h3>
               <p className="text-muted">
                 {isEn 
                   ? 'Keep up to date with events, achievements, and notifications.' 
-                  : 'ติดตามข่าวสาร กิจกรรม และประกาศสำคัญของโรงเรียนบ้านวังหัวแหวนพัฒนา'}
+                  : 'ติดตามข้อมูลข่าวสาร กิจกรรมการเรียนรู้ และประกาศทางราชการของสถานศึกษา'}
               </p>
             </div>
             <button className="btn btn-outline" onClick={() => setView('news')}>
-              {isEn ? 'View All News' : 'ดูข่าวสารทั้งหมด'} <ChevronRight size={16} />
+              {isEn ? 'View All News' : 'ดูข่าวประชาสัมพันธ์ทั้งหมด'} <ChevronRight size={16} />
             </button>
           </div>
 
@@ -490,7 +489,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
             </div>
           ) : (
             <div className="empty-state text-center py-5">
-              <p className="text-muted">{isEn ? 'No news available at the moment.' : 'ขณะนี้ยังไม่มีข้อมูลข่าวประชาสัมพันธ์ประกาศในระบบ'}</p>
+              <p className="text-muted">{isEn ? 'No news available at the moment.' : 'ขณะนี้ยังไม่มีข้อมูลข่าวประชาสัมพันธ์ในระบบ'}</p>
             </div>
           )}
         </div>

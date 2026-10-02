@@ -36,7 +36,7 @@ export default function Footer({ schoolInfo, setView, lang = 'th' }) {
 
           {/* Contact Info Column */}
           <div className="footer-contact">
-            <h4 className="footer-heading">{isEn ? 'Contact School' : 'ติดต่อโรงเรียน'}</h4>
+            <h4 className="footer-heading">{isEn ? 'Contact School' : 'ข้อมูลการติดต่อราชการ'}</h4>
             <ul className="footer-contact-list">
               <li>
                 <MapPin size={18} className="footer-icon" />
@@ -55,28 +55,28 @@ export default function Footer({ schoolInfo, setView, lang = 'th' }) {
 
           {/* Quick Links Column */}
           <div className="footer-links">
-            <h4 className="footer-heading">{isEn ? 'Site Navigation' : 'แผนผังเว็บไซต์'}</h4>
+            <h4 className="footer-heading">{isEn ? 'Site Navigation' : 'เมนูหลักสถานศึกษา'}</h4>
             <ul className="footer-link-list">
-              <li><button onClick={() => handleNav('home')}>{isEn ? 'Home' : 'หน้าแรก'}</button></li>
-              <li><button onClick={() => handleNav('news')}>{isEn ? 'News & Events' : 'ข่าวประกาศ'}</button></li>
-              <li><button onClick={() => handleNav('staff')}>{isEn ? 'Staff Directory' : 'ทำเนียบบุคลากร'}</button></li>
-              <li><button onClick={() => handleNav('campus')}>{isEn ? 'Campus Map' : 'แผนผังโรงเรียน'}</button></li>
-              <li><button onClick={() => handleNav('contact')}>{isEn ? 'Contact Us' : 'ข้อมูลติดต่อ'}</button></li>
+              <li><button onClick={() => handleNav('home')}>{isEn ? 'Home' : 'หน้าหลัก'}</button></li>
+              <li><button onClick={() => handleNav('news')}>{isEn ? 'News & Announcements' : 'ข่าวประชาสัมพันธ์'}</button></li>
+              <li><button onClick={() => handleNav('staff')}>{isEn ? 'Staff Directory' : 'ทำเนียบบุคลากรทางการศึกษา'}</button></li>
+              <li><button onClick={() => handleNav('campus')}>{isEn ? 'Campus Map' : 'แผนผังสถานศึกษา'}</button></li>
+              <li><button onClick={() => handleNav('contact')}>{isEn ? 'Contact Us' : 'ติดต่อราชการ'}</button></li>
             </ul>
           </div>
 
           {/* External Gov Links Column */}
           <div className="footer-external">
-            <h4 className="footer-heading">{isEn ? 'Related Educational Agencies' : 'ลิงก์หน่วยงานที่เกี่ยวข้อง'}</h4>
+            <h4 className="footer-heading">{isEn ? 'Related Educational Agencies' : 'หน่วยงานต้นสังกัดและภาคีเครือข่าย'}</h4>
             <ul className="footer-link-list">
               <li>
                 <a href="https://www.obec.go.th" target="_blank" rel="noopener noreferrer" className="ext-link">
-                  {isEn ? 'OBEC (สพฐ.)' : 'สพฐ.'} <ExternalLink size={12} />
+                  {isEn ? 'OBEC (สพฐ.)' : 'สำนักงานคณะกรรมการการศึกษาขั้นพื้นฐาน (สพฐ.)'} <ExternalLink size={12} />
                 </a>
               </li>
               <li>
                 <a href="https://www.kpp2.go.th/main/index.php" target="_blank" rel="noopener noreferrer" className="ext-link">
-                  {isEn ? 'KPP2 (สพป.กำแพงเพชร เขต 2)' : 'สพป.กำแพงเพชร เขต 2'} <ExternalLink size={12} />
+                  {isEn ? 'KPP2 (สพป.กำแพงเพชร เขต 2)' : 'สำนักงานเขตพื้นที่การศึกษาประถมศึกษากำแพงเพชร เขต 2'} <ExternalLink size={12} />
                 </a>
               </li>
               <li>
@@ -94,12 +94,12 @@ export default function Footer({ schoolInfo, setView, lang = 'th' }) {
         <div className="container footer-bottom-content">
           <p>© {isEn ? `Copyright ${currentYearCe}` : `พ.ศ. ${currentYearBe}`} {schoolInfo?.name}. {isEn ? 'All rights reserved.' : 'สงวนลิขสิทธิ์ข้อมูลตามพระราชบัญญัติลิขสิทธิ์'}</p>
           <div className="footer-credits-admin" style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
-            <p>{isEn ? 'Maintained by Ban Wang Hua Waen Phatthana School' : 'พัฒนาและบำรุงรักษาโดย โรงเรียนบ้านวังหัวแหวนพัฒนา'}</p>
+            <p>{isEn ? 'Maintained by Ban Wang Hua Waen Phatthana School' : 'กลุ่มงานสารสนเทศและเทคโนโลยีทางการศึกษา โรงเรียนบ้านวังหัวแหวนพัฒนา'}</p>
             <button 
               onClick={() => handleNav('login')} 
               className="admin-login-footer-btn"
             >
-              {isEn ? 'Admin Login' : 'สำหรับผู้ดูแลระบบ (Admin Login)'}
+              {isEn ? 'Admin Login' : 'เข้าสู่ระบบบริหารจัดการข้อมูลสถานศึกษา'}
             </button>
           </div>
         </div>

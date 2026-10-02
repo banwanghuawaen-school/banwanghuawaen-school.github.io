@@ -36,12 +36,12 @@ export default function Staff() {
     <div className="staff-view container section-padding animate-fade-in">
       {/* Title */}
       <div className="page-header text-center mb-5">
-        <span className="section-tag">PERSONNEL</span>
-        <h2 className="section-title">ทำเนียบบุคลากร</h2>
+        <span className="section-tag">PERSONNEL DIRECTORY</span>
+        <h2 className="section-title">ทำเนียบข้าราชการครูและบุคลากรทางการศึกษา</h2>
         <div className="school-divider">
           <span className="school-divider-dot"></span>
         </div>
-        <p className="section-subtitle">คณะผู้บริหาร ครู และบุคลากรทางการศึกษาที่ร่วมแรงร่วมใจในการขับเคลื่อนคุณภาพเยาวชนโรงเรียนบ้านวังหัวแหวนพัฒนา</p>
+        <p className="section-subtitle">ทำเนียบข้อมูลผู้บริหารสถานศึกษา ข้าราชการครู และบุคลากรทางการศึกษา โรงเรียนบ้านวังหัวแหวนพัฒนา</p>
       </div>
 
       {/* 1. Director Section */}
@@ -69,18 +69,18 @@ export default function Staff() {
             </div>
             {/* Right Column: Info details */}
             <div className="director-info-col">
-              <span className="badge badge-pr mb-2">ผู้อำนวยการโรงเรียน</span>
+              <span className="badge badge-pr mb-2">ผู้อำนวยการสถานศึกษา</span>
               <h3 className="name-title">{director.name}</h3>
               <p className="position-title">{director.position}</p>
               
               <div className="details-list">
                 <div className="detail-item">
                   <GraduationCap size={16} className="text-secondary" />
-                  <span><strong>วุฒิการศึกษา:</strong> {director.qualification}</span>
+                  <span><strong>คุณวุฒิการศึกษา:</strong> {director.qualification}</span>
                 </div>
                 <div className="detail-item">
                   <Mail size={16} className="text-secondary" />
-                  <span><strong>อีเมล:</strong> <a href={`mailto:${director.email}`}>{director.email}</a></span>
+                  <span><strong>ไปรษณีย์อิเล็กทรอนิกส์ (อีเมล):</strong> <a href={`mailto:${director.email}`}>{director.email}</a></span>
                 </div>
                 <div className="detail-item">
                   <Heart size={16} className="text-secondary" />
@@ -119,8 +119,8 @@ export default function Staff() {
                 <div className="teacher-divider"></div>
                 
                 <div className="teacher-meta-list">
-                  <p><strong>กลุ่มวิชา:</strong> {teacher.subject}</p>
-                  <p><strong>วุฒิการศึกษา:</strong> {teacher.qualification}</p>
+                  <p><strong>กลุ่มสาระการเรียนรู้:</strong> {teacher.subject}</p>
+                  <p><strong>คุณวุฒิการศึกษา:</strong> {teacher.qualification}</p>
                   <p className="email-row">
                     <Mail size={14} className="text-secondary" /> 
                     <a href={`mailto:${teacher.email}`} className="email-link">{teacher.email}</a>

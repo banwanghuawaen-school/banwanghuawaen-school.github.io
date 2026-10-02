@@ -6,10 +6,10 @@ export default function NewsCard({ item, onClick, lang = 'th' }) {
 
   const getCategoryBadge = (category) => {
     const labels = {
-      announcement: { th: 'ประกาศสำคัญ', en: 'Announcement' },
+      announcement: { th: 'ประกาศทางราชการ', en: 'Official Announcement' },
       pr: { th: 'ข่าวประชาสัมพันธ์', en: 'Public Relations' },
-      activity: { th: 'ข่าวกิจกรรม', en: 'Activity' },
-      default: { th: 'ข่าวสาร', en: 'News' }
+      activity: { th: 'ข่าวกิจกรรมและผลงาน', en: 'Activities & Achievements' },
+      default: { th: 'ข่าวประชาสัมพันธ์', en: 'Public Relations' }
     };
     const key = labels[category] ? category : 'default';
     const badgeClass = category === 'announcement' ? 'badge-announcement' : category === 'activity' ? 'badge-activity' : 'badge-pr';
@@ -119,7 +119,7 @@ export default function NewsCard({ item, onClick, lang = 'th' }) {
                 <line x1="16" y1="13" x2="8" y2="13"></line>
                 <line x1="16" y1="17" x2="8" y2="17"></line>
               </svg>
-              <span>{isEn ? 'School News' : 'ข่าวสารโรงเรียน'}</span>
+              <span>{isEn ? 'School News' : 'ข่าวประชาสัมพันธ์สถานศึกษา'}</span>
             </div>
             <p className="text-only-preview">{cleanContent ? cleanContent.slice(0, 120) : currentTitle}</p>
           </div>
@@ -127,7 +127,7 @@ export default function NewsCard({ item, onClick, lang = 'th' }) {
         <div className="card-category-floating" style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
           {item.isPinned && (
             <span className="badge badge-pinned" style={{ backgroundColor: '#f97316', color: 'white', display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '4px 8px', fontSize: '0.75rem', fontWeight: '600', borderRadius: '4px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-              <Pin size={11} fill="white" /> {isEn ? 'Pinned' : 'ปักหมุด'}
+              <Pin size={11} fill="white" /> {isEn ? 'Pinned' : 'ประกาศปักหมุด'}
             </span>
           )}
           {item.fbUrl && (
@@ -148,12 +148,12 @@ export default function NewsCard({ item, onClick, lang = 'th' }) {
             <Calendar size={14} />
             {formatDate(item.date)}
           </span>
-          <span className="meta-item" title={isEn ? `${(item.views || 0).toLocaleString()} views` : `เข้าชม ${(item.views || 0).toLocaleString()} ครั้ง`}>
+          <span className="meta-item" title={isEn ? `${(item.views || 0).toLocaleString()} views` : `จำนวนผู้เข้าชม ${(item.views || 0).toLocaleString()} ครั้ง`}>
             <Eye size={14} />
             {(item.views || 0).toLocaleString()}
           </span>
           {item.attachmentUrl && !item.attachmentUrl.includes('example.com') && (
-            <span className="meta-item text-primary" title={isEn ? 'Attachment available' : 'มีไฟล์เอกสารดาวน์โหลดแนบ'} style={{ color: 'var(--color-primary)' }}>
+            <span className="meta-item text-primary" title={isEn ? 'Attachment available' : 'มีเอกสารแนบประกอบ'} style={{ color: 'var(--color-primary)' }}>
               <Download size={14} />
             </span>
           )}

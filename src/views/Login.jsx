@@ -36,8 +36,8 @@ export default function Login({ setView, setUser }) {
           <div className="shield-icon-wrapper">
             <Shield size={36} />
           </div>
-          <h3>ระบบจัดการหลังบ้าน (CMS)</h3>
-          <p className="text-muted">เข้าสู่ระบบสำหรับเจ้าหน้าที่และผู้ดูแลระบบโรงเรียน</p>
+          <h3>ระบบบริหารจัดการข้อมูลสถานศึกษา</h3>
+          <p className="text-muted">เข้าสู่ระบบสำหรับเจ้าหน้าที่ผู้ดูแลระบบและบุคลากรทางการศึกษา</p>
           <div className="school-divider">
             <span className="school-divider-dot"></span>
           </div>
@@ -54,14 +54,14 @@ export default function Login({ setView, setUser }) {
         {/* Login Form */}
         <form onSubmit={handleLogin} className="login-form">
           <div className="form-group">
-            <label className="form-label" htmlFor="username">ชื่อผู้ใช้งาน (Username)</label>
+            <label className="form-label" htmlFor="username">ชื่อผู้ใช้งาน</label>
             <div className="input-with-icon-wrapper">
               <User size={18} className="input-icon" />
               <input 
                 type="text" 
                 id="username" 
                 className="form-input with-icon" 
-                placeholder="กรอกชื่อผู้ใช้งาน" 
+                placeholder="ระบุชื่อผู้ใช้งาน" 
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -70,14 +70,14 @@ export default function Login({ setView, setUser }) {
           </div>
 
           <div className="form-group">
-            <label className="form-label" htmlFor="password">รหัสผ่าน (Password)</label>
+            <label className="form-label" htmlFor="password">รหัสผ่าน</label>
             <div className="input-with-icon-wrapper">
               <KeyRound size={18} className="input-icon" />
               <input 
                 type={showPassword ? "text" : "password"} 
                 id="password" 
                 className="form-input with-icon" 
-                placeholder="กรอกรหัสผ่าน" 
+                placeholder="ระบุรหัสผ่าน" 
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -94,7 +94,7 @@ export default function Login({ setView, setUser }) {
           </div>
 
           <button type="submit" className="btn btn-primary w-100 mt-2" disabled={loading}>
-            {loading ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบ'}
+            {loading ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบบริหารจัดการ'}
           </button>
         </form>
 
