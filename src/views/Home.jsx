@@ -96,8 +96,8 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
                 <Layers size={24} />
               </div>
               <div className="portal-text">
-                <h4>แผนผังโรงเรียน 2.5D</h4>
-                <p>สำรวจ 14 อาคารและสนามกีฬาเสมือนจริง</p>
+                <h4>แผนผังโรงเรียน</h4>
+                <p>สำรวจ 14 อาคารและสิ่งอำนวยความสะดวก</p>
               </div>
               <ChevronRight size={18} className="portal-arrow" />
             </div>

@@ -134,6 +134,21 @@ export default function App() {
     }
   }, [view, user]);
 
+  // Dynamically update document title based on view for SEO & user orientation
+  useEffect(() => {
+    const titles = {
+      home: 'หน้าแรก | โรงเรียนบ้านวังหัวแหวนพัฒนา',
+      news: 'ข่าวประชาสัมพันธ์และกิจกรรม | โรงเรียนบ้านวังหัวแหวนพัฒนา',
+      'news-detail': currentNewsItem ? `${currentNewsItem.title} | โรงเรียนบ้านวังหัวแหวนพัฒนา` : 'รายละเอียดข่าว | โรงเรียนบ้านวังหัวแหวนพัฒนา',
+      staff: 'ทำเนียบบุคลากร | โรงเรียนบ้านวังหัวแหวนพัฒนา',
+      campus: 'แผนผังโรงเรียน | โรงเรียนบ้านวังหัวแหวนพัฒนา',
+      contact: 'ข้อมูลติดต่อ | โรงเรียนบ้านวังหัวแหวนพัฒนา',
+      login: 'เข้าสู่ระบบผู้ดูแล | โรงเรียนบ้านวังหัวแหวนพัฒนา',
+      admin: 'ระบบบริหารจัดการเว็บไซต์ | โรงเรียนบ้านวังหัวแหวนพัฒนา'
+    };
+    document.title = titles[view] || 'โรงเรียนบ้านวังหัวแหวนพัฒนา - สพป.กำแพงเพชร เขต 2 | เว็บไซต์ทางการ';
+  }, [view, currentNewsItem]);
+
   const handleLogout = () => {
     authService.logout();
     setUser(null);
