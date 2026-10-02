@@ -14,7 +14,8 @@ import {
   PhoneCall, 
   Building2,
   CheckCircle2,
-  ArrowRight
+  ArrowRight,
+  ShieldCheck
 } from 'lucide-react';
 
 export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
@@ -45,96 +46,95 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
   return (
     <div className="home-view animate-fade-in">
       
-      {/* 1. ULTRA-PREMIUM HERO BANNER */}
-      <section className="hero-banner">
-        {/* Animated Background Mesh & Star Glow */}
-        <div className="hero-ambient-glow glow-1"></div>
-        <div className="hero-ambient-glow glow-2"></div>
-        <div className="hero-grid-overlay"></div>
-
-        {schoolInfo.heroBgUrl && (
-          <div 
-            className="hero-bg-image-fade" 
-            style={{ 
-              backgroundImage: `url(${schoolInfo.heroBgUrl})`,
-              position: 'absolute',
-              inset: 0,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              opacity: 0.35,
-              zIndex: 0,
-              filter: 'brightness(0.3) contrast(1.2)'
-            }}
-          />
-        )}
-
-        <div className="container hero-content">
-          <div className="hero-badge-pill animate-float">
-            <Sparkles size={14} className="text-secondary" />
-            <span>เว็บไซต์อย่างเป็นทางการ • สพป.กำแพงเพชร เขต 2</span>
-          </div>
-
-          <h1 className="hero-title">
-            {schoolInfo.name}
-          </h1>
-          <p className="hero-subtitle">{schoolInfo.nameEn}</p>
+      {/* 1. CLEAN OFFICIAL OBEC PORTAL HERO BANNER */}
+      <section className="obec-hero-section">
+        <div className="container">
           
-          <div className="hero-slogan-card glass-panel-dark">
-            <span className="quote-mark">“</span>
-            <p className="hero-slogan-text">{schoolInfo.slogan}</p>
-            <span className="quote-mark">”</span>
+          <div className="obec-welcome-card">
+            {/* Top gold accent line */}
+            <div className="obec-gold-accent-bar"></div>
+
+            <div className="obec-welcome-content">
+              {/* Official Seal / Badge tag */}
+              <div className="obec-hero-badge">
+                <span className="badge-seal-dot"></span>
+                <span>สำนักงานคณะกรรมการการศึกษาขั้นพื้นฐาน (สพฐ.) • กระทรวงศึกษาธิการ</span>
+              </div>
+
+              {/* School Main Names */}
+              <h1 className="obec-hero-title">
+                {schoolInfo.name}
+              </h1>
+              <p className="obec-hero-org">
+                {schoolInfo.region || 'สำนักงานเขตพื้นที่การศึกษาประถมศึกษากำแพงเพชร เขต 2'}
+              </p>
+              <p className="obec-hero-sub">
+                {schoolInfo.nameEn || 'BAN WANG HUA WAEN PHATTHANA SCHOOL'}
+              </p>
+              
+              {/* Formal Slogan Card */}
+              <div className="obec-slogan-card">
+                <span className="slogan-badge-label">ปรัชญา / คำขวัญประจำโรงเรียน</span>
+                <p className="obec-slogan-text">“{schoolInfo.slogan}”</p>
+              </div>
+
+              <div className="obec-location-tag">
+                <MapPin size={16} className="text-primary" />
+                <span>{schoolInfo.address || 'ตำบลพานทอง อำเภอไทรงาม จังหวัดกำแพงเพชร'}</span>
+              </div>
+            </div>
+
+            {/* 4 Quick Access Portal Cards (Clean, Easy to read, Dignified) */}
+            <div className="obec-portals-grid">
+              
+              <div className="obec-portal-card card-hover-lift" onClick={() => setView('campus')}>
+                <div className="portal-icon-circle icon-bg-blue">
+                  <Layers size={24} />
+                </div>
+                <div className="portal-info-box">
+                  <h4 className="portal-heading">แผนผังโรงเรียน</h4>
+                  <p className="portal-subheading">สำรวจ 14 อาคารและสิ่งอำนวยความสะดวก</p>
+                </div>
+                <ChevronRight size={18} className="portal-chevron" />
+              </div>
+
+              <div className="obec-portal-card card-hover-lift" onClick={() => setView('news')}>
+                <div className="portal-icon-circle icon-bg-gold">
+                  <BookOpen size={24} />
+                </div>
+                <div className="portal-info-box">
+                  <h4 className="portal-heading">ข่าวสาร & กิจกรรม</h4>
+                  <p className="portal-subheading">ประกาศสำคัญ ข่าวสาร และกิจกรรมนักเรียน</p>
+                </div>
+                <ChevronRight size={18} className="portal-chevron" />
+              </div>
+
+              <div className="obec-portal-card card-hover-lift" onClick={() => setView('staff')}>
+                <div className="portal-icon-circle icon-bg-green">
+                  <Users size={24} />
+                </div>
+                <div className="portal-info-box">
+                  <h4 className="portal-heading">ทำเนียบบุคลากร</h4>
+                  <p className="portal-subheading">คณะผู้บริหารและข้าราชการครูผู้สอน</p>
+                </div>
+                <ChevronRight size={18} className="portal-chevron" />
+              </div>
+
+              <div className="obec-portal-card card-hover-lift" onClick={() => setView('contact')}>
+                <div className="portal-icon-circle icon-bg-teal">
+                  <PhoneCall size={24} />
+                </div>
+                <div className="portal-info-box">
+                  <h4 className="portal-heading">ติดต่อ & สมัครเรียน</h4>
+                  <p className="portal-subheading">ข้อมูลติดต่อ สอบถาม และที่ตั้งโรงเรียน</p>
+                </div>
+                <ChevronRight size={18} className="portal-chevron" />
+              </div>
+
+            </div>
+
           </div>
 
-          <p className="hero-region-tag">
-            <MapPin size={15} className="text-secondary" /> {schoolInfo.region}
-          </p>
-
-          {/* 4 Quick Access Portal Cards */}
-          <div className="hero-portals-grid mt-4">
-            <div className="portal-glass-card" onClick={() => setView('campus')}>
-              <div className="portal-icon-box bg-purple">
-                <Layers size={24} />
-              </div>
-              <div className="portal-text">
-                <h4>แผนผังโรงเรียน</h4>
-                <p>สำรวจ 14 อาคารและสิ่งอำนวยความสะดวก</p>
-              </div>
-              <ChevronRight size={18} className="portal-arrow" />
-            </div>
-
-            <div className="portal-glass-card" onClick={() => setView('news')}>
-              <div className="portal-icon-box bg-gold">
-                <BookOpen size={24} />
-              </div>
-              <div className="portal-text">
-                <h4>ข่าวประกาศ & กิจกรรม</h4>
-                <p>อัปเดตข่าวสารสำคัญและกิจกรรมนักเรียน</p>
-              </div>
-              <ChevronRight size={18} className="portal-arrow" />
-            </div>
-
-            <div className="portal-glass-card" onClick={() => setView('staff')}>
-              <div className="portal-icon-box bg-blue">
-                <Users size={24} />
-              </div>
-              <div className="portal-text">
-                <h4>ทำเนียบบุคลากร</h4>
-                <p>คณะผู้บริหารและข้าราชการครูผู้สอน</p>
-              </div>
-              <ChevronRight size={18} className="portal-arrow" />
-            </div>
-
-            <div className="portal-glass-card" onClick={() => setView('contact')}>
-              <div className="portal-icon-box bg-emerald">
-                <PhoneCall size={24} />
-              </div>
-              <div className="portal-text">
-                <h4>ติดต่อ & สมัครเรียน</h4>
-                <p>ข้อมูลติดต่อ สอบถาม และที่ตั้งโรงเรียน</p>
-              </div>
-              <ChevronRight size={18} className="portal-arrow" />
-            </div>
-          </div>
         </div>
       </section>
 
@@ -181,10 +181,10 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
       </section>
 
 
-      {/* 3. DIRECTOR'S PRESIDENTIAL GREETING */}
+      {/* 3. DIRECTOR'S PRESIDENTIAL GREETING (สารจากผู้อำนวยการ) */}
       <section className="section-padding greeting-section">
         <div className="container">
-          <div className="director-executive-wrapper glass-panel">
+          <div className="director-executive-wrapper">
             <div className="grid-2 align-items-center">
               
               {/* Left Column: Formal Executive Frame */}
@@ -220,8 +220,8 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
               {/* Right Column: Presidential Message */}
               <div className="greeting-content-side">
                 <div className="section-tag-gold mb-2 d-inline-block">WELCOME MESSAGE</div>
-                <h3 className="section-title text-left mb-3">สารจากผู้อำนวยการโรงเรียน</h3>
-                <div className="title-gold-bar mb-4"></div>
+                <h3 className="section-title text-left mb-2">สารจากผู้อำนวยการโรงเรียน</h3>
+                <div className="title-gold-bar mb-3"></div>
 
                 <blockquote className="director-quote-text">
                   “{schoolInfo.directorMsg}”
@@ -231,6 +231,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
                   <div className="sign-line"></div>
                   <p className="sign-author">({schoolInfo.directorName})</p>
                   <p className="sign-rank">{schoolInfo.directorPosition}</p>
+                  <p className="sign-org">โรงเรียนบ้านวังหัวแหวนพัฒนา</p>
                 </div>
               </div>
 
@@ -240,13 +241,16 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
       </section>
 
 
-      {/* 5. COMMITMENTS & IDENTITY (วิสัยทัศน์ พันธกิจ อัตลักษณ์) */}
+      {/* 4. COMMITMENTS & IDENTITY (วิสัยทัศน์ พันธกิจ อัตลักษณ์) */}
       <section className="section-padding vision-section">
         <div className="container">
           <div className="text-center mb-5">
             <span className="section-tag-gold d-inline-block mb-2">OUR COMMITMENTS</span>
             <h3 className="section-title">วิสัยทัศน์และพันธกิจ</h3>
-            <p className="section-subtitle">ความมุ่งมั่นในการขับเคลื่อนการศึกษาที่มีคุณภาพ เพื่อลูกหลานชาววังหามแห</p>
+            <div className="school-divider">
+              <span className="school-divider-dot"></span>
+            </div>
+            <p className="section-subtitle">ความมุ่งมั่นในการขับเคลื่อนการศึกษาที่มีคุณภาพ เพื่อลูกหลานชาวบ้านวังหัวแหวนพัฒนา</p>
           </div>
 
           <div className="grid-3 bento-commitments">
@@ -284,12 +288,12 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
       </section>
 
 
-      {/* 6. LATEST NEWS HIGHLIGHTS */}
-      <section className="section-padding news-highlights bg-white">
+      {/* 5. LATEST NEWS HIGHLIGHTS */}
+      <section className="section-padding news-highlights">
         <div className="container">
           <div className="flex-between-title mb-4">
             <div>
-              <span className="section-tag-gold d-inline-block mb-2">NEWS & ANNOUNCEMENTS</span>
+              <span className="section-tag-gold d-inline-block mb-1">NEWS & ANNOUNCEMENTS</span>
               <h3 className="section-title text-left mb-1">ข่าวประชาสัมพันธ์ล่าสุด</h3>
               <p className="text-muted">ติดตามข่าวสาร กิจกรรม และประกาศสำคัญของโรงเรียนบ้านวังหัวแหวนพัฒนา</p>
             </div>
@@ -317,231 +321,233 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
       </section>
 
 
-      {/* Scoped Styling for Luxury Home Page */}
+      {/* Scoped CSS for Clean OBEC Layout */}
       <style>{`
-        /* Hero Banner */
-        .hero-banner {
-          position: relative;
-          background: linear-gradient(135deg, #061527 0%, #0b2545 60%, #0a1f38 100%);
-          color: white;
-          padding: 90px 0 100px;
-          text-align: center;
+        /* Hero Section (Clean OBEC Style) */
+        .obec-hero-section {
+          background-color: #f8fafc;
+          padding: 36px 0 44px;
+          border-bottom: 1px solid #e2e8f0;
+        }
+
+        .obec-welcome-card {
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
+          border-radius: 16px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
           overflow: hidden;
-        }
-
-        .hero-ambient-glow {
-          position: absolute;
-          width: 500px;
-          height: 500px;
-          border-radius: 50%;
-          filter: blur(120px);
-          pointer-events: none;
-          opacity: 0.25;
-        }
-
-        .glow-1 {
-          top: -100px;
-          left: -100px;
-          background: #e5b326;
-        }
-
-        .glow-2 {
-          bottom: -150px;
-          right: -100px;
-          background: #3b82f6;
-        }
-
-        .hero-grid-overlay {
-          position: absolute;
-          inset: 0;
-          background-image: radial-gradient(rgba(229, 179, 38, 0.15) 1px, transparent 1px);
-          background-size: 24px 24px;
-          opacity: 0.4;
-          pointer-events: none;
-        }
-
-        .hero-content {
           position: relative;
-          z-index: 2;
-          max-width: 960px;
+        }
+
+        .obec-gold-accent-bar {
+          height: 6px;
+          background: linear-gradient(90deg, #063b27 0%, #eab308 50%, #0b2545 100%);
+        }
+
+        .obec-welcome-content {
+          padding: 44px 36px 28px;
+          text-align: center;
+          max-width: 900px;
           margin: 0 auto;
         }
 
-        .hero-badge-pill {
+        .obec-hero-badge {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          background: rgba(255, 255, 255, 0.08);
-          border: 1px solid rgba(229, 179, 38, 0.4);
-          color: #fde047;
+          background: #f0fdf4;
+          border: 1px solid #bbf7d0;
+          color: #166534;
           padding: 6px 18px;
-          border-radius: var(--radius-full);
-          font-size: 0.84rem;
+          border-radius: 9999px;
+          font-size: 0.85rem;
           font-family: var(--font-heading);
           font-weight: 600;
-          margin-bottom: 20px;
-          backdrop-filter: blur(8px);
+          margin-bottom: 18px;
         }
 
-        .hero-title {
-          font-size: 3.2rem;
-          font-weight: 900;
-          color: white;
+        .badge-seal-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background-color: #16a34a;
+        }
+
+        .obec-hero-title {
+          font-size: 2.5rem;
+          font-weight: 800;
+          color: #0b2545;
           margin-bottom: 8px;
-          letter-spacing: -0.5px;
-          text-shadow: 0 4px 16px rgba(0,0,0,0.4);
+          line-height: 1.25;
+          letter-spacing: -0.3px;
         }
 
-        .hero-subtitle {
-          font-size: 1.15rem;
-          color: rgba(255, 255, 255, 0.85);
-          letter-spacing: 2.5px;
-          font-family: var(--font-heading);
+        .obec-hero-org {
+          font-size: 1.12rem;
           font-weight: 600;
+          color: #063b27;
+          margin-bottom: 4px;
+        }
+
+        .obec-hero-sub {
+          font-size: 0.84rem;
+          font-weight: 700;
+          color: #94a3b8;
+          letter-spacing: 0.8px;
           margin-bottom: 24px;
         }
 
-        .hero-slogan-card {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          padding: 12px 28px;
-          border-radius: var(--radius-full);
-          margin-bottom: 20px;
+        .obec-slogan-card {
+          background: #fffdf5;
+          border: 1px solid #fde68a;
+          border-left: 4px solid #eab308;
+          padding: 14px 24px;
+          border-radius: 8px;
+          margin: 0 auto 20px;
+          display: inline-block;
+          text-align: center;
         }
 
-        .hero-slogan-text {
-          font-size: 1.25rem;
-          font-family: var(--font-heading);
-          color: #fde047;
+        .slogan-badge-label {
+          display: block;
+          font-size: 0.76rem;
+          font-weight: 700;
+          color: #b45309;
+          margin-bottom: 4px;
+          text-transform: uppercase;
+        }
+
+        .obec-slogan-text {
+          font-size: 1.15rem;
           font-weight: 600;
-          font-style: italic;
+          color: #1e293b;
           margin: 0;
+          font-style: italic;
         }
 
-        .quote-mark {
-          font-size: 1.6rem;
-          color: var(--color-secondary);
-          opacity: 0.7;
-          line-height: 1;
-        }
-
-        .hero-region-tag {
-          font-size: 0.95rem;
-          color: rgba(255, 255, 255, 0.75);
+        .obec-location-tag {
           display: inline-flex;
           align-items: center;
           gap: 6px;
+          font-size: 0.9rem;
+          color: #64748b;
+          font-weight: 500;
         }
 
         /* 4 Quick Access Portal Cards */
-        .hero-portals-grid {
+        .obec-portals-grid {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
           gap: 16px;
-          margin-top: 36px;
+          padding: 12px 32px 36px;
         }
 
-        @media (max-width: 992px) {
-          .hero-portals-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-          .hero-title { font-size: 2.4rem; }
-        }
-
-        @media (max-width: 576px) {
-          .hero-portals-grid {
-            grid-template-columns: 1fr;
-          }
-          .hero-title { font-size: 1.8rem; }
-        }
-
-        .portal-glass-card {
-          background: rgba(255, 255, 255, 0.08);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-          border: 1px solid rgba(255, 255, 255, 0.15);
-          border-radius: var(--radius-lg);
+        .obec-portal-card {
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
+          border-radius: 12px;
           padding: 18px 16px;
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 14px;
           cursor: pointer;
-          transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
           text-align: left;
         }
 
-        .portal-glass-card:hover {
-          background: rgba(255, 255, 255, 0.15);
-          border-color: var(--color-secondary);
-          transform: translateY(-5px);
-          box-shadow: 0 16px 28px -10px rgba(0, 0, 0, 0.5);
+        .obec-portal-card:hover {
+          border-color: #eab308;
+          background: #fffefb;
+          transform: translateY(-3px);
+          box-shadow: 0 10px 20px -5px rgba(234, 179, 8, 0.15);
         }
 
-        .portal-icon-box {
-          width: 46px;
-          height: 46px;
+        .portal-icon-circle {
+          width: 48px;
+          height: 48px;
           border-radius: 12px;
           display: flex;
           align-items: center;
           justify-content: center;
           flex-shrink: 0;
-          color: white;
+          color: #ffffff;
         }
 
-        .bg-purple { background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%); }
-        .bg-gold { background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); }
-        .bg-blue { background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); }
-        .bg-emerald { background: linear-gradient(135deg, #34d399 0%, #059669 100%); }
+        .icon-bg-blue { background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); }
+        .icon-bg-gold { background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%); }
+        .icon-bg-green { background: linear-gradient(135deg, #166534 0%, #22c55e 100%); }
+        .icon-bg-teal { background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%); }
 
-        .portal-text h4 {
-          font-size: 0.95rem;
-          color: white;
+        .portal-info-box {
+          flex: 1;
+        }
+
+        .portal-heading {
+          font-size: 0.98rem;
           font-weight: 700;
+          color: #0b2545;
           margin-bottom: 2px;
         }
 
-        .portal-text p {
-          font-size: 0.78rem;
-          color: rgba(255, 255, 255, 0.7);
+        .portal-subheading {
+          font-size: 0.8rem;
+          color: #64748b;
           margin: 0;
-          line-height: 1.3;
+          line-height: 1.35;
         }
 
-        .portal-arrow {
-          margin-left: auto;
-          color: rgba(255, 255, 255, 0.4);
-          transition: transform 0.2s ease;
+        .portal-chevron {
+          color: #cbd5e1;
+          transition: transform 0.15s ease, color 0.15s ease;
         }
 
-        .portal-glass-card:hover .portal-arrow {
-          transform: translateX(4px);
-          color: var(--color-secondary);
+        .obec-portal-card:hover .portal-chevron {
+          color: #eab308;
+          transform: translateX(3px);
+        }
+
+        @media (max-width: 992px) {
+          .obec-portals-grid {
+            grid-template-columns: repeat(2, 1fr);
+            padding: 12px 20px 28px;
+          }
+          .obec-hero-title { font-size: 2rem; }
+          .obec-welcome-content { padding: 32px 20px 20px; }
+        }
+
+        @media (max-width: 576px) {
+          .obec-portals-grid {
+            grid-template-columns: 1fr;
+            padding: 8px 16px 24px;
+          }
+          .obec-hero-title { font-size: 1.6rem; }
         }
 
         /* Stats Ribbon */
         .stats-ribbon-section {
-          margin-top: -36px;
+          margin-top: -24px;
           position: relative;
           z-index: 10;
         }
 
         .stats-ribbon-card {
           background: #ffffff;
-          border: 2px solid #e2e8f0;
-          padding: 28px 40px;
-          border-radius: var(--radius-lg);
+          border: 1px solid #cbd5e1;
+          padding: 24px 36px;
+          border-radius: 12px;
           display: flex;
           justify-content: space-around;
           align-items: center;
           gap: 20px;
-          box-shadow: 0 20px 45px -12px rgba(11, 37, 69, 0.25);
+          box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.06);
         }
 
         @media (max-width: 768px) {
           .stats-ribbon-card {
             flex-direction: column;
-            gap: 24px;
+            gap: 20px;
+            padding: 20px;
           }
           .stat-divider { display: none; }
         }
@@ -553,9 +559,9 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
         }
 
         .stat-icon-circle {
-          width: 54px;
-          height: 54px;
-          border-radius: 14px;
+          width: 52px;
+          height: 52px;
+          border-radius: 12px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -563,41 +569,43 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
         }
 
         .bg-primary-soft { background: rgba(11, 37, 69, 0.08); }
-        .bg-gold-soft { background: rgba(229, 179, 38, 0.12); }
+        .bg-gold-soft { background: rgba(234, 179, 8, 0.15); }
         .bg-emerald-soft { background: rgba(16, 185, 129, 0.12); }
-        .bg-purple-soft { background: rgba(168, 85, 247, 0.12); }
 
         .stat-number {
           font-size: 2rem;
           font-weight: 800;
-          color: var(--color-primary);
+          color: #0b2545;
           line-height: 1.1;
           margin-bottom: 2px;
           font-family: var(--font-heading);
         }
 
         .stat-plus {
-          color: var(--color-secondary);
+          color: #eab308;
           font-size: 1.5rem;
         }
 
         .stat-label {
-          font-size: 0.85rem;
-          color: var(--color-text-muted);
+          font-size: 0.88rem;
+          color: #64748b;
           font-weight: 600;
         }
 
         .stat-divider {
           width: 1px;
           height: 48px;
-          background: var(--color-border);
+          background: #e2e8f0;
         }
 
-        /* Director Executive Card */
+        /* Director Executive Card (Clean Official Style) */
         .director-executive-wrapper {
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
+          border-top: 5px solid #eab308;
+          border-radius: 12px;
           padding: 40px;
-          border-radius: var(--radius-lg);
-          border-top: 6px solid var(--color-secondary);
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
         }
 
         .director-visual {
@@ -611,16 +619,17 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
           width: 240px;
           height: 300px;
           background: white;
-          border-radius: var(--radius-md);
-          padding: 10px;
-          box-shadow: var(--shadow-lg);
+          border-radius: 8px;
+          padding: 8px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+          border: 1px solid #e2e8f0;
         }
 
         .gold-frame-accent {
           position: absolute;
-          inset: 6px;
-          border: 2px solid var(--color-secondary);
-          border-radius: 4px;
+          inset: 4px;
+          border: 2px solid #eab308;
+          border-radius: 6px;
           pointer-events: none;
         }
 
@@ -628,6 +637,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
           width: 100%;
           height: 100%;
           overflow: hidden;
+          border-radius: 4px;
         }
 
         .director-img {
@@ -649,35 +659,44 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
         .dir-name {
           font-size: 1.15rem;
           font-weight: 700;
-          color: var(--color-primary);
+          color: #0b2545;
           margin-bottom: 2px;
         }
 
         .dir-position {
-          font-size: 0.85rem;
-          color: var(--color-text-muted);
+          font-size: 0.88rem;
+          color: #64748b;
+          font-weight: 500;
+        }
+
+        .section-tag-gold {
+          font-size: 0.78rem;
+          font-weight: 700;
+          color: #ca8a04;
+          letter-spacing: 0.8px;
+          font-family: var(--font-heading);
         }
 
         .title-gold-bar {
-          width: 60px;
+          width: 50px;
           height: 4px;
-          background: linear-gradient(90deg, var(--color-secondary) 0%, transparent 100%);
+          background: #eab308;
           border-radius: 2px;
         }
 
         .director-quote-text {
-          font-size: 1.08rem;
+          font-size: 1.05rem;
           line-height: 1.85;
-          color: var(--color-text-main);
+          color: #1e293b;
           font-style: italic;
-          border-left: 3px solid var(--color-secondary);
-          padding-left: 20px;
-          margin-bottom: 24px;
+          border-left: 3px solid #eab308;
+          padding-left: 18px;
+          margin-bottom: 20px;
         }
 
         .director-formal-sign {
           text-align: right;
-          padding-right: 20px;
+          padding-right: 16px;
         }
 
         .sign-line {
@@ -691,107 +710,79 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem }) {
         .sign-author {
           font-size: 0.98rem;
           font-weight: 700;
-          color: var(--color-primary);
+          color: #0b2545;
         }
 
         .sign-rank {
-          font-size: 0.84rem;
-          color: var(--color-text-muted);
+          font-size: 0.85rem;
+          color: #64748b;
         }
 
-        /* Campus Callout Banner */
-        .campus-callout-section {
-          background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
-        }
-
-        .campus-feature-card {
-          padding: 48px;
-          border-radius: var(--radius-lg);
-          background: linear-gradient(135deg, #0b2545 0%, #173f6f 100%);
-          box-shadow: 0 20px 35px -10px rgba(11, 37, 69, 0.3);
-        }
-
-        .badge-tag-purple {
-          display: inline-block;
-          background: rgba(168, 85, 247, 0.2);
-          color: #c084fc;
-          border: 1px solid rgba(168, 85, 247, 0.4);
-          padding: 4px 14px;
-          border-radius: var(--radius-full);
+        .sign-org {
           font-size: 0.8rem;
-          font-weight: 700;
-          font-family: var(--font-heading);
-          letter-spacing: 0.8px;
-        }
-
-        .feature-title {
-          font-size: 2.2rem;
-          font-weight: 800;
-          color: white;
-          margin-bottom: 14px;
-        }
-
-        .feature-desc {
-          font-size: 1.05rem;
-          color: rgba(255, 255, 255, 0.8);
-          max-width: 720px;
-          line-height: 1.7;
-          margin-bottom: 20px;
-        }
-
-        .feature-badges-row {
-          display: flex;
-          gap: 16px;
-          flex-wrap: wrap;
-        }
-
-        .f-badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          color: white;
-          font-size: 0.88rem;
-          font-weight: 500;
-          background: rgba(255, 255, 255, 0.08);
-          padding: 6px 14px;
-          border-radius: var(--radius-full);
-          border: 1px solid rgba(255, 255, 255, 0.12);
+          color: #94a3b8;
         }
 
         /* Bento Commitments */
         .bento-commitments {
-          margin-top: 32px;
+          margin-top: 24px;
         }
 
         .bento-card {
           background: white;
-          padding: 36px 28px;
-          border-radius: var(--radius-lg);
-          border: 1px solid var(--color-border);
-          box-shadow: var(--shadow-sm);
+          padding: 32px 24px;
+          border-radius: 12px;
+          border: 1px solid #e2e8f0;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+          transition: all 0.2s ease;
+        }
+
+        .bento-card:hover {
+          border-color: #cbd5e1;
+          box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
         }
 
         .bento-icon {
-          width: 52px;
-          height: 52px;
-          border-radius: 14px;
+          width: 48px;
+          height: 48px;
+          border-radius: 12px;
           display: flex;
           align-items: center;
           justify-content: center;
-          margin-bottom: 20px;
+          margin-bottom: 18px;
         }
 
         .bento-title {
-          font-size: 1.3rem;
+          font-size: 1.2rem;
           font-weight: 700;
-          color: var(--color-primary);
-          margin-bottom: 12px;
+          color: #0b2545;
+          margin-bottom: 10px;
         }
 
         .bento-desc {
-          font-size: 0.95rem;
-          color: var(--color-text-main);
+          font-size: 0.92rem;
+          color: #334155;
           line-height: 1.7;
+        }
+
+        /* News Highlights */
+        .news-highlights {
+          background: #ffffff;
+          border-top: 1px solid #e2e8f0;
+        }
+
+        .flex-between-title {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+          gap: 16px;
+        }
+
+        @media (max-width: 600px) {
+          .flex-between-title {
+            flex-direction: column;
+            align-items: flex-start;
+          }
         }
       `}</style>
     </div>

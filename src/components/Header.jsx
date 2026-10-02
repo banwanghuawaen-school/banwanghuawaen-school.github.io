@@ -1,14 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { LogOut, Menu, X, ShieldAlert, Home, Newspaper, PhoneCall } from 'lucide-react';
+import { 
+  LogOut, 
+  Menu, 
+  X, 
+  ShieldAlert, 
+  Home, 
+  Newspaper, 
+  Users, 
+  Layers, 
+  PhoneCall, 
+  Search,
+  Phone
+} from 'lucide-react';
 import { authService } from '../services/auth';
 
-export default function Header({ currentView, setView, user, setUser, schoolInfo }) {
+export default function Header({ currentView, setView, user, setUser, schoolInfo, setSearchQuery }) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [fontSize, setFontSize] = useState('normal'); // 'small', 'normal', 'large'
+  const [contrastMode, setContrastMode] = useState('normal'); // 'normal', 'yellow-black', 'white-black'
+  const [headerSearch, setHeaderSearch] = useState('');
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 20) {
+      if (window.scrollY > 30) {
         setScrolled(true);
       } else {
         setScrolled(false);
@@ -17,6 +32,30 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const changeFontSize = (size) => {
+    setFontSize(size);
+    if (size === 'small') {
+      document.documentElement.style.fontSize = '14px';
+    } else if (size === 'large') {
+      document.documentElement.style.fontSize = '18px';
+    } else {
+      document.documentElement.style.fontSize = '16px';
+    }
+  };
+
+  const changeContrast = (mode) => {
+    setContrastMode(mode);
+    if (mode === 'yellow-black') {
+      document.body.classList.add('high-contrast-yb');
+      document.body.classList.remove('high-contrast-wb');
+    } else if (mode === 'white-black') {
+      document.body.classList.add('high-contrast-wb');
+      document.body.classList.remove('high-contrast-yb');
+    } else {
+      document.body.classList.remove('high-contrast-yb', 'high-contrast-wb');
+    }
+  };
 
   const handleLogout = () => {
     authService.logout();
@@ -31,395 +70,652 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
     window.scrollTo(0, 0);
   };
 
-  const isActive = (view) => currentView === view ? 'nav-link active' : 'nav-link';
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (headerSearch.trim()) {
+      if (setSearchQuery) {
+        setSearchQuery(headerSearch.trim());
+      }
+      handleNav('news');
+    }
+  };
+
+  const isActive = (view) => currentView === view ? 'nav-tab active-obec-tab' : 'nav-tab';
 
   return (
-    <header className={`school-header ${scrolled ? 'scrolled' : ''}`}>
-      {/* Top Gold Bar */}
-      <div className="header-top-bar">
-        <div className="container header-top-content">
-          <span>สังกัดสำนักงานเขตพื้นที่การศึกษาประถมศึกษากำแพงเพชร เขต 2</span>
-          <span>ติดต่อ: 0-5578-0246</span>
-        </div>
-      </div>
-
-      {/* Main Navigation Bar */}
-      <div className="header-main-nav">
-        <div className="container nav-container">
-          {/* Logo & School Name */}
-          <div 
-            className="logo-section" 
-            onClick={() => handleNav('home')} 
-            style={{ cursor: 'pointer' }}
-          >
-            <div className="school-logo-crest">
-              <img 
-                src={schoolInfo && schoolInfo.logoUrl ? schoolInfo.logoUrl : 'logo.jpg'} 
-                alt="Logo" 
-                className="crest-svg" 
-                style={{ objectFit: 'contain', width: '100%', height: '100%', borderRadius: '50%' }} 
-              />
+    <header className={`obec-school-header ${scrolled ? 'scrolled' : ''}`}>
+      
+      {/* 1. TOP UTILITY BAR (Deep Green / MoE Government Style) */}
+      <div className="obec-top-bar">
+        <div className="container obec-top-content">
+          {/* Accessibility Font Resizer & Contrast */}
+          <div className="obec-access-group">
+            <span className="access-label d-none-sm">ขนาดตัวอักษร:</span>
+            <div className="font-size-pills">
+              <button 
+                type="button"
+                className={`font-pill ${fontSize === 'small' ? 'active' : ''}`}
+                onClick={() => changeFontSize('small')}
+                title="ลดขนาดตัวอักษร"
+              >
+                ก-
+              </button>
+              <button 
+                type="button"
+                className={`font-pill ${fontSize === 'normal' ? 'active' : ''}`}
+                onClick={() => changeFontSize('normal')}
+                title="ขนาดตัวอักษรปกติ"
+              >
+                ก
+              </button>
+              <button 
+                type="button"
+                className={`font-pill ${fontSize === 'large' ? 'active' : ''}`}
+                onClick={() => changeFontSize('large')}
+                title="เพิ่มขนาดตัวอักษร"
+              >
+                ก+
+              </button>
             </div>
-            <div className="school-name-text">
-              <h1 className="logo-title">โรงเรียนบ้านวังหัวแหวนพัฒนา</h1>
-              <p className="logo-subtitle">BAN WANG HUA WAEN PHATTHANA SCHOOL</p>
+
+            <div className="contrast-pills d-none-sm">
+              <button 
+                type="button"
+                className={`contrast-pill c-default ${contrastMode === 'normal' ? 'active' : ''}`}
+                onClick={() => changeContrast('normal')}
+                title="สีปกติ"
+              >
+                ก
+              </button>
+              <button 
+                type="button"
+                className={`contrast-pill c-wb ${contrastMode === 'white-black' ? 'active' : ''}`}
+                onClick={() => changeContrast('white-black')}
+                title="ขาว-ดำ (White on Black)"
+              >
+                ก
+              </button>
+              <button 
+                type="button"
+                className={`contrast-pill c-yb ${contrastMode === 'yellow-black' ? 'active' : ''}`}
+                onClick={() => changeContrast('yellow-black')}
+                title="เหลือง-ดำ (Yellow on Black)"
+              >
+                ก
+              </button>
             </div>
           </div>
 
-          {/* Desktop Navigation */}
-          <nav className="desktop-nav">
+          {/* Right Utility: Language & Contact */}
+          <div className="obec-top-right">
+            <div className="lang-switcher">
+              <span className="lang-badge active">TH</span>
+              <span className="lang-badge">EN</span>
+            </div>
+            <span className="top-divider"></span>
+            <div className="top-phone d-none-sm">
+              <Phone size={13} className="text-secondary" />
+              <span>โทร: {schoolInfo?.phone || '0-5578-0246'}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 2. MIDDLE BRANDING ROW (Pure White Background) */}
+      <div className="obec-brand-row">
+        <div className="container brand-row-container">
+          <div 
+            className="brand-logo-unit" 
+            onClick={() => handleNav('home')} 
+            style={{ cursor: 'pointer' }}
+          >
+            <div className="school-logo-frame">
+              <img 
+                src={schoolInfo && schoolInfo.logoUrl ? schoolInfo.logoUrl : 'logo.jpg'} 
+                alt="ตราสัญลักษณ์โรงเรียน" 
+                className="school-logo-img" 
+              />
+            </div>
+            <div className="school-text-unit">
+              <h1 className="school-main-name">โรงเรียนบ้านวังหัวแหวนพัฒนา</h1>
+              <p className="school-org-name">สำนักงานเขตพื้นที่การศึกษาประถมศึกษากำแพงเพชร เขต 2</p>
+              <p className="school-en-name">BAN WANG HUA WAEN PHATTHANA SCHOOL • สพป.กำแพงเพชร เขต 2</p>
+            </div>
+          </div>
+
+          {/* Mobile Hamburger Button */}
+          <button 
+            className="mobile-hamburger-btn" 
+            onClick={() => setIsOpen(!isOpen)} 
+            aria-label="เปิดเมนูนำทาง"
+          >
+            {isOpen ? <X size={26} /> : <Menu size={26} />}
+          </button>
+        </div>
+      </div>
+
+      {/* 3. PRIMARY NAVIGATION BAR (Signature OBEC Gold Active Tab) */}
+      <nav className="obec-main-navbar">
+        <div className="container nav-row-container">
+          
+          {/* Desktop Links with OBEC Gold Active Tab */}
+          <div className="desktop-menu-list">
             <button onClick={() => handleNav('home')} className={isActive('home')}>
               <Home size={16} /> หน้าแรก
             </button>
             <button onClick={() => handleNav('news')} className={isActive('news')}>
-              <Newspaper size={16} /> ข่าวประกาศ
+              <Newspaper size={16} /> ข่าวสารและกิจกรรม
             </button>
             <button onClick={() => handleNav('staff')} className={isActive('staff')}>
-              ทำเนียบบุคลากร
+              <Users size={16} /> ทำเนียบบุคลากร
             </button>
             <button onClick={() => handleNav('campus')} className={isActive('campus')}>
-              แผนผังโรงเรียน
+              <Layers size={16} /> แผนผังโรงเรียน
             </button>
             <button onClick={() => handleNav('contact')} className={isActive('contact')}>
               <PhoneCall size={16} /> ข้อมูลติดต่อ
             </button>
-            
-            {user && <span className="nav-divider"></span>}
-            
+
             {user && (
-              <div className="admin-status-nav">
+              <div className="admin-chip-group">
                 <button onClick={() => handleNav('admin')} className={isActive('admin')}>
                   <ShieldAlert size={16} /> ระบบจัดการ (Admin)
                 </button>
-                <button onClick={handleLogout} className="btn-logout" title="ออกจากระบบ">
-                  <LogOut size={16} /> ออกจากระบบ
+                <button onClick={handleLogout} className="btn-logout-chip" title="ออกจากระบบ">
+                  <LogOut size={14} /> ออกจากระบบ
                 </button>
               </div>
             )}
-          </nav>
+          </div>
 
-          {/* Mobile Menu Toggle */}
-          <button className="mobile-menu-toggle" onClick={() => setIsOpen(!isOpen)} aria-label="Toggle Menu">
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          {/* Quick Search Box (สไตล์ สพฐ. กรอกคำค้นหา + ปุ่มแว่นขยายสีทอง) */}
+          <form className="header-search-form" onSubmit={handleSearchSubmit}>
+            <input 
+              type="text" 
+              placeholder="กรอกคำเพื่อค้นหา..." 
+              className="header-search-input"
+              value={headerSearch}
+              onChange={(e) => setHeaderSearch(e.target.value)}
+            />
+            <button type="submit" className="header-search-btn" title="ค้นหา">
+              <Search size={16} />
+            </button>
+          </form>
+
         </div>
-      </div>
+      </nav>
 
-      {/* Mobile Navigation Drawer */}
+      {/* 4. MOBILE NAVIGATION DRAWER */}
       {isOpen && (
-        <div className="mobile-nav-drawer animate-fade-in">
+        <div className="obec-mobile-drawer animate-fade-in">
+          <form className="mobile-search-form mb-3" onSubmit={handleSearchSubmit}>
+            <input 
+              type="text" 
+              placeholder="กรอกคำเพื่อค้นหา..." 
+              className="header-search-input w-100"
+              value={headerSearch}
+              onChange={(e) => setHeaderSearch(e.target.value)}
+            />
+            <button type="submit" className="header-search-btn">
+              <Search size={16} />
+            </button>
+          </form>
+
           <button onClick={() => handleNav('home')} className={isActive('home')}>
-            หน้าแรก
+            <Home size={18} /> หน้าแรก
           </button>
           <button onClick={() => handleNav('news')} className={isActive('news')}>
-            ข่าวประกาศ
+            <Newspaper size={18} /> ข่าวสารและกิจกรรม
           </button>
           <button onClick={() => handleNav('staff')} className={isActive('staff')}>
-            ทำเนียบบุคลากร
+            <Users size={18} /> ทำเนียบบุคลากร
           </button>
           <button onClick={() => handleNav('campus')} className={isActive('campus')}>
-            แผนผังโรงเรียน
+            <Layers size={18} /> แผนผังโรงเรียน
           </button>
           <button onClick={() => handleNav('contact')} className={isActive('contact')}>
-            ข้อมูลติดต่อ
+            <PhoneCall size={18} /> ข้อมูลติดต่อ
           </button>
-          
-          {user && <hr className="mobile-divider" />}
-          
+
           {user && (
-            <>
-              <div className="mobile-admin-info">
-                <span>ผู้ใช้งาน: {user.name}</span>
+            <div className="mobile-admin-actions mt-3">
+              <div className="mobile-user-tag">
+                ผู้ดูแลระบบ: <strong>{user.name}</strong>
               </div>
-              <button onClick={() => handleNav('admin')} className={isActive('admin')}>
-                ระบบจัดการ (Admin)
+              <button onClick={() => handleNav('admin')} className="admin-mobile-nav-btn">
+                <ShieldAlert size={16} /> เข้าสู่ระบบจัดการ (Admin)
               </button>
-              <button onClick={handleLogout} className="mobile-btn-logout">
+              <button onClick={handleLogout} className="logout-mobile-nav-btn">
                 <LogOut size={16} /> ออกจากระบบ
               </button>
-            </>
+            </div>
           )}
         </div>
       )}
 
-      {/* Styles specific to header */}
+      {/* Scoped CSS for OBEC Header Style */}
       <style>{`
-        .school-header {
+        .obec-school-header {
           position: sticky;
           top: 0;
-          z-index: 100;
-          background-color: white;
-          box-shadow: var(--shadow-sm);
-          transition: var(--transition-smooth);
+          z-index: 1000;
+          background: #ffffff;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+          font-family: var(--font-heading);
         }
-        
-        .school-header.scrolled {
-          box-shadow: var(--shadow-md);
-        }
-        
-        .header-top-bar {
-          background-color: var(--color-primary);
-          color: white;
+
+        /* 1. Top Bar */
+        .obec-top-bar {
+          background-color: #063b27; /* Deep Educational Forest Green / MoE Tone */
+          color: #ffffff;
           font-size: 0.8rem;
           padding: 6px 0;
-          border-bottom: 2px solid var(--color-secondary);
-        }
-        
-        .header-top-content {
-          display: flex;
-          justify-content: space-between;
-          font-weight: 300;
+          border-bottom: 2px solid #eab308;
         }
 
-        .header-main-nav {
-          padding: 12px 0;
-          border-bottom: 1px solid var(--color-border);
-        }
-
-        .nav-container {
+        .obec-top-content {
           display: flex;
           justify-content: space-between;
           align-items: center;
+          gap: 16px;
         }
 
-        .logo-section {
+        .obec-access-group {
           display: flex;
           align-items: center;
           gap: 12px;
         }
 
-        .school-logo-crest {
-          width: 50px;
-          height: 50px;
+        .access-label {
+          color: #d1fae5;
+          font-size: 0.82rem;
+          font-weight: 500;
+        }
+
+        .font-size-pills, .contrast-pills {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+        }
+
+        .font-pill {
+          width: 26px;
+          height: 26px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(255, 255, 255, 0.15);
+          color: #ffffff;
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          border-radius: 50%;
+          font-size: 0.76rem;
+          font-weight: 700;
+          cursor: pointer;
+          transition: all 0.15s ease;
+        }
+
+        .font-pill:hover, .font-pill.active {
+          background: #eab308;
+          color: #000000;
+          border-color: #eab308;
+        }
+
+        .contrast-pill {
+          width: 24px;
+          height: 24px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          font-size: 0.76rem;
+          font-weight: 800;
+          cursor: pointer;
+          border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .contrast-pill.c-default { background: #ffffff; color: #000000; }
+        .contrast-pill.c-wb { background: #000000; color: #ffffff; }
+        .contrast-pill.c-yb { background: #000000; color: #fde047; border-color: #fde047; }
+        .contrast-pill.active { outline: 2px solid #eab308; }
+
+        .obec-top-right {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+        }
+
+        .lang-switcher {
+          display: flex;
+          align-items: center;
+          background: rgba(0, 0, 0, 0.25);
+          border-radius: 4px;
+          overflow: hidden;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .lang-badge {
+          padding: 2px 8px;
+          font-size: 0.75rem;
+          font-weight: 700;
+          color: #ffffff;
+        }
+
+        .lang-badge.active {
+          background-color: #eab308;
+          color: #000000;
+        }
+
+        .top-divider {
+          width: 1px;
+          height: 16px;
+          background-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .top-phone {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          color: #f1f5f9;
+          font-size: 0.82rem;
+          font-weight: 500;
+        }
+
+        /* 2. Brand Row */
+        .obec-brand-row {
+          background-color: #ffffff;
+          padding: 16px 0;
+          border-bottom: 1px solid #f1f5f9;
+        }
+
+        .brand-row-container {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .brand-logo-unit {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+        }
+
+        .school-logo-frame {
+          width: 68px;
+          height: 68px;
+          border-radius: 50%;
+          overflow: hidden;
+          border: 2px solid #eab308;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+          flex-shrink: 0;
+          background: #ffffff;
+        }
+
+        .school-logo-img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+
+        .school-text-unit {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+
+        .school-main-name {
+          font-size: 1.55rem;
+          font-weight: 800;
+          color: #0b2545; /* Deep Navy */
+          margin: 0;
+          line-height: 1.25;
+          letter-spacing: -0.2px;
+        }
+
+        .school-org-name {
+          font-size: 0.88rem;
+          font-weight: 600;
+          color: #475569;
+          margin: 0;
+          line-height: 1.3;
+        }
+
+        .school-en-name {
+          font-size: 0.72rem;
+          font-weight: 700;
+          color: #94a3b8;
+          letter-spacing: 0.6px;
+          margin: 0;
+        }
+
+        .mobile-hamburger-btn {
+          display: none;
+          background: none;
+          border: 1px solid #e2e8f0;
+          border-radius: 6px;
+          padding: 6px 10px;
+          cursor: pointer;
+          color: #0b2545;
+        }
+
+        /* 3. Primary Navbar */
+        .obec-main-navbar {
+          background-color: #ffffff;
+          border-top: 1px solid #e2e8f0;
+          border-bottom: 3px solid #eab308; /* Signature Gold Stripe */
+        }
+
+        .nav-row-container {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .desktop-menu-list {
+          display: flex;
+          align-items: stretch;
+          gap: 2px;
+        }
+
+        .nav-tab {
+          display: inline-flex;
+          align-items: center;
+          gap: 7px;
+          padding: 13px 18px;
+          font-size: 0.96rem;
+          font-weight: 600;
+          color: #1e293b;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          transition: all 0.15s ease;
+          border-bottom: 3px solid transparent;
+          margin-bottom: -3px; /* align with bottom border */
+        }
+
+        .nav-tab:hover {
+          color: #063b27;
+          background-color: #f8fafc;
+        }
+
+        /* The signature OBEC / MoE active gold tab */
+        .nav-tab.active-obec-tab {
+          background-color: #eab308 !important; /* Gold */
+          color: #000000 !important;
+          font-weight: 800 !important;
+          border-bottom: 3px solid #ca8a04;
+          box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.15);
+        }
+
+        .admin-chip-group {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          margin-left: 8px;
+          padding-left: 8px;
+          border-left: 1px solid #e2e8f0;
+        }
+
+        .btn-logout-chip {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          padding: 6px 10px;
+          font-size: 0.8rem;
+          font-weight: 600;
+          color: #dc2626;
+          background: #fee2e2;
+          border: 1px solid #fca5a5;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+
+        /* Search Form in Navbar */
+        .header-search-form {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          background: #f1f5f9;
+          border: 1px solid #cbd5e1;
+          border-radius: 9999px;
+          padding: 3px 4px 3px 14px;
+          width: 250px;
+          transition: all 0.2s ease;
+        }
+
+        .header-search-form:focus-within {
+          background: #ffffff;
+          border-color: #eab308;
+          box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.2);
+        }
+
+        .header-search-input {
+          border: none;
+          background: transparent;
+          font-size: 0.85rem;
+          color: #1e293b;
+          width: 100%;
+          outline: none;
+          font-family: var(--font-heading);
+        }
+
+        .header-search-btn {
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          background-color: #eab308;
+          color: #000000;
+          border: none;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          flex-shrink: 0;
+          transition: background 0.15s ease;
+        }
+
+        .header-search-btn:hover {
+          background-color: #ca8a04;
+        }
+
+        /* 4. Mobile Drawer */
+        .obec-mobile-drawer {
+          display: none;
+          padding: 16px 20px;
+          background-color: #ffffff;
+          border-bottom: 2px solid #eab308;
+        }
+
+        .obec-mobile-drawer .nav-tab {
+          display: flex;
+          width: 100%;
+          padding: 12px 14px;
+          border-radius: 6px;
+          margin-bottom: 4px;
+        }
+
+        .mobile-search-form {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          background: #f1f5f9;
+          border: 1px solid #cbd5e1;
+          border-radius: 9999px;
+          padding: 6px 12px;
+        }
+
+        .mobile-admin-actions {
+          padding-top: 12px;
+          border-top: 1px solid #e2e8f0;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .mobile-user-tag {
+          font-size: 0.85rem;
+          color: #475569;
+        }
+
+        .admin-mobile-nav-btn {
           display: flex;
           align-items: center;
           justify-content: center;
-        }
-
-        .crest-svg {
-          width: 100%;
-          height: 100%;
-          filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-        }
-
-        .school-name-text {
-          display: flex;
-          flex-direction: column;
-        }
-
-        .logo-title {
-          font-size: 1.25rem;
-          color: var(--color-primary);
-          font-weight: 700;
-          margin: 0;
-          letter-spacing: -0.3px;
-        }
-
-        .logo-subtitle {
-          font-size: 0.7rem;
-          color: var(--color-text-muted);
+          gap: 6px;
+          padding: 10px;
+          background: #0b2545;
+          color: white;
+          border: none;
+          border-radius: 6px;
           font-weight: 600;
-          letter-spacing: 0.5px;
-          margin: 0;
+          cursor: pointer;
         }
 
-        .desktop-nav {
+        .logout-mobile-nav-btn {
           display: flex;
           align-items: center;
-          gap: 8px;
-        }
-
-        .nav-link {
-          background: none;
-          border: none;
-          padding: 8px 16px;
-          font-family: var(--font-heading);
-          font-size: 0.95rem;
-          font-weight: 500;
-          color: var(--color-text-main);
-          border-radius: var(--radius-md);
-          cursor: pointer;
-          display: inline-flex;
-          align-items: center;
+          justify-content: center;
           gap: 6px;
-          transition: var(--transition-fast);
-        }
-
-        .nav-link:hover {
-          color: var(--color-primary);
-          background-color: var(--color-primary-light);
-        }
-
-        .nav-link.active {
-          color: white;
-          background-color: var(--color-primary);
-        }
-
-        .nav-divider {
-          height: 24px;
-          width: 1px;
-          background-color: var(--color-border);
-          margin: 0 10px;
-        }
-
-        .admin-status-nav {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-
-        .btn-logout {
-          background-color: rgba(239, 68, 68, 0.1);
-          border: 1px solid rgba(239, 68, 68, 0.2);
-          color: var(--color-danger);
-          padding: 8px 12px;
-          border-radius: var(--radius-md);
+          padding: 8px;
+          background: #fee2e2;
+          color: #dc2626;
+          border: 1px solid #fca5a5;
+          border-radius: 6px;
+          font-weight: 600;
           cursor: pointer;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          font-family: var(--font-heading);
-          font-size: 0.9rem;
-          font-weight: 500;
-          transition: var(--transition-fast);
-        }
-
-        .btn-logout:hover {
-          background-color: var(--color-danger);
-          color: white;
-        }
-
-        .btn-login-nav {
-          background-color: transparent;
-          border: 1px solid var(--color-secondary);
-          color: var(--color-primary);
-          padding: 8px 16px;
-          border-radius: var(--radius-md);
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          font-family: var(--font-heading);
-          font-size: 0.9rem;
-          font-weight: 500;
-          transition: var(--transition-smooth);
-        }
-
-        .btn-login-nav:hover {
-          background-color: var(--color-secondary);
-          color: white;
-          box-shadow: var(--shadow-sm);
-        }
-
-        .mobile-menu-toggle {
-          display: none;
-          background: none;
-          border: none;
-          color: var(--color-primary);
-          cursor: pointer;
-        }
-
-        .mobile-nav-drawer {
-          display: none;
-          background-color: white;
-          padding: 16px 24px;
-          border-top: 1px solid var(--color-border);
-          box-shadow: var(--shadow-md);
-          flex-direction: column;
-          gap: 12px;
         }
 
         @media (max-width: 992px) {
-          .desktop-nav {
+          .desktop-menu-list {
             display: none;
           }
-          
-          .mobile-menu-toggle {
+          .header-search-form {
+            display: none;
+          }
+          .mobile-hamburger-btn {
             display: block;
           }
-          
-          .mobile-nav-drawer {
-            display: flex;
+          .obec-mobile-drawer {
+            display: block;
           }
-          
-          .mobile-nav-drawer .nav-link {
-            width: 100%;
-            justify-content: flex-start;
+          .school-main-name {
+            font-size: 1.25rem;
           }
-
-          .mobile-divider {
-            border: 0;
-            border-top: 1px solid var(--color-border);
-            margin: 8px 0;
+          .school-org-name {
+            font-size: 0.78rem;
           }
-
-          .mobile-admin-info {
-            font-size: 0.85rem;
-            color: var(--color-text-muted);
-            padding-left: 16px;
+          .school-en-name {
+            display: none;
           }
-
-          .mobile-btn-logout {
-            background-color: rgba(239, 68, 68, 0.08);
-            border: 1px solid rgba(239, 68, 68, 0.15);
-            color: var(--color-danger);
-            padding: 10px;
-            border-radius: var(--radius-md);
-            text-align: center;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            cursor: pointer;
+          .school-logo-frame {
+            width: 52px;
+            height: 52px;
           }
-          
-          .mobile-btn-login {
-            background-color: var(--color-secondary-light);
-            border: 1px solid var(--color-secondary);
-            color: var(--color-primary);
-            padding: 10px;
-            border-radius: var(--radius-md);
-            text-align: center;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            cursor: pointer;
-          }
-        }
-
-        /* Mobile specific header layout fixes to prevent wrapping and blocking issues */
-        @media (max-width: 768px) {
-          .header-top-bar {
-            display: none; /* Hide top bar on mobile to save vertical space */
-          }
-        }
-
-        @media (max-width: 600px) {
-          .logo-title {
-            font-size: 1.05rem; /* Shrink school title font to fit narrow screens */
-          }
-          .logo-subtitle {
-            font-size: 0.6rem;
-            letter-spacing: 0.2px;
-          }
-          .school-logo-crest {
-            width: 40px;
-            height: 40px; /* Make logo smaller on mobile */
-          }
-        }
-
-        @media (max-width: 400px) {
-          .logo-title {
-            font-size: 0.95rem; /* Prevent wrapping on extremely small phones */
-          }
-          .logo-subtitle {
-            display: none; /* Hide English subtitle on tiny viewports to keep logo clean */
+          .d-none-sm {
+            display: none !important;
           }
         }
       `}</style>
+
     </header>
   );
 }

@@ -3,8 +3,10 @@ import { dbService } from '../services/db';
 import NewsCard from '../components/NewsCard';
 import { Search, AlertCircle } from 'lucide-react';
 
-export default function News({ setView, setCurrentNewsItem }) {
-  const [searchQuery, setSearchQuery] = useState('');
+export default function News({ setView, setCurrentNewsItem, searchQuery: propSearchQuery, setSearchQuery: propSetSearchQuery }) {
+  const [localSearchQuery, setLocalSearchQuery] = useState('');
+  const searchQuery = propSearchQuery !== undefined ? propSearchQuery : localSearchQuery;
+  const setSearchQuery = propSetSearchQuery || setLocalSearchQuery;
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [newsList, setNewsList] = useState([]);
 

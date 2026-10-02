@@ -17,6 +17,7 @@ export default function App() {
   const [schoolInfo, setSchoolInfo] = useState(null);
   const [currentNewsItem, setCurrentNewsItem] = useState(null);
   const [user, setUser] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Initialize school info and user session on mount
   useEffect(() => {
@@ -164,7 +165,7 @@ export default function App() {
       case 'home':
         return <Home schoolInfo={schoolInfo} setView={setView} setCurrentNewsItem={setCurrentNewsItem} />;
       case 'news':
-        return <News setView={setView} setCurrentNewsItem={setCurrentNewsItem} />;
+        return <News setView={setView} setCurrentNewsItem={setCurrentNewsItem} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />;
       case 'news-detail':
         return <NewsDetail newsItem={currentNewsItem} setView={setView} setCurrentNewsItem={setCurrentNewsItem} />;
       case 'staff':
@@ -194,7 +195,7 @@ export default function App() {
 
   return (
     <>
-      <Header currentView={view} setView={setView} user={user} setUser={setUser} schoolInfo={schoolInfo} />
+      <Header currentView={view} setView={setView} user={user} setUser={setUser} schoolInfo={schoolInfo} setSearchQuery={setSearchQuery} />
       <main className="main-content-layout">
         {renderView()}
       </main>

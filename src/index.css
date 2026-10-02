@@ -429,3 +429,59 @@ textarea.form-input {
   background: #94a3b8;
 }
 
+/* Accessibility: Government Standards (สพฐ. / สพป.) */
+html {
+  font-size: 16px;
+  transition: font-size 0.2s ease;
+}
+
+/* White on Black Mode */
+body.high-contrast-wb {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+body.high-contrast-wb * {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+body.high-contrast-wb a,
+body.high-contrast-wb button {
+  color: #ffffff !important;
+  text-decoration: underline !important;
+}
+
+body.high-contrast-wb img,
+body.high-contrast-wb svg {
+  filter: grayscale(100%) contrast(150%) !important;
+}
+
+/* Yellow on Black Mode */
+body.high-contrast-yb {
+  background-color: #000000 !important;
+  color: #fde047 !important;
+}
+
+body.high-contrast-yb * {
+  background-color: #000000 !important;
+  color: #fde047 !important;
+  border-color: #fde047 !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+body.high-contrast-yb a,
+body.high-contrast-yb button {
+  color: #fde047 !important;
+  text-decoration: underline !important;
+}
+
+body.high-contrast-yb img,
+body.high-contrast-yb svg {
+  filter: grayscale(100%) contrast(150%) !important;
+}
+
