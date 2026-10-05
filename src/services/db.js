@@ -285,9 +285,11 @@ const initializeStorage = () => {
       const parsed = JSON.parse(existingNews);
       let changed = false;
       const updated = parsed.map(item => {
-        // Fix any legacy corrupted item where water truck had award/lunch images
-        if (item.id === 'fb_1560176759242385' && item.imageUrl && item.imageUrl.includes('school_award_honor')) {
-          changed = true;
+        // 1. Water truck assistance post MUST use the authentic water truck photo
+        if (item.id === 'fb_1560176759242385' || (item.title && item.title.includes('รถน้ำ'))) {
+          if (item.imageUrl !== 'news/fb_1560176759242385.jpg') {
+            changed = true;
+          }
           return {
             ...item,
             title: "ขอขอบคุณองค์การบริหารส่วนตำบลวังหามแห นำรถน้ำมาอนุเคราะห์ช่วยเหลือสถานศึกษา",
@@ -295,9 +297,26 @@ const initializeStorage = () => {
             galleryUrls: 'news/fb_1560176759242385_g1.jpg,news/fb_1560176759242385_g2.jpg,news/fb_1560176759242385_g3.jpg,news/fb_1560176759242385_g4.jpg'
           };
         }
-        // Fix admissions if it had award image
-        if (item.id === 'news-1' && item.imageUrl && item.imageUrl.includes('school_award_honor')) {
-          changed = true;
+        // 2. ISMS Award post MUST use the ISMS Award banner
+        if (item.id === 'news-isms-award' || (item.title && item.title.includes('ISMS Award'))) {
+          if (item.imageUrl !== 'news/school_award_honor.jpg') {
+            changed = true;
+          }
+          return {
+            ...item,
+            imageUrl: 'news/school_award_honor.jpg'
+          };
+        }
+        // 3. Admissions, Wai Kru, Buddhist holidays announcements DO NOT have event photos -> Strictly text-only
+        if (
+          item.id === 'news-1' || 
+          item.id === 'news-2' || 
+          item.id === 'news-4' ||
+          (item.title && (item.title.includes('สมัครเข้าเรียน') || item.title.includes('รับสมัคร') || item.title.includes('ไหว้ครู') || item.title.includes('วันสำคัญ') || item.title.includes('หยุดเรียน')))
+        ) {
+          if (item.imageUrl !== '') {
+            changed = true;
+          }
           return {
             ...item,
             imageUrl: '',
@@ -563,39 +582,8 @@ export const dbService = {
         newsList = DEFAULT_NEWS;
       }
 
-      const fallbackPhotos = [
-        'news/school_award_honor.jpg',
-        'news/fb_lunch_donation.jpg',
-        'news/school_teachers_group.jpg',
-        'news/school_entrance_sign.jpg',
-        'news/fb_teacher_pa.jpg'
-      ];
-      const sanitized = newsList.map((item, idx) => {
-        // 1. Completely eliminate any legacy water truck post or photo
-        if (
-          (item.title && (item.title.includes('รถน้ำ') || item.title.includes('องค์การบริหารส่วนตำบล') || item.title.includes('กิจกรรมส่งเสริมการเรียนรู้และพัฒนาทักษะชีวิต'))) ||
-          (item.content && item.content.includes('รถน้ำ')) ||
-          (item.imageUrl && item.imageUrl.includes('fb_1560176759242385'))
-        ) {
-          return {
-            views: 188,
-            status: 'published',
-            isPinned: true,
-            attachmentName: '',
-            attachmentUrl: '',
-            ...item,
-            title: DEFAULT_NEWS[0].title,
-            titleEn: DEFAULT_NEWS[0].titleEn,
-            subtitle: DEFAULT_NEWS[0].subtitle,
-            subtitleEn: DEFAULT_NEWS[0].subtitleEn,
-            content: DEFAULT_NEWS[0].content,
-            contentEn: DEFAULT_NEWS[0].contentEn,
-            imageUrl: 'news/school_award_honor.jpg',
-            galleryUrls: 'news/school_teachers_group.jpg,news/school_entrance_sign.jpg,news/fb_lunch_donation.jpg',
-            category: 'announcement'
-          };
-        }
-
+      // STRICT 100% FAITHFUL PHOTO MATCHING (No random fallbacks, No mismatched photos)
+      const sanitized = newsList.map((item) => {
         let cleanSubtitle = item.subtitle || '';
         let cleanContent = item.content || '';
 
@@ -608,12 +596,42 @@ export const dbService = {
           cleanContent = cleanContent.replace(fbJunkRegex, '').trim();
         }
 
-        let resolvedImage = item.imageUrl || fallbackPhotos[idx % fallbackPhotos.length];
-        if (resolvedImage.includes('fb_1560176759242385')) {
+        // Match strictly to authentic real photos based on specific post identity:
+        let resolvedImage = item.imageUrl || '';
+
+        // 1. Water truck assistance post -> Authentic green water truck photo
+        if (item.id === 'fb_1560176759242385' || (item.title && item.title.includes('รถน้ำ'))) {
+          resolvedImage = 'news/fb_1560176759242385.jpg';
+        }
+        // 2. Thai Honda safety helmets post -> Authentic Honda helmet donation photo
+        else if (item.id === 'fb_1551648353428559' || (item.title && item.title.includes('ฮอนด้า'))) {
+          resolvedImage = 'news/fb_honda_safety.jpg';
+        }
+        // 3. Lunch donation by Khun Benyapha -> Authentic lunch sponsorship photo
+        else if (item.id === 'fb_1550894303503964' || (item.title && item.title.includes('อาหารกลางวัน'))) {
+          resolvedImage = 'news/fb_lunch_donation.jpg';
+        }
+        // 4. ISMS Award excellence -> Authentic ISMS Award banner
+        else if (item.id === 'news-isms-award' || (item.title && item.title.includes('ISMS Award'))) {
           resolvedImage = 'news/school_award_honor.jpg';
         }
+        // 5. Landscaping & school environment -> Authentic school entrance sign photo
+        else if (item.id === 'news-3' || (item.title && item.title.includes('ปรับปรุงภูมิทัศน์'))) {
+          resolvedImage = 'news/school_entrance_sign.jpg';
+        }
+        // 6. Admissions notice (news-1) & general notices WITHOUT photos:
+        // MUST REMAIN EMPTY ('') to render as dignified official Text-Only Bulletin Cards!
+        else if (
+          item.id === 'news-1' || 
+          item.id === 'news-2' || 
+          item.id === 'news-4' ||
+          item.id === 'fb_1550841523509242' ||
+          (item.title && (item.title.includes('สมัครเข้าเรียน') || item.title.includes('รับสมัคร') || item.title.includes('ไหว้ครู') || item.title.includes('วันสำคัญ') || item.title.includes('หยุดเรียน') || item.title.includes('PA')))
+        ) {
+          resolvedImage = '';
+        }
 
-        // 2. Provide automatic high-quality English translations for known categories/posts if missing
+        // Automatic high-quality English translations for known categories/posts if missing
         let titleEn = item.titleEn || '';
         let subtitleEn = item.subtitleEn || '';
         let contentEn = item.contentEn || '';
