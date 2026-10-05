@@ -44,10 +44,27 @@ export default function Staff() {
         <p className="section-subtitle">ทำเนียบข้อมูลผู้บริหารสถานศึกษา ข้าราชการครู และบุคลากรทางการศึกษา โรงเรียนบ้านวังหัวแหวนพัฒนา</p>
       </div>
 
+      {/* Real Faculty Group Photo Showcase */}
+      <div className="faculty-group-showcase mb-5">
+        <div className="group-photo-card">
+          <img 
+            src="news/school_teachers_group.jpg" 
+            alt="ภาพถ่ายรวมคณะครูและบุคลากรทางการศึกษา โรงเรียนบ้านวังหัวแหวนพัฒนา" 
+            className="group-photo-img"
+          />
+          <div className="group-photo-overlay">
+            <span className="badge badge-pr mb-1">ข้าราชการครูและบุคลากร</span>
+            <h4 className="group-photo-title">คณะข้าราชการครูและบุคลากรทางการศึกษา โรงเรียนบ้านวังหัวแหวนพัฒนา</h4>
+            <p className="group-photo-desc">ร่วมแรงร่วมใจจัดการศึกษา พัฒนาคุณภาพชีวิต และเสริมสร้างคุณธรรมนำความรู้สู่ผู้เรียน</p>
+          </div>
+        </div>
+      </div>
+
       {/* 1. Director Section */}
       <div className="director-executive-section mb-5">
         <h3 className="staff-sub-heading text-center">ผู้บริหารสถานศึกษา</h3>
         <div className="director-card-wrapper">
+
           <div className="director-card">
             {/* Left Column: Photo frame */}
             <div className="director-photo-col">
@@ -369,8 +386,54 @@ export default function Staff() {
           text-decoration: underline;
         }
 
+        .faculty-group-showcase {
+          max-width: 900px;
+          margin: 0 auto 3rem;
+        }
+
+        .group-photo-card {
+          position: relative;
+          border-radius: 20px;
+          overflow: hidden;
+          box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+          border: 1px solid #e2e8f0;
+          background: #08192e;
+        }
+
+        .group-photo-img {
+          width: 100%;
+          height: auto;
+          max-height: 480px;
+          object-fit: cover;
+          display: block;
+        }
+
+        .group-photo-overlay {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background: linear-gradient(0deg, rgba(8, 25, 46, 0.95) 0%, rgba(8, 25, 46, 0.75) 60%, transparent 100%);
+          color: #ffffff;
+          padding: 30px 28px 22px;
+        }
+
+        .group-photo-title {
+          font-size: 1.3rem;
+          font-weight: 700;
+          margin-bottom: 4px;
+          color: #ffffff;
+        }
+
+        .group-photo-desc {
+          font-size: 0.92rem;
+          color: #cbd5e1;
+          margin: 0;
+        }
+
         .mb-5 { margin-bottom: 3rem; }
       `}</style>
     </div>
   );
 }
+

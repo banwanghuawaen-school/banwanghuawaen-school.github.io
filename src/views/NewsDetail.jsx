@@ -147,28 +147,30 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem, lang
 
           <hr className="divider-line" />
 
-          {/* Cover image or fallback pattern banner */}
-          <div 
-            className="article-cover-wrapper" 
-            style={coverImage || galleryImages.length > 0 ? { cursor: 'zoom-in' } : {}}
-            onClick={() => {
-              const imgToZoom = coverImage || galleryImages[0];
-              if (imgToZoom) setLightboxImage(imgToZoom);
-            }}
-          >
-            {coverImage ? (
-              <img src={coverImage} alt={currentTitle} className="article-cover-img" />
-            ) : galleryImages.length > 0 ? (
-              <img src={galleryImages[0]} alt={currentTitle} className="article-cover-img" />
-            ) : (
-              <div className={`article-cover-fallback bg-gradient-${newsItem.category || 'pr'}`}>
-                <div className="fallback-pattern"></div>
-                <Newspaper size={48} className="fallback-icon" />
-                <h4 className="fallback-title">{isEn ? 'Ban Wang Hua Waen Phatthana School' : 'โรงเรียนบ้านวังหัวแหวนพัฒนา'}</h4>
-                <p className="fallback-desc">{isEn ? 'Official School Publication' : 'ข่าวประชาสัมพันธ์ทางการของสถานศึกษา'}</p>
-              </div>
-            )}
-          </div>
+          {/* Cover image (Only rendered if authentic photo exists) */}
+          {(coverImage || galleryImages.length > 0) ? (
+            <div 
+              className="article-cover-wrapper" 
+              style={{ cursor: 'zoom-in' }}
+              onClick={() => {
+                const imgToZoom = coverImage || galleryImages[0];
+                if (imgToZoom) setLightboxImage(imgToZoom);
+              }}
+            >
+              <img 
+                src={coverImage || galleryImages[0]} 
+                alt={currentTitle} 
+                className="article-cover-img" 
+              />
+            </div>
+          ) : (
+            <div className="article-text-only-header-accent">
+              <span className="bulletin-notice-seal">
+                {isEn ? 'Official Institutional Announcement' : 'ประกาศทางการ • โรงเรียนบ้านวังหัวแหวนพัฒนา'}
+              </span>
+            </div>
+          )}
+
 
           {/* Article Body Content */}
           <div className="article-body">

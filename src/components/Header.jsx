@@ -10,9 +10,13 @@ import {
   Layers, 
   PhoneCall, 
   Search,
-  Phone
+  Phone,
+  RotateCw,
+  CheckCircle2,
+  AlertCircle
 } from 'lucide-react';
 import { authService } from '../services/auth';
+import { dbService } from '../services/db';
 
 export default function Header({ currentView, setView, user, setUser, schoolInfo, setSearchQuery, lang = 'th', setLang }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,20 +24,43 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
   const [fontSize, setFontSize] = useState('normal'); // 'small', 'normal', 'large'
   const [contrastMode, setContrastMode] = useState('normal'); // 'normal', 'yellow-black', 'white-black'
   const [headerSearch, setHeaderSearch] = useState('');
+  
+  // Real-time Sync State
+  const [syncState, setSyncState] = useState(() => dbService.getSyncStatus());
+  const [syncFeedback, setSyncFeedback] = useState('');
 
   const isEn = lang === 'en';
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 30) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(window.scrollY > 30);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Listen to sync status changes
+  useEffect(() => {
+    const handleSyncStatus = (e) => {
+      if (e.detail) {
+        setSyncState(e.detail);
+      }
+    };
+    window.addEventListener('school_sync_status_updated', handleSyncStatus);
+    return () => window.removeEventListener('school_sync_status_updated', handleSyncStatus);
+  }, []);
+
+  const handleManualSync = async () => {
+    setSyncFeedback(isEn ? 'Syncing...' : 'กำลังดึงข้อมูล...');
+    const ok = await dbService.triggerManualSync();
+    if (ok) {
+      setSyncFeedback(isEn ? 'Synced!' : 'อัปเดตเรียบร้อย');
+      setTimeout(() => setSyncFeedback(''), 3000);
+    } else {
+      setSyncFeedback(isEn ? 'Sync Error' : 'เกิดข้อผิดพลาด');
+      setTimeout(() => setSyncFeedback(''), 4000);
+    }
+  };
 
   const changeFontSize = (size) => {
     setFontSize(size);
@@ -82,19 +109,39 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
     }
   };
 
-  const isActive = (view) => currentView === view ? 'nav-tab active-obec-tab' : 'nav-tab';
+  const isActive = (view) => currentView === view ? 'nav-tab active-portal-tab' : 'nav-tab';
 
   return (
-    <header className={`obec-school-header ${scrolled ? 'scrolled' : ''}`}>
+    <header className={`portal-school-header ${scrolled ? 'scrolled' : ''}`}>
       
-      {/* 1. TOP UTILITY BAR (Deep Green / MoE Government Style - Clean No-Text Icons) */}
-      <div className="obec-top-bar">
-        <div className="container obec-top-content">
+      {/* 1. TOP UTILITY BAR (Deep Midnight Navy with Live Sync Pill & Accessibility) */}
+      <div className="portal-top-bar">
+        <div className="container portal-top-content">
           
-          {/* Left: Accessibility Controls (Contrast & Font Resizer - Pure Clean Icon Buttons) */}
-          <div className="obec-access-group">
+          {/* Left: Real-time Auto-Sync Status & One-Click Trigger */}
+          <div className="portal-sync-status-group">
+            <button 
+              type="button" 
+              className={`sync-status-pill ${syncState.isSyncing ? 'syncing' : ''}`}
+              onClick={handleManualSync}
+              title={isEn ? "Click to sync data with Facebook & Cloud" : "คลิกเพื่อสั่งซิงค์ข้อมูลกับ Facebook และคลาวด์"}
+            >
+              <span className={`sync-dot ${syncState.isSyncing ? 'pulsing' : ''}`}></span>
+              <span className="sync-text">
+                {syncFeedback || (
+                  syncState.isSyncing 
+                    ? (isEn ? 'Syncing...' : 'กำลังดึงข้อมูล...') 
+                    : (isEn ? 'Auto-Sync: Live' : 'ซิงค์ข้อมูลอัตโนมัติ')
+                )}
+              </span>
+              <RotateCw size={12} className={`sync-refresh-icon ${syncState.isSyncing ? 'spin-anim' : ''}`} />
+            </button>
+          </div>
+
+          {/* Right: Accessibility Controls, Language, Phone & Social */}
+          <div className="portal-top-right">
             
-            {/* Contrast Color Buttons (White, Black/White, Black/Yellow) */}
+            {/* Contrast Color Buttons */}
             <div className="contrast-pills">
               <button 
                 type="button"
@@ -158,12 +205,9 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
               </button>
             </div>
 
-          </div>
+            <div className="top-divider-small"></div>
 
-          {/* Right: Language Switcher & Contact / Social Icons */}
-          <div className="obec-top-right">
-            
-            {/* Interactive TH / EN Language Switcher */}
+            {/* Language Switcher */}
             <div className="lang-switcher">
               <button 
                 type="button"
@@ -183,16 +227,16 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
               </button>
             </div>
 
-            <span className="top-divider"></span>
+            <div className="top-divider-small d-none-sm"></div>
 
-            {/* Social & Phone Links */}
+            {/* Social & Contact */}
             <div className="top-social-group d-none-sm">
               <a 
                 href="https://www.facebook.com/profile.php?id=100057502268064" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="top-social-link"
-                title="Facebook โรงเรียน"
+                title="เพจเฟซบุ๊กโรงเรียนบ้านวังหัวแหวนพัฒนา"
               >
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
@@ -212,8 +256,8 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
         </div>
       </div>
 
-      {/* 2. MIDDLE BRANDING ROW (Pure White Background) */}
-      <div className="obec-brand-row">
+      {/* 2. MIDDLE BRANDING ROW (Modern Clean Institutional Identity) */}
+      <div className="portal-brand-row">
         <div className="container brand-row-container">
           <div 
             className="brand-logo-unit" 
@@ -235,7 +279,7 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
                 {isEn ? 'Kamphaeng Phet Primary Educational Service Area Office 2' : (schoolInfo?.region || 'สำนักงานเขตพื้นที่การศึกษาประถมศึกษากำแพงเพชร เขต 2')}
               </p>
               <p className="school-en-name">
-                {isEn ? 'Office of the Basic Education Commission • Ministry of Education' : 'Ban Wang Hua Waen Phatthana School'}
+                {isEn ? 'Ban Wang Hua Waen Phatthana School • Educational Portal' : 'Ban Wang Hua Waen Phatthana School'}
               </p>
             </div>
           </div>
@@ -251,51 +295,51 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
         </div>
       </div>
 
-      {/* 3. PRIMARY NAVIGATION BAR (Signature OBEC Gold Active Tab) */}
-      <nav className="obec-main-navbar">
+      {/* 3. PRIMARY NAVIGATION BAR (Sleek Rounded Navigation with Dynamic Indicator) */}
+      <nav className="portal-main-navbar">
         <div className="container nav-row-container">
           
-          {/* Desktop Links with OBEC Gold Active Tab */}
+          {/* Desktop Navigation Links */}
           <div className="desktop-menu-list">
             <button onClick={() => handleNav('home')} className={isActive('home')}>
-              <Home size={16} /> {isEn ? 'Home' : 'หน้าหลัก'}
+              <Home size={16} /> <span>{isEn ? 'Home' : 'หน้าหลัก'}</span>
             </button>
             <button onClick={() => handleNav('news')} className={isActive('news')}>
-              <Newspaper size={16} /> {isEn ? 'News & Announcements' : 'ข่าวประชาสัมพันธ์'}
+              <Newspaper size={16} /> <span>{isEn ? 'News & Announcements' : 'ข่าวประชาสัมพันธ์'}</span>
             </button>
             <button onClick={() => handleNav('staff')} className={isActive('staff')}>
-              <Users size={16} /> {isEn ? 'Staff Directory' : 'ทำเนียบบุคลากรทางการศึกษา'}
+              <Users size={16} /> <span>{isEn ? 'Staff Directory' : 'ทำเนียบบุคลากร'}</span>
             </button>
             <button onClick={() => handleNav('campus')} className={isActive('campus')}>
-              <Layers size={16} /> {isEn ? 'Campus Map' : 'แผนผังสถานศึกษา'}
+              <Layers size={16} /> <span>{isEn ? 'Campus Map' : 'แผนผังสถานศึกษา'}</span>
             </button>
             <button onClick={() => handleNav('contact')} className={isActive('contact')}>
-              <PhoneCall size={16} /> {isEn ? 'Contact Us' : 'ติดต่อราชการ'}
+              <PhoneCall size={16} /> <span>{isEn ? 'Contact Us' : 'ติดต่อราชการ'}</span>
             </button>
 
             {user && (
               <div className="admin-chip-group">
                 <button onClick={() => handleNav('admin')} className={isActive('admin')}>
-                  <ShieldAlert size={16} /> {isEn ? 'Admin Portal' : 'ระบบบริหารจัดการข้อมูล'}
+                  <ShieldAlert size={16} /> <span>{isEn ? 'Admin' : 'ระบบบริหารข้อมูล'}</span>
                 </button>
-                <button onClick={handleLogout} className="btn-logout-chip" title={isEn ? "Logout" : "ออกจากระบบงาน"}>
-                  <LogOut size={14} /> {isEn ? 'Logout' : 'ออกจากระบบ'}
+                <button onClick={handleLogout} className="btn-logout-chip" title={isEn ? "Logout" : "ออกจากระบบ"}>
+                  <LogOut size={14} />
                 </button>
               </div>
             )}
           </div>
 
-          {/* Quick Search Box (สไตล์ สพฐ. กรอกคำค้นหา + ปุ่มแว่นขยายสีทอง) */}
+          {/* Quick Search Form */}
           <form className="header-search-form" onSubmit={handleSearchSubmit}>
             <input 
               type="text" 
-              placeholder={isEn ? "Search announcements..." : "ระบุข้อความเพื่อสืบค้น..."} 
+              placeholder={isEn ? "Search portal..." : "ค้นหาข้อมูลข่าวสาร..."} 
               className="header-search-input"
               value={headerSearch}
               onChange={(e) => setHeaderSearch(e.target.value)}
             />
-            <button type="submit" className="header-search-btn" title={isEn ? "Search" : "สืบค้น"}>
-              <Search size={16} />
+            <button type="submit" className="header-search-btn" title={isEn ? "Search" : "ค้นหา"}>
+              <Search size={15} />
             </button>
           </form>
 
@@ -304,33 +348,25 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
 
       {/* 4. MOBILE NAVIGATION DRAWER */}
       {isOpen && (
-        <div className="obec-mobile-drawer animate-fade-in">
+        <div className="portal-mobile-drawer animate-fade-in">
           
-          {/* Mobile Language Switcher */}
-          <div className="mobile-lang-row mb-3">
-            <span className="mobile-lang-label">{isEn ? 'Language:' : 'ภาษา:'}</span>
-            <div className="lang-switcher">
-              <button 
-                type="button"
-                className={`lang-btn ${lang === 'th' ? 'active' : ''}`}
-                onClick={() => setLang && setLang('th')}
-              >
-                TH
-              </button>
-              <button 
-                type="button"
-                className={`lang-btn ${lang === 'en' ? 'active' : ''}`}
-                onClick={() => setLang && setLang('en')}
-              >
-                EN
-              </button>
-            </div>
+          {/* Mobile Auto-Sync Trigger */}
+          <div className="mobile-sync-row mb-3">
+            <button 
+              type="button" 
+              className="mobile-sync-btn"
+              onClick={handleManualSync}
+            >
+              <RotateCw size={15} className={syncState.isSyncing ? 'spin-anim' : ''} />
+              <span>{syncFeedback || (isEn ? 'Sync Facebook & Cloud' : 'ซิงค์ข้อมูลกับ Facebook และระบบคลาวด์')}</span>
+            </button>
           </div>
 
+          {/* Mobile Search Form */}
           <form className="mobile-search-form mb-3" onSubmit={handleSearchSubmit}>
             <input 
               type="text" 
-              placeholder={isEn ? "Search announcements..." : "ระบุข้อความเพื่อสืบค้น..."} 
+              placeholder={isEn ? "Search portal..." : "ค้นหาข้อมูลข่าวสาร..."} 
               className="header-search-input w-100"
               value={headerSearch}
               onChange={(e) => setHeaderSearch(e.target.value)}
@@ -359,10 +395,10 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
           {user && (
             <div className="mobile-admin-actions mt-3">
               <div className="mobile-user-tag">
-                {isEn ? 'Admin:' : 'ผู้ดูแลระบบ:'} <strong>{user.name}</strong>
+                {isEn ? 'Signed in as:' : 'เข้าสู่ระบบในชื่อ:'} <strong>{user.name}</strong>
               </div>
               <button onClick={() => handleNav('admin')} className="admin-mobile-nav-btn">
-                <ShieldAlert size={16} /> {isEn ? 'Admin Portal' : 'ระบบบริหารจัดการข้อมูลสถานศึกษา'}
+                <ShieldAlert size={16} /> {isEn ? 'Admin Portal' : 'ระบบบริหารข้อมูลสถานศึกษา'}
               </button>
               <button onClick={handleLogout} className="logout-mobile-nav-btn">
                 <LogOut size={16} /> {isEn ? 'Logout' : 'ออกจากระบบงาน'}
@@ -372,34 +408,97 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
         </div>
       )}
 
-      {/* Scoped CSS for OBEC Header Style */}
+      {/* Scoped CSS for Bespoke Modern Header */}
       <style>{`
-        .obec-school-header {
+        .portal-school-header {
           position: sticky;
           top: 0;
           z-index: 1000;
           background: #ffffff;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
           font-family: var(--font-heading);
+          transition: all 0.25s ease;
         }
 
         /* 1. Top Bar */
-        .obec-top-bar {
-          background-color: #063b27; /* Deep Educational Forest Green / MoE Tone */
+        .portal-top-bar {
+          background-color: #08192e;
           color: #ffffff;
           font-size: 0.8rem;
-          padding: 6px 0;
-          border-bottom: 2px solid #eab308;
+          padding: 7px 0;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .obec-top-content {
+        .portal-top-content {
           display: flex;
           justify-content: space-between;
           align-items: center;
           gap: 16px;
         }
 
-        .obec-access-group {
+        /* Sync Status Pill */
+        .portal-sync-status-group {
+          display: flex;
+          align-items: center;
+        }
+
+        .sync-status-pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 7px;
+          background: rgba(37, 99, 235, 0.2);
+          border: 1px solid rgba(96, 165, 250, 0.35);
+          color: #bfdbfe;
+          padding: 3px 10px;
+          border-radius: 9999px;
+          font-size: 0.76rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          outline: none;
+        }
+
+        .sync-status-pill:hover {
+          background: rgba(37, 99, 235, 0.35);
+          border-color: #60a5fa;
+          color: #ffffff;
+        }
+
+        .sync-dot {
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: #10b981;
+          box-shadow: 0 0 6px #10b981;
+        }
+
+        .sync-dot.pulsing {
+          background: #38bdf8;
+          box-shadow: 0 0 8px #38bdf8;
+          animation: pulseGlow 1.5s infinite;
+        }
+
+        .sync-refresh-icon {
+          opacity: 0.8;
+          transition: transform 0.2s ease;
+        }
+
+        .sync-status-pill:hover .sync-refresh-icon {
+          opacity: 1;
+          transform: rotate(45deg);
+        }
+
+        .spin-anim {
+          animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+
+        /* Top Right Group */
+        .portal-top-right {
           display: flex;
           align-items: center;
           gap: 10px;
@@ -407,96 +506,84 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
 
         .top-divider-small {
           width: 1px;
-          height: 16px;
-          background-color: rgba(255, 255, 255, 0.25);
+          height: 14px;
+          background-color: rgba(255, 255, 255, 0.2);
         }
 
         .font-size-pills, .contrast-pills {
           display: flex;
           align-items: center;
-          gap: 5px;
+          gap: 4px;
         }
 
         .font-pill {
-          width: 26px;
-          height: 26px;
+          width: 24px;
+          height: 24px;
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          background: rgba(255, 255, 255, 0.15);
+          background: rgba(255, 255, 255, 0.12);
           color: #ffffff;
-          border: 1px solid rgba(255, 255, 255, 0.35);
+          border: 1px solid rgba(255, 255, 255, 0.25);
           border-radius: 50%;
-          font-size: 0.8rem;
+          font-size: 0.76rem;
           font-weight: 700;
           cursor: pointer;
           transition: all 0.15s ease;
         }
 
         .font-pill:hover, .font-pill.active {
-          background: #eab308;
-          color: #000000;
-          border-color: #eab308;
+          background: #2563eb;
+          color: #ffffff;
+          border-color: #60a5fa;
         }
 
         .contrast-pill {
-          width: 25px;
-          height: 25px;
+          width: 23px;
+          height: 23px;
           display: inline-flex;
           align-items: center;
           justify-content: center;
           border-radius: 50%;
-          font-size: 0.76rem;
+          font-size: 0.74rem;
           font-weight: 800;
           cursor: pointer;
-          border: 1px solid rgba(255, 255, 255, 0.4);
-          transition: transform 0.15s ease;
+          transition: all 0.15s ease;
         }
 
-        .contrast-pill:hover {
-          transform: scale(1.1);
+        .c-default { background: #ffffff; color: #0f172a; border: 1px solid #cbd5e1; }
+        .c-wb { background: #000000; color: #ffffff; border: 1px solid #ffffff; }
+        .c-yb { background: #000000; color: #fde047; border: 1px solid #fde047; }
+
+        .contrast-pill.active {
+          box-shadow: 0 0 0 2px #38bdf8;
         }
 
-        .contrast-pill.c-default { background: #ffffff; color: #000000; }
-        .contrast-pill.c-wb { background: #000000; color: #ffffff; }
-        .contrast-pill.c-yb { background: #000000; color: #fde047; border-color: #fde047; }
-        .contrast-pill.active { outline: 2px solid #eab308; outline-offset: 1px; }
-
-        .obec-top-right {
-          display: flex;
-          align-items: center;
-          gap: 14px;
-        }
-
+        /* Language Switcher */
         .lang-switcher {
           display: flex;
           align-items: center;
-          background: rgba(0, 0, 0, 0.3);
-          border-radius: 4px;
-          overflow: hidden;
-          border: 1px solid rgba(255, 255, 255, 0.25);
+          background: rgba(255, 255, 255, 0.12);
+          border-radius: 9999px;
+          padding: 2px;
+          border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .lang-btn {
-          padding: 3px 9px;
-          font-size: 0.74rem;
-          font-weight: 700;
-          color: #ffffff;
-          background: transparent;
           border: none;
+          background: transparent;
+          color: rgba(255, 255, 255, 0.75);
+          font-size: 0.72rem;
+          font-weight: 700;
+          padding: 2px 7px;
+          border-radius: 9999px;
           cursor: pointer;
           transition: all 0.15s ease;
         }
 
         .lang-btn.active {
-          background-color: #eab308;
-          color: #000000;
-        }
-
-        .top-divider {
-          width: 1px;
-          height: 16px;
-          background-color: rgba(255, 255, 255, 0.25);
+          background: #2563eb;
+          color: #ffffff;
         }
 
         .top-social-group {
@@ -512,38 +599,34 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
           width: 24px;
           height: 24px;
           border-radius: 50%;
-          background: rgba(255, 255, 255, 0.15);
+          background: rgba(255, 255, 255, 0.12);
           color: #ffffff;
-          transition: all 0.15s ease;
+          transition: all 0.2s ease;
         }
 
         .top-social-link:hover {
-          background: #eab308;
-          color: #000000;
+          background: #1877F2;
+          transform: translateY(-1px);
         }
 
         .top-phone-link {
-          display: flex;
+          display: inline-flex;
           align-items: center;
-          gap: 5px;
-          color: #f1f5f9;
-          font-size: 0.82rem;
+          gap: 6px;
+          color: #e2e8f0;
+          font-size: 0.8rem;
           font-weight: 500;
-          transition: color 0.15s ease;
+          transition: color 0.2s ease;
         }
 
         .top-phone-link:hover {
-          color: #eab308;
+          color: #38bdf8;
         }
 
-        .phone-icon {
-          color: #eab308;
-        }
-
-        /* 2. Brand Row */
-        .obec-brand-row {
-          background-color: #ffffff;
-          padding: 16px 0;
+        /* 2. Middle Branding Row */
+        .portal-brand-row {
+          background: #ffffff;
+          padding: 14px 0;
           border-bottom: 1px solid #f1f5f9;
         }
 
@@ -560,14 +643,17 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
         }
 
         .school-logo-frame {
-          width: 68px;
-          height: 68px;
-          border-radius: 50%;
+          width: 58px;
+          height: 58px;
+          border-radius: 14px;
           overflow: hidden;
-          border: 2px solid #eab308;
-          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-          flex-shrink: 0;
           background: #ffffff;
+          border: 1px solid #e2e8f0;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
         }
 
         .school-logo-img {
@@ -576,229 +662,211 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
           object-fit: contain;
         }
 
-        .school-text-unit {
-          display: flex;
-          flex-direction: column;
-          gap: 2px;
-        }
-
         .school-main-name {
-          font-size: 1.55rem;
+          font-size: 1.45rem;
           font-weight: 800;
-          color: #0b2545; /* Deep Navy */
-          margin: 0;
-          line-height: 1.25;
-          letter-spacing: -0.2px;
+          color: #0c2340;
+          line-height: 1.2;
+          margin-bottom: 2px;
+          letter-spacing: -0.3px;
         }
 
         .school-org-name {
-          font-size: 0.88rem;
-          font-weight: 600;
+          font-size: 0.86rem;
           color: #475569;
-          margin: 0;
-          line-height: 1.3;
+          font-weight: 500;
+          margin-bottom: 1px;
         }
 
         .school-en-name {
-          font-size: 0.74rem;
-          font-weight: 700;
+          font-size: 0.76rem;
           color: #94a3b8;
-          letter-spacing: 0.5px;
+          font-weight: 500;
           margin: 0;
         }
 
         .mobile-hamburger-btn {
           display: none;
-          background: none;
-          border: 1px solid #e2e8f0;
-          border-radius: 6px;
-          padding: 6px 10px;
+          background: transparent;
+          border: none;
+          color: #0c2340;
           cursor: pointer;
-          color: #0b2545;
         }
 
-        /* 3. Primary Navbar */
-        .obec-main-navbar {
-          background-color: #ffffff;
-          border-top: 1px solid #e2e8f0;
-          border-bottom: 3px solid #eab308; /* Signature Gold Stripe */
+        /* 3. Main Navbar */
+        .portal-main-navbar {
+          background: #0c2340;
+          padding: 4px 0;
+          box-shadow: 0 4px 14px rgba(12, 35, 64, 0.15);
         }
 
         .nav-row-container {
           display: flex;
           justify-content: space-between;
           align-items: center;
+          gap: 20px;
         }
 
         .desktop-menu-list {
           display: flex;
-          align-items: stretch;
-          gap: 2px;
+          align-items: center;
+          gap: 4px;
         }
 
         .nav-tab {
           display: inline-flex;
           align-items: center;
           gap: 7px;
-          padding: 13px 18px;
-          font-size: 0.96rem;
-          font-weight: 600;
-          color: #1e293b;
           background: transparent;
           border: none;
+          color: #cbd5e1;
+          font-size: 0.92rem;
+          font-weight: 600;
+          padding: 10px 16px;
+          border-radius: 8px;
           cursor: pointer;
-          transition: all 0.15s ease;
-          border-bottom: 3px solid transparent;
-          margin-bottom: -3px;
+          transition: all 0.2s ease;
         }
 
         .nav-tab:hover {
-          color: #063b27;
-          background-color: #f8fafc;
+          color: #ffffff;
+          background: rgba(255, 255, 255, 0.08);
         }
 
-        .nav-tab.active-obec-tab {
-          background-color: #eab308 !important;
-          color: #000000 !important;
-          font-weight: 800 !important;
-          border-bottom: 3px solid #ca8a04;
-          box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.15);
+        .active-portal-tab {
+          background: #2563eb !important;
+          color: #ffffff !important;
+          box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
         }
 
         .admin-chip-group {
           display: flex;
           align-items: center;
-          gap: 6px;
+          gap: 4px;
           margin-left: 8px;
           padding-left: 8px;
-          border-left: 1px solid #e2e8f0;
+          border-left: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         .btn-logout-chip {
           display: inline-flex;
           align-items: center;
-          gap: 4px;
-          padding: 6px 10px;
-          font-size: 0.8rem;
-          font-weight: 600;
-          color: #dc2626;
-          background: #fee2e2;
-          border: 1px solid #fca5a5;
-          border-radius: 4px;
+          justify-content: center;
+          width: 32px;
+          height: 32px;
+          border-radius: 6px;
+          background: rgba(239, 68, 68, 0.2);
+          border: 1px solid rgba(239, 68, 68, 0.4);
+          color: #fca5a5;
           cursor: pointer;
-        }
-
-        /* Search Form in Navbar */
-        .header-search-form {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          background: #f1f5f9;
-          border: 1px solid #cbd5e1;
-          border-radius: 9999px;
-          padding: 3px 4px 3px 14px;
-          width: 250px;
           transition: all 0.2s ease;
         }
 
-        .header-search-form:focus-within {
-          background: #ffffff;
-          border-color: #eab308;
-          box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.2);
+        .btn-logout-chip:hover {
+          background: #ef4444;
+          color: #ffffff;
+        }
+
+        /* Search Form */
+        .header-search-form {
+          position: relative;
+          width: 220px;
         }
 
         .header-search-input {
-          border: none;
-          background: transparent;
-          font-size: 0.85rem;
-          color: #1e293b;
           width: 100%;
+          background: rgba(255, 255, 255, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          color: #ffffff;
+          padding: 7px 32px 7px 12px;
+          border-radius: 9999px;
+          font-size: 0.84rem;
           outline: none;
-          font-family: var(--font-heading);
+          transition: all 0.2s ease;
+        }
+
+        .header-search-input::placeholder {
+          color: #94a3b8;
+        }
+
+        .header-search-input:focus {
+          background: rgba(255, 255, 255, 0.18);
+          border-color: #38bdf8;
+          width: 250px;
         }
 
         .header-search-btn {
-          width: 28px;
-          height: 28px;
-          border-radius: 50%;
-          background-color: #eab308;
-          color: #000000;
+          position: absolute;
+          right: 8px;
+          top: 50%;
+          transform: translateY(-50%);
+          background: transparent;
           border: none;
-          display: inline-flex;
+          color: #94a3b8;
+          cursor: pointer;
+          display: flex;
           align-items: center;
           justify-content: center;
-          cursor: pointer;
-          flex-shrink: 0;
-          transition: background 0.15s ease;
         }
 
         .header-search-btn:hover {
-          background-color: #ca8a04;
+          color: #ffffff;
         }
 
-        /* 4. Mobile Drawer */
-        .obec-mobile-drawer {
-          display: none;
-          padding: 16px 20px;
-          background-color: #ffffff;
-          border-bottom: 2px solid #eab308;
-        }
-
-        .mobile-lang-row {
+        /* Mobile Drawer */
+        .portal-mobile-drawer {
+          background: #08192e;
+          padding: 20px;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
           display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding-bottom: 12px;
-          border-bottom: 1px solid #e2e8f0;
-        }
-
-        .mobile-lang-label {
-          font-size: 0.9rem;
-          font-weight: 600;
-          color: #0b2545;
-        }
-
-        .obec-mobile-drawer .nav-tab {
-          display: flex;
-          width: 100%;
-          padding: 12px 14px;
-          border-radius: 6px;
-          margin-bottom: 4px;
-        }
-
-        .mobile-search-form {
-          display: flex;
-          align-items: center;
+          flex-direction: column;
           gap: 6px;
-          background: #f1f5f9;
-          border: 1px solid #cbd5e1;
-          border-radius: 9999px;
-          padding: 6px 12px;
+        }
+
+        .mobile-sync-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          width: 100%;
+          background: rgba(37, 99, 235, 0.25);
+          border: 1px solid rgba(96, 165, 250, 0.4);
+          color: #bfdbfe;
+          padding: 10px;
+          border-radius: 8px;
+          font-weight: 600;
+          font-size: 0.88rem;
+          cursor: pointer;
+        }
+
+        .portal-mobile-drawer .nav-tab {
+          width: 100%;
+          justify-content: flex-start;
+          padding: 12px 14px;
         }
 
         .mobile-admin-actions {
-          padding-top: 12px;
-          border-top: 1px solid #e2e8f0;
+          padding-top: 14px;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
           display: flex;
           flex-direction: column;
           gap: 8px;
         }
 
         .mobile-user-tag {
-          font-size: 0.85rem;
-          color: #475569;
+          font-size: 0.82rem;
+          color: #94a3b8;
         }
 
         .admin-mobile-nav-btn {
           display: flex;
           align-items: center;
-          justify-content: center;
-          gap: 6px;
-          padding: 10px;
-          background: #0b2545;
-          color: white;
+          gap: 8px;
+          background: #2563eb;
+          color: #ffffff;
           border: none;
-          border-radius: 6px;
+          padding: 10px;
+          border-radius: 8px;
           font-weight: 600;
           cursor: pointer;
         }
@@ -806,45 +874,28 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
         .logout-mobile-nav-btn {
           display: flex;
           align-items: center;
-          justify-content: center;
-          gap: 6px;
-          padding: 8px;
-          background: #fee2e2;
-          color: #dc2626;
-          border: 1px solid #fca5a5;
-          border-radius: 6px;
+          gap: 8px;
+          background: rgba(239, 68, 68, 0.2);
+          border: 1px solid rgba(239, 68, 68, 0.4);
+          color: #fca5a5;
+          padding: 10px;
+          border-radius: 8px;
           font-weight: 600;
           cursor: pointer;
         }
 
-        @media (max-width: 992px) {
-          .desktop-menu-list {
-            display: none;
-          }
-          .header-search-form {
+        @media (max-width: 900px) {
+          .desktop-menu-list, .header-search-form {
             display: none;
           }
           .mobile-hamburger-btn {
             display: block;
           }
-          .obec-mobile-drawer {
-            display: block;
-          }
-          .school-main-name {
-            font-size: 1.25rem;
-          }
-          .school-org-name {
-            font-size: 0.78rem;
-          }
-          .school-en-name {
-            display: none;
-          }
-          .school-logo-frame {
-            width: 52px;
-            height: 52px;
-          }
           .d-none-sm {
             display: none !important;
+          }
+          .school-main-name {
+            font-size: 1.15rem;
           }
         }
       `}</style>

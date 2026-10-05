@@ -39,77 +39,176 @@ const DEFAULT_SCHOOL_INFO = {
 
 const DEFAULT_NEWS = [
   {
-    id: "news-1",
+    id: "fb_1560176759242385",
+    title: "ขอขอบคุณองค์การบริหารส่วนตำบลวังหามแห นำรถน้ำมาอนุเคราะห์ช่วยเหลือสถานศึกษา",
+    titleEn: "Gratitude to Wang Ham Hae SAO for Water Truck Assistance",
+    subtitle: "การสนับสนุนน้ำอุปโภคบริโภคเพื่อการจัดการศึกษาและความเป็นอยู่ที่ดีของนักเรียน",
+    subtitleEn: "Community water supply support for campus hygiene and school operations",
+    category: "activity",
+    content: "โรงเรียนบ้านวังหัวแหวนพัฒนา ขอขอบคุณองค์การบริหารส่วนตำบลวังหามแห ที่ได้ให้ความอนุเคราะห์นำรถน้ำมาช่วยเหลือเติมน้ำเพื่อการอุปโภคบริโภคและการดูแลรักษาสิ่งแวดล้อมภายในโรงเรียน เพื่อให้นักเรียนและบุคลากรทางการศึกษามีน้ำใช้อย่างเพียงพอและถูกสุขลักษณะ",
+    contentEn: "Ban Wang Hua Waen Phatthana School expresses sincere gratitude to Wang Ham Hae Sub-district Administrative Organization for providing water truck assistance to supply water for campus hygiene and daily operations.",
+    date: "2026-10-02",
+    author: "เพจโรงเรียนบ้านวังหัวแหวนพัฒนา",
+    imageUrl: "news/fb_1560176759242385.jpg",
+    isPinned: false,
+    status: "published",
+    views: 89,
+    attachmentName: "",
+    attachmentUrl: "",
+    galleryUrls: "news/fb_1560176759242385_g1.jpg,news/fb_1560176759242385_g2.jpg,news/fb_1560176759242385_g3.jpg,news/fb_1560176759242385_g4.jpg",
+    fbUrl: "https://www.facebook.com/100057502268064/posts/1560176759242385"
+  },
+  {
+    id: "fb_1551648353428559",
+    title: "ขอขอบคุณ บริษัท ไทยฮอนด้า จำกัด และ ห้างหุ้นส่วนจำกัด นรินทร์กลการกำแพงเพชร มอบหมวกนิรภัยและทุนการศึกษา",
+    titleEn: "Thai Honda and Narin Karnkol Donate Safety Helmets and Scholarships",
+    subtitle: "โครงการขับขี่ปลอดภัยใส่ใจวินัยจราจร ส่งเสริมความปลอดภัยและมอบโอกาสทางการศึกษาแก่นักเรียน",
+    subtitleEn: "Safety riding campaign and educational scholarships for students",
+    category: "activity",
+    content: "โรงเรียนบ้านวังหัวแหวนพัฒนา ขอขอบคุณ บริษัท ไทยฮอนด้า จำกัด และ ห้างหุ้นส่วนจำกัด นรินทร์กลการกำแพงเพชร ที่ได้จัดกิจกรรมรณรงค์ความปลอดภัยในการใช้รถใช้ถนน พร้อมมอบหมวกนิรภัยและทุนการศึกษาให้แก่นักเรียน เพื่อส่งเสริมวินัยจราจรและความปลอดภัยในชีวิตประจำวัน",
+    contentEn: "Ban Wang Hua Waen Phatthana School thanks Thai Honda Co., Ltd. and Narin Karnkol Kamphaeng Phet Ltd., Part. for sponsoring certified safety helmets and scholarships promoting traffic awareness.",
+    date: "2026-09-23",
+    author: "เพจโรงเรียนบ้านวังหัวแหวนพัฒนา",
+    imageUrl: "news/fb_honda_safety.jpg",
+    isPinned: false,
+    status: "published",
+    views: 114,
+    attachmentName: "",
+    attachmentUrl: "",
+    galleryUrls: "",
+    fbUrl: "https://www.facebook.com/100057502268064/posts/1551648353428559"
+  },
+  {
+    id: "fb_1550894303503964",
+    title: "ขอขอบคุณผู้ใหญ่ใจดี คุณเบญญาภา วงศ์ภู่ (พี่เกด) เลี้ยงอาหารกลางวันและมอบเงินแก่นักเรียน",
+    titleEn: "Generous Lunch Sponsorship and Support by Khun Benyapha Wongphu",
+    subtitle: "สนับสนุนสปาเก็ตตี้ ไก่ป๊อป คัพเค้กแสนอร่อย และมอบเงินสนับสนุนทุนการศึกษาแก่นักเรียน",
+    subtitleEn: "Delightful spaghetti lunch and educational support for all students",
+    category: "activity",
+    content: "ขอขอบคุณผู้ใหญ่ใจดี คุณเบญญาภา วงศ์ภู่ (พี่เกด) ที่มาเลี้ยงสปาเก็ตตี้ ไก่ป๊อป คัพเค้ก และมอบเงินให้แก่นักเรียนโรงเรียนบ้านวังหัวแหวนพัฒนาทุกคน อิ่มอร่อยและมีความสุขกันถ้วนหน้า ขออำนาจคุณพระศรีรัตนตรัยดลบันดาลให้ท่านและครอบครัวประสบแต่ความสุขความเจริญ",
+    contentEn: "Heartfelt gratitude to Khun Benyapha Wongphu for sponsoring a nutritious and joyful lunch of spaghetti, chicken pops, cupcakes, and scholarship support for all students.",
+    date: "2026-09-22",
+    author: "เพจโรงเรียนบ้านวังหัวแหวนพัฒนา",
+    imageUrl: "news/fb_lunch_donation.jpg",
+    isPinned: false,
+    status: "published",
+    views: 165,
+    attachmentName: "",
+    attachmentUrl: "",
+    galleryUrls: "",
+    fbUrl: "https://www.facebook.com/100057502268064/posts/1550894303503964"
+  },
+  {
+    id: "fb_1550841523509242",
+    title: "การประเมินผลการปฏิบัติงานตามข้อตกลงในการพัฒนางาน (PA) ประจำปีงบประมาณ 2569",
+    titleEn: "Teacher Performance Agreement (PA) Annual Assessment FY 2026",
+    subtitle: "ขับเคลื่อนคุณภาพการจัดการเรียนรู้และการพัฒนาวิชาชีพครูเพื่อประโยชน์สูงสุดของผู้เรียน",
+    subtitleEn: "Continuous instructional leadership and educational quality development",
+    category: "announcement",
+    content: "คณะกรรมการประเมินผลการปฏิบัติงานตามข้อตกลงในการพัฒนางาน สำหรับข้าราชการครูและบุคลากรทางการศึกษา (Performance Agreement : PA) ดำเนินการประเมินผลงานและนวัตกรรมการจัดการเรียนรู้เชิงรุก (Active Learning) ของคณะครู เพื่อมุ่งยกระดับผลสัมฤทธิ์ทางการเรียนของผู้เรียนอย่างยั่งยืน",
+    contentEn: "Evaluation committee conducted the Performance Agreement (PA) assessment for teachers, reviewing active learning strategies and classroom innovations.",
+    date: "2026-09-22",
+    author: "กลุ่มงานบริหารวิชาการ",
+    imageUrl: "news/fb_teacher_pa.jpg",
+    isPinned: false,
+    status: "published",
+    views: 138,
+    attachmentName: "",
+    attachmentUrl: "",
+    galleryUrls: "",
+    fbUrl: "https://www.facebook.com/100057502268064/posts/1550841523509242"
+  },
+  {
+    id: "news-isms-award",
     title: "โรงเรียนบ้านวังหัวแหวนพัฒนา ได้รับรางวัลสถานศึกษาต้นแบบการนิเทศภายใน (ISMS Award) ระดับยอดเยี่ยม",
     titleEn: "Ban Wang Hua Waen Phatthana School Receives ISMS Excellence Award",
     subtitle: "ความภาคภูมิใจแห่งการพัฒนาคุณภาพการศึกษาและระบบนิเทศภายใน ระดับสำนักงานคณะกรรมการการศึกษาขั้นพื้นฐาน",
     subtitleEn: "A proud achievement in educational excellence and instructional supervision from OBEC",
     category: "announcement",
     content: "โรงเรียนบ้านวังหัวแหวนพัฒนา สำนักงานเขตพื้นที่การศึกษาประถมศึกษากำแพงเพชร เขต 2 ได้รับการคัดเลือกและยกย่องเชิดชูเกียรติให้เป็น 'สถานศึกษาต้นแบบการนิเทศภายใน (Internal Supervision Model School : ISMS Award)' ระดับสำนักงานคณะกรรมการการศึกษาขั้นพื้นฐาน (สพฐ.) ระดับยอดเยี่ยม ประจำปีการศึกษา 2568 สะท้อนถึงความมุ่งมั่นทุ่มเทของผู้บริหาร คณะครู และบุคลากรทางการศึกษาในการยกระดับคุณภาพการเรียนรู้ของผู้เรียนอย่างต่อเนื่อง",
-    contentEn: "Ban Wang Hua Waen Phatthana School under Kamphaeng Phet Primary Educational Service Area Office 2 has been recognized as an Internal Supervision Model School (ISMS Award) at the Excellent Level by the Office of the Basic Education Commission (OBEC) for academic year 2025-2026. This award honors our administrators, teachers, and educational staff for their tireless dedication to instructional quality and active student learning.",
-    date: "2026-03-28",
+    contentEn: "Ban Wang Hua Waen Phatthana School under Kamphaeng Phet Primary Educational Service Area Office 2 has been recognized as an Internal Supervision Model School (ISMS Award) at the Excellent Level by OBEC.",
+    date: "2026-08-10",
     author: "กลุ่มงานประชาสัมพันธ์สถานศึกษา",
     imageUrl: "news/school_award_honor.jpg",
     isPinned: true,
     status: "published",
-    views: 188,
+    views: 245,
     attachmentName: "",
     attachmentUrl: "",
-    galleryUrls: "news/school_teachers_group.jpg,news/school_entrance_sign.jpg,news/fb_lunch_donation.jpg"
+    galleryUrls: ""
   },
   {
-    id: "news-2",
-    title: "กิจกรรมส่งเสริมสุขอนามัยและโภชนาการที่ดีสำหรับนักเรียน",
-    titleEn: "Student Health, Hygiene and Nutrition Program",
-    subtitle: "การดูแลคุณภาพชีวิตและอาหารกลางวันนักเรียนอย่างถูกหลักโภชนาการ",
-    subtitleEn: "Ensuring student well-being and balanced lunch nutrition",
-    category: "activity",
-    content: "โรงเรียนบ้านวังหัวแหวนพัฒนา ให้ความสำคัญกับสุขภาพอนามัยและโภชนาการของนักเรียนทุกคน โดยได้รับความร่วมมือและการสนับสนุนจากชุมชนและผู้มีอุปการคุณ เพื่อให้เด็กๆ ได้รับประทานอาหารที่มีประโยชน์และถูกสุขลักษณะ ช่วยส่งเสริมพัฒนาการทั้งทางร่างกายและสติปัญญา",
-    contentEn: "Ban Wang Hua Waen Phatthana School places high priority on student health, hygiene, and balanced nutrition. With strong cooperation from the community and benevolent donors, students receive wholesome meals supporting their physical and cognitive growth.",
-    date: "2026-03-20",
-    author: "กลุ่มงานส่งเสริมกิจการนักเรียน",
-    imageUrl: "news/fb_lunch_donation.jpg",
+    id: "news-4",
+    title: "ประกาศหยุดเรียนเนื่องในวันสำคัญทางพระพุทธศาสนา วันอาสาฬหบูชาและวันเข้าพรรษา",
+    titleEn: "School Holiday Notice: Asalha Puja Day and Buddhist Lent Day",
+    subtitle: "แจ้งกำหนดการหยุดเรียนและการปฏิบัติตนตามหลักธรรมทางพระพุทธศาสนา",
+    subtitleEn: "Official notification on religious observance and school schedule",
+    category: "announcement",
+    content: "เนื่องด้วยในวันสำคัญทางพระพุทธศาสนา วันอาสาฬหบูชา และวันเข้าพรรษา โรงเรียนบ้านวังหัวแหวนพัฒนา ขอประกาศหยุดการเรียนการสอนเพื่อให้คณะครู บุคลากร และนักเรียนได้ร่วมทำบุญตักบาตร ฟังพระธรรมเทศนา และสืบสานประเพณีอันดีงามของไทย",
+    contentEn: "Official announcement regarding school closure on Asalha Puja and Buddhist Lent holidays to allow faculty, staff, and students to participate in religious activities.",
+    date: "2026-07-05",
+    author: "กลุ่มงานบริหารทั่วไป",
+    imageUrl: "", // ไม่มีรูปจริง แสดงเป็นการ์ดข้อความทางการ (Text-only)
     isPinned: false,
     status: "published",
-    views: 142,
+    views: 92,
     attachmentName: "",
     attachmentUrl: "",
     galleryUrls: ""
   },
   {
     id: "news-3",
-    title: "การขับเคลื่อนการจัดการเรียนรู้และการประเมินผลการปฏิบัติงาน (PA) คณะครู",
-    titleEn: "Teacher Professional Development & Performance Agreement (PA)",
-    subtitle: "การประชุมเชิงปฏิบัติการพัฒนาสมรรถนะครูผู้สอนเพื่อประโยชน์สูงสุดของผู้เรียน",
-    subtitleEn: "Instructional leadership workshop to elevate student learning outcomes",
-    category: "announcement",
-    content: "คณะผู้บริหารและข้าราชการครูโรงเรียนบ้านวังหัวแหวนพัฒนา ร่วมประชุมวางแผนและประเมินผลการจัดการเรียนรู้ตามข้อตกลงในการพัฒนางาน (PA) มุ่งเน้นการจัดการเรียนรู้เชิงรุก (Active Learning) ที่ตอบสนองความต้องการของผู้เรียนในศตวรรษที่ 21",
-    contentEn: "School leadership and teaching faculty convened for the Performance Agreement (PA) instructional development workshop, focusing on active learning methodologies and 21st-century learner competency development.",
-    date: "2026-03-15",
-    author: "กลุ่มงานบริหารวิชาการ",
-    imageUrl: "news/school_teachers_group.jpg",
-    isPinned: false,
-    status: "published",
-    views: 126,
-    attachmentName: "",
-    attachmentUrl: "",
-    galleryUrls: "news/fb_teacher_pa.jpg,news/school_award_honor.jpg"
-  },
-  {
-    id: "news-4",
-    title: "พัฒนาการเรียนรู้และสภาพแวดล้อมน่าอยู่ โรงเรียนบ้านวังหัวแหวนพัฒนา",
-    titleEn: "Campus Environment & Interactive Learning Spaces Development",
-    subtitle: "ปรับปรุงภูมิทัศน์และบรรยากาศสถานศึกษาให้เอื้อต่อการเรียนรู้ของนักเรียน",
-    subtitleEn: "Enhancing school grounds and vibrant student activity zones",
+    title: "โครงการปรับปรุงภูมิทัศน์โรงเรียนและห้องเรียนอัจฉริยะ เพื่อรองรับการเรียนรู้ยุคใหม่",
+    titleEn: "Campus Environment and Modern Learning Spaces Renovation Project",
+    subtitle: "พัฒนาสภาพแวดล้อม ป้ายสถานศึกษา และบรรยากาศที่ปลอดภัย สะอาด ร่มรื่น และน่าเรียนรู้",
+    subtitleEn: "Upgrading school grounds, entrance signs, and safe learning environment",
     category: "pr",
-    content: "โรงเรียนบ้านวังหัวแหวนพัฒนา ดำเนินการปรับปรุงภูมิทัศน์ ป้ายสถานศึกษา และพื้นที่กิจกรรมการเรียนรู้ เพื่อให้นักเรียนได้เรียนรู้ในบรรยากาศที่ปลอดภัย สะอาด ร่มรื่น และมีความสุขในการมาโรงเรียนทุกวัน",
-    contentEn: "Continuous enhancement of school entrance, gardens, and learning spaces to provide a clean, safe, and joyful educational atmosphere for all students.",
-    date: "2026-03-10",
+    content: "โรงเรียนบ้านวังหัวแหวนพัฒนา ดำเนินโครงการปรับปรุงภูมิทัศน์ ป้ายหน้าสถานศึกษา และสิ่งแวดล้อมรอบบริเวณ เพื่อสร้างบรรยากาศที่เอื้อต่อการเรียนรู้ สะอาด ร่มรื่น และปลอดภัย พร้อมส่งเสริมความสุขในการมาโรงเรียนของนักเรียนทุกคน",
+    contentEn: "School landscaping and signage upgrade project creating safe, clean, and vibrant educational spaces for students.",
+    date: "2026-06-25",
     author: "กลุ่มงานบริหารทั่วไป",
     imageUrl: "news/school_entrance_sign.jpg",
     isPinned: false,
     status: "published",
-    views: 95,
+    views: 110,
+    attachmentName: "",
+    attachmentUrl: "",
+    galleryUrls: ""
+  },
+  {
+    id: "news-2",
+    title: "กิจกรรมไหว้ครู ประจำปีการศึกษา 2569 'นอบน้อมวันทา บูชาคุณครู'",
+    titleEn: "Annual Wai Kru (Teacher Appreciation) Ceremony 2026",
+    subtitle: "พิธีแสดงความกตัญญูกตเวทิตาต่อครูอาจารย์ ผู้ประสิทธิ์ประสาทวิชาความรู้",
+    subtitleEn: "Students pay tribute and express respect to teachers and mentors",
+    category: "activity",
+    content: "โรงเรียนบ้านวังหัวแหวนพัฒนา จัดพิธีไหว้ครู ประจำปีการศึกษา 2569 เพื่อให้นักเรียนได้แสดงความเคารพ กตัญญูกตเวทิตาต่อคุณครูผู้ให้การอบรมสั่งสอน ปลูกฝังคุณธรรม จริยธรรม และความรู้สู่อนาคต",
+    contentEn: "Ban Wang Hua Waen Phatthana School held the annual Wai Kru ceremony for students to express gratitude to teachers.",
+    date: "2026-06-18",
+    author: "กลุ่มงานส่งเสริมกิจการนักเรียน",
+    imageUrl: "", // ไม่มีรูปจริง แสดงเป็นการ์ดข้อความทางการ (Text-only)
+    isPinned: false,
+    status: "published",
+    views: 84,
+    attachmentName: "",
+    attachmentUrl: "",
+    galleryUrls: ""
+  },
+  {
+    id: "news-1",
+    title: "การสมัครเข้าเรียนระดับชั้นอนุบาล และชั้นประถมศึกษาปีที่ 1 ประจำปีการศึกษา 2569",
+    titleEn: "Student Admissions for Kindergarten and Primary Grade 1 (Academic Year 2026)",
+    subtitle: "เปิดรับสมัครนักเรียนใหม่เพื่อเข้ารับการศึกษาที่มีคุณภาพและสร้างเสริมพัฒนาการรอบด้าน",
+    subtitleEn: "Enrolling new students for holistic development and academic excellence",
+    category: "announcement",
+    content: "โรงเรียนบ้านวังหัวแหวนพัฒนา เปิดรับสมัครนักเรียนใหม่เพื่อเข้าศึกษาในระดับชั้นอนุบาล 2 - 3 และชั้นประถมศึกษาปีที่ 1 ประจำปีการศึกษา 2569 ผู้ปกครองสามารถติดต่อยื่นใบสมัครได้ ณ ห้องสำนักงานผู้อำนวยการ ในวันและเวลาราชการ",
+    contentEn: "Admissions open for kindergarten and primary grade 1. Parents may contact the school office during official working hours.",
+    date: "2026-03-15",
+    author: "กลุ่มงานวิชาการและทะเบียน",
+    imageUrl: "", // ไม่มีรูปจริง แสดงเป็นการ์ดข้อความทางการ (Text-only)
+    isPinned: false,
+    status: "published",
+    views: 198,
     attachmentName: "",
     attachmentUrl: "",
     galleryUrls: ""
@@ -173,7 +272,7 @@ const DEFAULT_STAFF = {
   ]
 };
 
-// Helper to initialize local storage if it's empty
+// Helper to initialize local storage if it's empty and sanitize any mismatched cached entries
 const initializeStorage = () => {
   if (!localStorage.getItem(STORAGE_KEYS.SCHOOL_INFO)) {
     localStorage.setItem(STORAGE_KEYS.SCHOOL_INFO, JSON.stringify(DEFAULT_SCHOOL_INFO));
@@ -186,18 +285,23 @@ const initializeStorage = () => {
       const parsed = JSON.parse(existingNews);
       let changed = false;
       const updated = parsed.map(item => {
-        if (item.imageUrl && item.imageUrl.includes('fb_1560176759242385')) {
+        // Fix any legacy corrupted item where water truck had award/lunch images
+        if (item.id === 'fb_1560176759242385' && item.imageUrl && item.imageUrl.includes('school_award_honor')) {
           changed = true;
           return {
             ...item,
-            title: item.title.includes('กิจกรรมส่งเสริม') ? DEFAULT_NEWS[0].title : item.title,
-            titleEn: DEFAULT_NEWS[0].titleEn,
-            subtitle: item.subtitle.includes('ภาพบรรยากาศ') ? DEFAULT_NEWS[0].subtitle : item.subtitle,
-            subtitleEn: DEFAULT_NEWS[0].subtitleEn,
-            content: item.content.includes('ส่งเสริมศักยภาพ') ? DEFAULT_NEWS[0].content : item.content,
-            contentEn: DEFAULT_NEWS[0].contentEn,
-            imageUrl: 'news/school_award_honor.jpg',
-            galleryUrls: 'news/school_teachers_group.jpg,news/school_entrance_sign.jpg,news/fb_lunch_donation.jpg'
+            title: "ขอขอบคุณองค์การบริหารส่วนตำบลวังหามแห นำรถน้ำมาอนุเคราะห์ช่วยเหลือสถานศึกษา",
+            imageUrl: 'news/fb_1560176759242385.jpg',
+            galleryUrls: 'news/fb_1560176759242385_g1.jpg,news/fb_1560176759242385_g2.jpg,news/fb_1560176759242385_g3.jpg,news/fb_1560176759242385_g4.jpg'
+          };
+        }
+        // Fix admissions if it had award image
+        if (item.id === 'news-1' && item.imageUrl && item.imageUrl.includes('school_award_honor')) {
+          changed = true;
+          return {
+            ...item,
+            imageUrl: '',
+            galleryUrls: ''
           };
         }
         return item;
@@ -206,7 +310,7 @@ const initializeStorage = () => {
         localStorage.setItem(STORAGE_KEYS.NEWS, JSON.stringify(updated));
       }
     } catch (e) {
-      console.error("Error migrating news storage:", e);
+      console.error("Error sanitizing news storage:", e);
     }
   }
   if (!localStorage.getItem(STORAGE_KEYS.STAFF)) {
@@ -215,6 +319,7 @@ const initializeStorage = () => {
 };
 
 initializeStorage();
+
 
 export const dbService = {
   // --- Supabase Cloud Sync Operations ---
@@ -252,9 +357,28 @@ export const dbService = {
     }
   },
 
-  async syncFromCloud() {
+  // --- Real-time Sync Status State ---
+  _syncStatus: {
+    isSyncing: false,
+    lastSyncedAt: new Date(),
+    success: true,
+    error: null
+  },
+
+  getSyncStatus() {
+    return { ...this._syncStatus };
+  },
+
+  async triggerManualSync() {
+    return await this.syncFromCloud(true);
+  },
+
+  async syncFromCloud(forceEvent = false) {
     const config = this.getSupabaseConfig();
     if (!config) return null;
+
+    this._syncStatus.isSyncing = true;
+    window.dispatchEvent(new CustomEvent('school_sync_status_updated', { detail: { ...this._syncStatus } }));
 
     try {
       const res = await fetch(`${config.url}/rest/v1/school_portal_data?select=*`, {
@@ -288,8 +412,14 @@ export const dbService = {
         }
       });
 
-      if (hasChanges) {
-        console.log('Database synced from cloud successfully with changes.');
+      this._syncStatus.isSyncing = false;
+      this._syncStatus.lastSyncedAt = new Date();
+      this._syncStatus.success = true;
+      this._syncStatus.error = null;
+      window.dispatchEvent(new CustomEvent('school_sync_status_updated', { detail: { ...this._syncStatus } }));
+
+      if (hasChanges || forceEvent) {
+        console.log('Database synced from cloud successfully with updates.');
         window.dispatchEvent(new Event('school_db_updated'));
       } else {
         console.log('Database synced from cloud. No changes.');
@@ -297,9 +427,14 @@ export const dbService = {
       return true;
     } catch (e) {
       console.error('Failed to sync database from cloud:', e);
+      this._syncStatus.isSyncing = false;
+      this._syncStatus.success = false;
+      this._syncStatus.error = e.message;
+      window.dispatchEvent(new CustomEvent('school_sync_status_updated', { detail: { ...this._syncStatus } }));
       return false;
     }
   },
+
 
   async syncToCloud(storageKey, value) {
     const config = this.getSupabaseConfig();
