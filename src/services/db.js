@@ -13,11 +13,17 @@ const DEFAULT_SCHOOL_INFO = {
   name: "โรงเรียนบ้านวังหัวแหวนพัฒนา",
   nameEn: "Ban Wang Hua Waen Phatthana School",
   slogan: "การศึกษาดี มีวินัย ใฝ่เรียนรู้ คู่คุณธรรม",
+  sloganEn: "Quality Education, Strong Discipline, Eager to Learn, High Moral Integrity",
   region: "สำนักงานเขตพื้นที่การศึกษาประถมศึกษากำแพงเพชร เขต 2",
+  regionEn: "Kamphaeng Phet Primary Educational Service Area Office 2",
   directorName: "นายสุชาติ จันทร์บ้านโต้น",
+  directorNameEn: "Mr. Suchart Chanbantone",
   directorPosition: "ผู้อำนวยการสถานศึกษา โรงเรียนบ้านวังหัวแหวนพัฒนา",
+  directorPositionEn: "Director of Ban Wang Hua Waen Phatthana School",
   directorMsg: "ยินดีต้อนรับคณะข้าราชการครู นักเรียน ผู้ปกครอง และประชาชนผู้สนใจทุกท่าน เข้าสู่เว็บไซต์ทางการของโรงเรียนบ้านวังหัวแหวนพัฒนา สถานศึกษามุ่งมั่นพัฒนาคุณภาพการศึกษา ส่งเสริมคุณธรรม จริยธรรม และพัฒนาศักยภาพของผู้เรียนอย่างรอบด้าน เพื่อหล่อหลอมให้ผู้เรียนเป็นผู้มีความรู้คู่คุณธรรมและมีทักษะการดำเนินชีวิตในศตวรรษที่ 21",
+  directorMsgEn: "Welcome to the official website of Ban Wang Hua Waen Phatthana School. Our institution is dedicated to fostering academic excellence, moral integrity, and holistic student potential, nurturing well-rounded learners with knowledge, character, and 21st-century life skills.",
   address: "หมู่ที่ 6 ตำบลวังหามแห อำเภอขาณุวรลักษบุรี จังหวัดกำแพงเพชร 62140",
+  addressEn: "Moo 6, Wang Ham Hae Subdistrict, Khanu Woralaksaburi District, Kamphaeng Phet Province 62140, Thailand",
   phone: "0-5578-0246",
   email: "banwanghuawaen@g.obec.go.th", // standard OBEC school email format
   googleMapsUrl: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1916.872335714618!2d99.5433991!3d16.0787341!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e0bd8766db67f5%3A0x1b4e6a8c47261182!2z4LmC4Lij4LiH4LmA4Lij4Li14Lii4LiZ4Lia4LmJ4Liy4LiZ4Lin4Lix4LiH4Lir4Lix4Lin4LmB4Lir4Lin4LiZ4Lie4Lix4LiS4LiZ4Liy!5e0!3m2!1sth!2sth!4v1783505957256!5m2!1sth!2sth",
@@ -33,8 +39,11 @@ const DEFAULT_SCHOOL_INFO = {
     levels: 8 // อ.2 - ป.6
   },
   vision: "มุ่งพัฒนาผู้เรียนให้มีคุณภาพตามมาตรฐานการศึกษา สร้างเสริมคุณธรรมนำความรู้ ควบคู่เทคโนโลยี ร่วมใจสืบสานวัฒนธรรมไทย ใส่ใจสิ่งแวดล้อม น้อมนำปรัชญาของเศรษฐกิจพอเพียง",
+  visionEn: "Committed to developing learners in accordance with educational quality standards, promoting morality alongside academic knowledge and modern technology, preserving Thai heritage, fostering environmental responsibility, and embracing the Philosophy of Sufficiency Economy.",
   mission: "จัดการศึกษาตั้งแต่ระดับปฐมวัยถึงประถมศึกษาอย่างทั่วถึง พัฒนาระบบการเรียนรู้ เน้นผู้เรียนเป็นสำคัญ ส่งเสริมบุคลากรให้มีคุณภาพ และบริหารจัดการโดยชุมชนมีส่วนร่วม",
-  identity: "ยิ้มง่าย ไหว้สวย รวยน้ำใจ มีวินัยใฝ่การศึกษา ซึ่งเป็นจุดเน้นการหล่อหลอมพฤติกรรมพื้นฐานของเยาวชนและนักเรียนโรงเรียนบ้านวังหัวแหวนพัฒนาทุกคน"
+  missionEn: "Provide equitable and comprehensive education from early childhood through primary levels, enhance student-centered learning methodologies, advance faculty professional standards, and foster participatory school administration with community engagement.",
+  identity: "ยิ้มง่าย ไหว้สวย รวยน้ำใจ มีวินัยใฝ่การศึกษา ซึ่งเป็นจุดเน้นการหล่อหลอมพฤติกรรมพื้นฐานของเยาวชนและนักเรียนโรงเรียนบ้านวังหัวแหวนพัฒนาทุกคน",
+  identityEn: "Warm Smiles, Respectful Greetings, Generous Spirits, and Disciplined Learners — the fundamental character values instilled in every student at Ban Wang Hua Waen Phatthana School."
 };
 
 const DEFAULT_NEWS = [
@@ -218,54 +227,78 @@ const DEFAULT_NEWS = [
 const DEFAULT_STAFF = {
   director: {
     name: "นายสุชาติ จันทร์บ้านโต้น",
+    nameEn: "Mr. Suchart Chanbantone",
     position: "ผู้อำนวยการสถานศึกษา โรงเรียนบ้านวังหัวแหวนพัฒนา",
+    positionEn: "Director of Ban Wang Hua Waen Phatthana School",
     qualification: "ครุศาสตรมหาบัณฑิต (ค.ม.) สาขาการบริหารการศึกษา",
+    qualificationEn: "Master of Education (M.Ed.) in Educational Administration",
     email: "suchart.chan@g.obec.go.th",
     motto: "บริหารงานอย่างมีระบบ พัฒนาการเรียนรู้สู่สากล น้อมนำหลักปรัชญาเศรษฐกิจพอเพียง",
+    mottoEn: "Systematic administration, fostering 21st-century global learning, guided by the Sufficiency Economy Philosophy.",
     imageUrl: ""
   },
   teachers: [
     {
       id: "teacher-1",
       name: "นางพรพิมล อารีราษฎร์",
+      nameEn: "Mrs. Pornpimon Areerat",
       position: "ครู วิทยฐานะชำนาญการพิเศษ",
+      positionEn: "Senior Professional Level Teacher",
       duty: "ครูประจำชั้นประถมศึกษาปีที่ 5 - 6",
+      dutyEn: "Homeroom Teacher, Grades 5 - 6",
       qualification: "ศึกษาศาสตรบัณฑิต (ศษ.บ.) สาขาประถมศึกษา",
+      qualificationEn: "Bachelor of Education (B.Ed.) in Elementary Education",
       email: "pornpimon.a@g.obec.go.th",
       subject: "กลุ่มสาระการเรียนรู้ภาษาไทย และคณิตศาสตร์",
+      subjectEn: "Thai Language & Mathematics Department",
       gender: "female",
       imageUrl: ""
     },
     {
       id: "teacher-2",
       name: "นายเทวฤทธิ์ มะลิวรรณ",
+      nameEn: "Mr. Tewarit Maliwan",
       position: "ครู วิทยฐานะชำนาญการ",
+      positionEn: "Professional Level Teacher",
       duty: "ครูประจำชั้นประถมศึกษาปีที่ 3 - 4",
+      dutyEn: "Homeroom Teacher, Grades 3 - 4",
       qualification: "ครุศาสตรบัณฑิต (ค.บ.) สาขาคอมพิวเตอร์ศึกษา",
+      qualificationEn: "Bachelor of Education (B.Ed.) in Computer Education",
       email: "tewarit.m@g.obec.go.th",
       subject: "กลุ่มสาระการเรียนรู้วิทยาศาสตร์และเทคโนโลยี",
+      subjectEn: "Science & Technology Department",
       gender: "male",
       imageUrl: ""
     },
     {
       id: "teacher-3",
       name: "นางสาวศิริลักษณ์ ดีพร้อม",
+      nameEn: "Ms. Sirilak Deeprom",
       position: "ครูผู้ช่วย",
+      positionEn: "Assistant Teacher",
       duty: "ครูประจำชั้นประถมศึกษาปีที่ 1 - 2",
+      dutyEn: "Homeroom Teacher, Grades 1 - 2",
       qualification: "ครุศาสตรบัณฑิต (ค.บ.) สาขาภาษาอังกฤษ",
+      qualificationEn: "Bachelor of Education (B.Ed.) in English Education",
       email: "sirilak.d@g.obec.go.th",
       subject: "กลุ่มสาระการเรียนรู้ภาษาต่างประเทศ (ภาษาอังกฤษ)",
+      subjectEn: "Foreign Language Department (English)",
       gender: "female",
       imageUrl: ""
     },
     {
       id: "teacher-4",
       name: "นางสาวณิชนันทน์ แก้ววิเศษ",
+      nameEn: "Ms. Nichanan Kaewwiset",
       position: "ครูอัตราจ้าง",
+      positionEn: "Contract Teacher",
       duty: "ครูประจำชั้นปฐมวัย (อนุบาล 2 - 3)",
+      dutyEn: "Early Childhood Teacher (Kindergarten 2 - 3)",
       qualification: "ครุศาสตรบัณฑิต (ค.บ.) สาขาการศึกษาปฐมวัย",
+      qualificationEn: "Bachelor of Education (B.Ed.) in Early Childhood Education",
       email: "nichanan.k@g.obec.go.th",
       subject: "กลุ่มกิจกรรมพัฒนาผู้เรียนและระดับปฐมวัย",
+      subjectEn: "Early Childhood & Student Development Department",
       gender: "female",
       imageUrl: ""
     }
@@ -274,9 +307,26 @@ const DEFAULT_STAFF = {
 
 // Helper to initialize local storage if it's empty and sanitize any mismatched cached entries
 const initializeStorage = () => {
-  if (!localStorage.getItem(STORAGE_KEYS.SCHOOL_INFO)) {
+  const existingSchoolInfo = localStorage.getItem(STORAGE_KEYS.SCHOOL_INFO);
+  if (!existingSchoolInfo) {
     localStorage.setItem(STORAGE_KEYS.SCHOOL_INFO, JSON.stringify(DEFAULT_SCHOOL_INFO));
+  } else {
+    try {
+      const parsed = JSON.parse(existingSchoolInfo);
+      let changed = false;
+      const enKeys = ['nameEn', 'sloganEn', 'regionEn', 'directorNameEn', 'directorPositionEn', 'directorMsgEn', 'addressEn', 'visionEn', 'missionEn', 'identityEn'];
+      enKeys.forEach(k => {
+        if (!parsed[k] && DEFAULT_SCHOOL_INFO[k]) {
+          parsed[k] = DEFAULT_SCHOOL_INFO[k];
+          changed = true;
+        }
+      });
+      if (changed) {
+        localStorage.setItem(STORAGE_KEYS.SCHOOL_INFO, JSON.stringify(parsed));
+      }
+    } catch (_) {}
   }
+
   const existingNews = localStorage.getItem(STORAGE_KEYS.NEWS);
   if (!existingNews) {
     localStorage.setItem(STORAGE_KEYS.NEWS, JSON.stringify(DEFAULT_NEWS));
@@ -323,6 +373,14 @@ const initializeStorage = () => {
             galleryUrls: ''
           };
         }
+
+        // Hydrate English fields from DEFAULT_NEWS if missing
+        const defMatch = DEFAULT_NEWS.find(dn => dn.id === item.id);
+        if (defMatch) {
+          if (!item.titleEn && defMatch.titleEn) { item.titleEn = defMatch.titleEn; changed = true; }
+          if (!item.subtitleEn && defMatch.subtitleEn) { item.subtitleEn = defMatch.subtitleEn; changed = true; }
+          if (!item.contentEn && defMatch.contentEn) { item.contentEn = defMatch.contentEn; changed = true; }
+        }
         return item;
       });
       if (changed) {
@@ -332,8 +390,48 @@ const initializeStorage = () => {
       console.error("Error sanitizing news storage:", e);
     }
   }
-  if (!localStorage.getItem(STORAGE_KEYS.STAFF)) {
+
+  const existingStaff = localStorage.getItem(STORAGE_KEYS.STAFF);
+  if (!existingStaff) {
     localStorage.setItem(STORAGE_KEYS.STAFF, JSON.stringify(DEFAULT_STAFF));
+  } else {
+    try {
+      const parsed = JSON.parse(existingStaff);
+      let changed = false;
+      if (parsed.director && !parsed.director.nameEn) {
+        parsed.director = {
+          ...DEFAULT_STAFF.director,
+          ...parsed.director,
+          nameEn: DEFAULT_STAFF.director.nameEn,
+          positionEn: DEFAULT_STAFF.director.positionEn,
+          qualificationEn: DEFAULT_STAFF.director.qualificationEn,
+          mottoEn: DEFAULT_STAFF.director.mottoEn
+        };
+        changed = true;
+      }
+      if (Array.isArray(parsed.teachers)) {
+        parsed.teachers = parsed.teachers.map((t, idx) => {
+          const defT = DEFAULT_STAFF.teachers[idx] || DEFAULT_STAFF.teachers.find(dt => dt.id === t.id);
+          if (defT) {
+            if (!t.nameEn || !t.positionEn || !t.dutyEn || !t.qualificationEn || !t.subjectEn) {
+              changed = true;
+            }
+            return {
+              ...t,
+              nameEn: t.nameEn || defT.nameEn,
+              positionEn: t.positionEn || defT.positionEn,
+              dutyEn: t.dutyEn || defT.dutyEn,
+              qualificationEn: t.qualificationEn || defT.qualificationEn,
+              subjectEn: t.subjectEn || defT.subjectEn
+            };
+          }
+          return t;
+        });
+      }
+      if (changed) {
+        localStorage.setItem(STORAGE_KEYS.STAFF, JSON.stringify(parsed));
+      }
+    } catch (_) {}
   }
 };
 

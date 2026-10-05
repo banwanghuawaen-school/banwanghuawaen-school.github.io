@@ -109,7 +109,7 @@ export default function NewsCard({ item, onClick, lang = 'th' }) {
             {getCategoryBadge(item.category)}
             {galleryList.length > 0 && (
               <span className="badge badge-gallery-count">
-                <ImageIcon size={11} /> +{galleryList.length} รูป
+                <ImageIcon size={11} /> +{galleryList.length} {isEn ? 'photos' : 'รูป'}
               </span>
             )}
           </div>

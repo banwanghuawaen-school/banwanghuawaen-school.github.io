@@ -3,7 +3,7 @@
  * สคริปต์ดึงโพสต์และรูปภาพจาก Facebook ของโรงเรียนเข้าสู่ Supabase อัตโนมัติ
  * - ดึงรูปภาพจริงจาก Facebook CDN แล้วเซฟลง public/news/
  * - โพสต์ไหนไม่มีรูปจริง ก็แสดงเป็นข้อความอย่างเดียว (ไม่ใช้รูป AI)
- * - ทำงานบน GitHub Actions ทุกๆ 2 ชั่วโมง หรือสั่งรันแบบ Manual
+ * - ทำงานบน GitHub Actions ทุกๆ 30 นาที หรือสั่งรันแบบ Manual
  * ==============================================================================
  */
 
@@ -342,8 +342,11 @@ async function syncPostsToSupabase(posts) {
     const newItem = {
       id: post.id,
       title: title,
+      titleEn: title,
       subtitle: subtitle,
+      subtitleEn: subtitle,
       content: content,
+      contentEn: content,
       date: post.created_time || new Date().toISOString().split('T')[0],
       category: 'activity',
       imageUrl: localImagePath,  // ใช้ path ของไฟล์ local แทน CDN link
@@ -368,8 +371,11 @@ async function syncPostsToSupabase(posts) {
         ...existing,
         id: post.id,
         title: title,
+        titleEn: existing.titleEn || title,
         subtitle: subtitle,
+        subtitleEn: existing.subtitleEn || subtitle,
         content: content,
+        contentEn: existing.contentEn || content,
         imageUrl: bestImage,
         galleryUrls: bestGallery,
         fbUrl: post.permalink

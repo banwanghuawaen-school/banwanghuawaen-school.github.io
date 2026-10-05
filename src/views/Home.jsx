@@ -457,8 +457,8 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
                       <div className="director-crest-symbol">
                         <Award size={48} />
                       </div>
-                      <p className="director-seal-text">{schoolInfo?.directorName || 'นายสุชาติ จันทร์บ้านโต้น'}</p>
-                      <span className="director-seal-sub">ผู้อำนวยการสถานศึกษา</span>
+                      <p className="director-seal-text">{isEn ? (schoolInfo?.directorNameEn || 'Mr. Suchart Chanbantone') : (schoolInfo?.directorName || 'นายสุชาติ จันทร์บ้านโต้น')}</p>
+                      <span className="director-seal-sub">{isEn ? 'School Director' : 'ผู้อำนวยการสถานศึกษา'}</span>
                     </div>
                   )}
                   
@@ -469,9 +469,9 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
                 </div>
 
                 <div className="editorial-director-meta">
-                  <h4 className="editorial-name">{schoolInfo?.directorName}</h4>
-                  <p className="editorial-position">{isEn ? 'School Director' : schoolInfo?.directorPosition}</p>
-                  <p className="editorial-org">{schoolInfo?.region}</p>
+                  <h4 className="editorial-name">{isEn ? (schoolInfo?.directorNameEn || 'Mr. Suchart Chanbantone') : schoolInfo?.directorName}</h4>
+                  <p className="editorial-position">{isEn ? (schoolInfo?.directorPositionEn || 'School Director') : schoolInfo?.directorPosition}</p>
+                  <p className="editorial-org">{isEn ? (schoolInfo?.regionEn || 'Kamphaeng Phet Primary Educational Service Area Office 2') : schoolInfo?.region}</p>
                 </div>
               </div>
 
@@ -489,16 +489,18 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
                 <div className="editorial-quote-container">
                   <div className="quote-mark-large">“</div>
                   <blockquote className="editorial-quote-body">
-                    {schoolInfo?.directorMsg}
+                    {isEn 
+                      ? (schoolInfo?.directorMsgEn || "Ban Wang Hua Waen Phatthana School is dedicated to fostering academic excellence, moral integrity, and lifelong learning competencies in every student, through collaborative education and strong community partnership.") 
+                      : schoolInfo?.directorMsg}
                   </blockquote>
                 </div>
 
                 <div className="editorial-sign-block">
                   <div className="sign-signature-line">
-                    <span className="director-sign-name">({schoolInfo?.directorName})</span>
+                    <span className="director-sign-name">({isEn ? (schoolInfo?.directorNameEn || 'Mr. Suchart Chanbantone') : schoolInfo?.directorName})</span>
                   </div>
-                  <p className="director-sign-title">{schoolInfo?.directorPosition}</p>
-                  <p className="director-sign-subtitle">โรงเรียนบ้านวังหัวแหวนพัฒนา</p>
+                  <p className="director-sign-title">{isEn ? (schoolInfo?.directorPositionEn || 'School Director') : schoolInfo?.directorPosition}</p>
+                  <p className="director-sign-subtitle">{isEn ? (schoolInfo?.nameEn || 'Ban Wang Hua Waen Phatthana School') : 'โรงเรียนบ้านวังหัวแหวนพัฒนา'}</p>
                 </div>
               </div>
 
@@ -539,7 +541,9 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
               </div>
               <h3 className="pillar-title">{isEn ? 'Vision' : 'วิสัยทัศน์ (Vision)'}</h3>
               <p className="pillar-body">
-                {schoolInfo?.vision || 'มุ่งพัฒนาผู้เรียนให้มีคุณภาพตามมาตรฐานการศึกษา สร้างเสริมคุณธรรมนำความรู้ ควบคู่เทคโนโลยี ร่วมใจสืบสานวัฒนธรรมไทย ใส่ใจสิ่งแวดล้อม น้อมนำปรัชญาของเศรษฐกิจพอเพียง'}
+                {isEn 
+                  ? (schoolInfo?.visionEn || 'Committed to developing learners in accordance with educational quality standards, promoting morality alongside academic knowledge and modern technology, preserving Thai heritage, fostering environmental responsibility, and embracing the Philosophy of Sufficiency Economy.') 
+                  : (schoolInfo?.vision || 'มุ่งพัฒนาผู้เรียนให้มีคุณภาพตามมาตรฐานการศึกษา สร้างเสริมคุณธรรมนำความรู้ ควบคู่เทคโนโลยี ร่วมใจสืบสานวัฒนธรรมไทย ใส่ใจสิ่งแวดล้อม น้อมนำปรัชญาของเศรษฐกิจพอเพียง')}
               </p>
             </div>
 
@@ -553,7 +557,9 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
               </div>
               <h3 className="pillar-title">{isEn ? 'Mission' : 'พันธกิจ (Mission)'}</h3>
               <p className="pillar-body">
-                {schoolInfo?.mission || 'จัดการศึกษาตั้งแต่ระดับปฐมวัยถึงประถมศึกษาอย่างทั่วถึง พัฒนาระบบการเรียนรู้ เน้นผู้เรียนเป็นสำคัญ ส่งเสริมบุคลากรให้มีคุณภาพ และบริหารจัดการโดยชุมชนมีส่วนร่วม'}
+                {isEn 
+                  ? (schoolInfo?.missionEn || 'Provide equitable and comprehensive education from early childhood through primary levels, enhance student-centered learning methodologies, advance faculty professional standards, and foster participatory school administration with community engagement.') 
+                  : (schoolInfo?.mission || 'จัดการศึกษาตั้งแต่ระดับปฐมวัยถึงประถมศึกษาอย่างทั่วถึง พัฒนาระบบการเรียนรู้ เน้นผู้เรียนเป็นสำคัญ ส่งเสริมบุคลากรให้มีคุณภาพ และบริหารจัดการโดยชุมชนมีส่วนร่วม')}
               </p>
             </div>
 
@@ -567,7 +573,9 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
               </div>
               <h3 className="pillar-title">{isEn ? 'Identity' : 'อัตลักษณ์สถานศึกษา (Identity)'}</h3>
               <p className="pillar-body">
-                {schoolInfo?.identity || 'ยิ้มง่าย ไหว้สวย รวยน้ำใจ มีวินัยใฝ่การศึกษา ซึ่งเป็นจุดเน้นการหล่อหลอมพฤติกรรมพื้นฐานของเยาวชนและนักเรียนโรงเรียนบ้านวังหัวแหวนพัฒนาทุกคน'}
+                {isEn 
+                  ? (schoolInfo?.identityEn || '“Warm Smiles, Respectful Greetings, Generous Spirits, and Disciplined Learners” — Core behavioural foundations nurtured in every student.') 
+                  : (schoolInfo?.identity || 'ยิ้มง่าย ไหว้สวย รวยน้ำใจ มีวินัยใฝ่การศึกษา ซึ่งเป็นจุดเน้นการหล่อหลอมพฤติกรรมพื้นฐานของเยาวชนและนักเรียนโรงเรียนบ้านวังหัวแหวนพัฒนาทุกคน')}
               </p>
             </div>
 

@@ -108,7 +108,7 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
                 title={isEn ? "Default Colors" : "สีปกติ"}
                 aria-label="Default colors"
               >
-                ก
+                {isEn ? 'A' : 'ก'}
               </button>
               <button 
                 type="button"
@@ -117,7 +117,7 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
                 title={isEn ? "White on Black" : "ขาว-ดำ"}
                 aria-label="White on black"
               >
-                ก
+                {isEn ? 'A' : 'ก'}
               </button>
               <button 
                 type="button"
@@ -126,13 +126,13 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
                 title={isEn ? "Yellow on Black" : "เหลือง-ดำ"}
                 aria-label="Yellow on black"
               >
-                ก
+                {isEn ? 'A' : 'ก'}
               </button>
             </div>
 
             <div className="top-divider-small"></div>
 
-            {/* Font Size Buttons: (-) (ก) (+) */}
+            {/* Font Size Buttons: (-) (ก / A) (+) */}
             <div className="font-size-pills">
               <button 
                 type="button"
@@ -150,7 +150,7 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
                 title={isEn ? "Normal Font Size" : "ขนาดตัวอักษรปกติ"}
                 aria-label="Normal font size"
               >
-                ก
+                {isEn ? 'A' : 'ก'}
               </button>
               <button 
                 type="button"
@@ -194,7 +194,7 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="top-social-link"
-                title="เพจเฟซบุ๊กโรงเรียนบ้านวังหัวแหวนพัฒนา"
+                title={isEn ? "School Facebook Page" : "เพจเฟซบุ๊กโรงเรียนบ้านวังหัวแหวนพัฒนา"}
               >
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
@@ -225,7 +225,7 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
             <div className="school-logo-frame">
               <img 
                 src={schoolInfo && schoolInfo.logoUrl ? schoolInfo.logoUrl : 'logo.jpg'} 
-                alt="ตราสัญลักษณ์โรงเรียน" 
+                alt={isEn ? "School Crest" : "ตราสัญลักษณ์โรงเรียน"} 
                 className="school-logo-img" 
               />
             </div>
@@ -246,7 +246,7 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
           <button 
             className="mobile-hamburger-btn" 
             onClick={() => setIsOpen(!isOpen)} 
-            aria-label="เปิดเมนูนำทาง"
+            aria-label={isEn ? "Toggle navigation menu" : "เปิดเมนูนำทาง"}
           >
             {isOpen ? <X size={26} /> : <Menu size={26} />}
           </button>

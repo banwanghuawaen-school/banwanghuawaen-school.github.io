@@ -18,11 +18,13 @@ import {
   Tag
 } from 'lucide-react';
 
-export default function CampusMap() {
+export default function CampusMap({ lang = 'th' }) {
   const [selectedZone, setSelectedZone] = useState('b1'); // default to Main Building 1
   const [activeCategory, setActiveCategory] = useState('all');
   const [isNightMode, setIsNightMode] = useState(false);
   const [showLabels, setShowLabels] = useState(true);
+
+  const isEn = lang === 'en';
 
   const campusZones = {
     b1: {
@@ -32,16 +34,26 @@ export default function CampusMap() {
       name: 'อาคาร 1 (อาคารเรียนหลักวังพัฒนา)',
       nameEn: 'Building 1 (Main Academic Building)',
       type: 'อาคารเรียนมาตรฐาน 2 ชั้น ขนาดใหญ่',
+      typeEn: 'Two-Story Standard Academic Building',
       color: '#8b5cf6',
       badgeText: 'อาคารหลัก',
+      badgeTextEn: 'Main Building',
       desc: 'อาคารเรียน 2 ชั้น ขนาดใหญ่ ศูนย์กลางการจัดการเรียนการสอนระดับประถมศึกษา พร้อมระบบห้องเรียนคุณภาพและศูนย์เทคโนโลยีสารสนเทศเพื่อการศึกษา',
+      descEn: 'Two-story primary educational building featuring quality classrooms, digital labs, and the educational media technology hub.',
       highlights: [
         'ชั้นที่ 1: ห้องพักครู, ห้องธุรการ-การเงิน, ห้องเรียนชั้น ป.1 - ป.3',
         'ชั้นที่ 2: ห้องเรียนชั้น ป.4 - ป.6, ห้องปฏิบัติการคอมพิวเตอร์และสื่อการเรียนรู้ทางไกลผ่านดาวเทียม (DLTV)',
         'ติดตั้งระบบ Smart TV และเครือข่ายสัญญาณอินเทอร์เน็ตความเร็วสูงทุกห้องเรียน'
       ],
+      highlightsEn: [
+        '1st Floor: Faculty lounge, administration office, classrooms for Grades 1 - 3',
+        '2nd Floor: Classrooms for Grades 4 - 6, computer lab, and DLTV distance learning center',
+        'Equipped with 4K Smart TVs and high-speed campus internet in every room'
+      ],
       facilities: ['ห้องเรียนประถม 6 ห้อง', 'ห้องพักครูและธุรการ', 'ห้องปฏิบัติการคอมพิวเตอร์'],
-      area: '280 ตร.ม.'
+      facilitiesEn: ['6 Primary Classrooms', 'Faculty & Admin Lounge', 'Modern Computer Lab'],
+      area: '280 ตร.ม.',
+      areaEn: '280 sq.m.'
     },
     b2: {
       id: 'b2',
@@ -50,16 +62,26 @@ export default function CampusMap() {
       name: 'อาคาร 2 (ศูนย์การเรียนรู้สร้างสรรค์)',
       nameEn: 'Building 2 (Creative Learning Center)',
       type: 'อาคารเรียน 1 ชั้น โครงสร้างมาตรฐาน',
+      typeEn: 'One-Story Standard Creative Learning Center',
       color: '#f97316',
       badgeText: 'อาคาร 2',
+      badgeTextEn: 'Building 2',
       desc: 'อาคารจัดกิจกรรมการเรียนรู้และแหล่งค้นคว้าเฉพาะทาง รองรับการพัฒนาทักษะวิชาการ การศึกษาค้นคว้า และการดูแลสุขอนามัยของผู้เรียน',
+      descEn: 'Dedicated center for specialized learning, scientific experimentation, student research, and healthcare services.',
       highlights: [
         'ห้องสมุดมีชีวิตและศูนย์วิทยบริการสถานศึกษา',
         'ห้องปฏิบัติการวิทยาศาสตร์พื้นฐานและโครงงานนักเรียน',
         'ห้องพยาบาลมาตรฐาน พร้อมอุปกรณ์และเวชภัณฑ์ปฐมพยาบาลเบื้องต้น'
       ],
+      highlightsEn: [
+        'Living school library and instructional resource center',
+        'Basic science laboratory and STEM project station',
+        'First-aid infirmary equipped with medical supplies'
+      ],
       facilities: ['ห้องสมุดมีชีวิต', 'มุมวิทยาศาสตร์', 'ห้องพยาบาล'],
-      area: '160 ตร.ม.'
+      facilitiesEn: ['Living Library', 'Science Corner', 'School Infirmary'],
+      area: '160 ตร.ม.',
+      areaEn: '160 sq.m.'
     },
     kindergarten: {
       id: 'kindergarten',
@@ -68,17 +90,28 @@ export default function CampusMap() {
       name: 'อาคารเรียนปฐมวัย (อนุบาล) & ห้องผู้อำนวยการสถานศึกษา',
       nameEn: 'Early Childhood Center & Director Office',
       type: 'อาคารเรียนปฐมวัยและห้องปฏิบัติงานผู้บริหาร',
+      typeEn: 'Early Childhood & Director Executive Suite',
       color: '#f43f5e',
       badgeText: 'อนุบาล & ผู้อำนวยการ',
+      badgeTextEn: 'Kindergarten & Director',
       desc: 'อาคารเรียนระดับปฐมวัย (อนุบาล 2 - อนุบาล 3) พร้อมห้องปฏิบัติงานผู้อำนวยการสถานศึกษา ออกแบบตามมาตรฐานความปลอดภัยและเอื้อต่อพัฒนาการของผู้เรียน',
+      descEn: 'Kindergarten classrooms (K2 - K3) and School Director executive office, designed for child safety and brain development.',
       highlights: [
         'ห้องเรียนระดับปฐมวัยพร้อมสื่อส่งเสริมพัฒนาการกล้ามเนื้อและทักษะสมอง',
         'มุมส่งเสริมการอ่านและพื้นที่กิจกรรมสร้างสรรค์ตามหลัก BBL',
         'ห้องปฏิบัติงานผู้อำนวยการสถานศึกษา',
         'สภาพแวดล้อมร่มรื่นด้วยพรรณไม้ธรรมชาติเพื่อสุขภาวะที่ดี'
       ],
+      highlightsEn: [
+        'Kindergarten classrooms with sensory and motor-skill development toys',
+        'BBL reading and creative learning stations',
+        'School Director executive office',
+        'Surrounded by shaded natural gardens'
+      ],
       facilities: ['ห้องเรียนระดับปฐมวัย', 'ห้องผู้อำนวยการสถานศึกษา', 'มุมส่งเสริมพัฒนาการ BBL'],
-      area: '190 ตร.ม.'
+      facilitiesEn: ['Early Childhood Rooms', 'Director Office', 'BBL Play Corner'],
+      area: '190 ตร.ม.',
+      areaEn: '190 sq.m.'
     },
     canteen: {
       id: 'canteen',
@@ -87,16 +120,26 @@ export default function CampusMap() {
       name: 'อาคารโรงอาหารสถานศึกษา',
       nameEn: 'School Cafeteria & Nutrition Hall',
       type: 'อาคารบริการโภชนาการนักเรียน',
+      typeEn: 'Nutritional Dining Hall',
       color: '#f59e0b',
       badgeText: 'โรงอาหาร',
+      badgeTextEn: 'Cafeteria',
       desc: 'สถานที่ประกอบอาหารและบริการอาหารกลางวันสำหรับนักเรียนและบุคลากร สะอาด ถูกสุขอนามัยตามเกณฑ์มาตรฐานสุขาภิบาลอาหาร สพฐ.',
+      descEn: 'Food preparation and dining pavilion providing hygienic, balanced, and nutritious lunch meals for all students and staff.',
       highlights: [
         'โรงครัวมาตรฐาน ปรุงอาหารสดใหม่ สะอาด ถูกหลักโภชนาการทุกวันราชการ',
         'โต๊ะรับประทานอาหารเป็นระเบียบสำหรับนักเรียนทุกระดับชั้น',
         'จุดล้างมือน้ำไหลและจุดส่งเสริมสุขอนามัยประจำสถานศึกษา'
       ],
+      highlightsEn: [
+        'Standardized kitchen preparing fresh, balanced daily meals',
+        'Orderly dining tables accommodating all student cohorts',
+        'Running water hand-wash stations promoting hygiene'
+      ],
       facilities: ['โรงครัวมาตรฐาน สพฐ.', 'โต๊ะรับประทานอาหาร', 'จุดล้างมือน้ำไหล'],
-      area: '140 ตร.ม.'
+      facilitiesEn: ['Standard OBEC Kitchen', 'Dining Tables', 'Handwash Stations'],
+      area: '140 ตร.ม.',
+      areaEn: '140 sq.m.'
     },
     welfare: {
       id: 'welfare',
@@ -105,16 +148,26 @@ export default function CampusMap() {
       name: 'ร้านค้าสวัสดิการและสหกรณ์นักเรียน',
       nameEn: 'Welfare & Student Cooperative Store',
       type: 'อาคารบริการสวัสดิการทางการศึกษา',
+      typeEn: 'Cooperative Welfare Store',
       color: '#a855f7',
       badgeText: 'ร้านสวัสดิการ',
+      badgeTextEn: 'Welfare Store',
       desc: 'ร้านค้าสวัสดิการและกิจกรรมสหกรณ์นักเรียน จำหน่ายแบบเรียน เครื่องเขียน อุปกรณ์การศึกษา และอาหารว่างที่มีคุณค่าทางโภชนาการ',
+      descEn: 'Student cooperative store selling textbooks, stationery, school supplies, and healthy nutritional snacks.',
       highlights: [
         'แหล่งฝึกปฏิบัติจริงด้านทักษะอาชีพและการทำบัญชีสหกรณ์นักเรียน',
         'จำหน่ายอุปกรณ์การเรียนราคายุติธรรมเพื่อแบ่งเบาภาระผู้ปกครอง',
         'บริการเครื่องดื่มและนมโรงเรียนคุณภาพ'
       ],
+      highlightsEn: [
+        'Practical vocational training in cooperative accounting',
+        'Fair-price school supplies to ease parental burdens',
+        'Quality school milk and hydration station'
+      ],
       facilities: ['ร้านค้าสหกรณ์', 'มุมเครื่องเขียน', 'มุมอาหารว่างถูกสุขลักษณะ'],
-      area: '45 ตร.ม.'
+      facilitiesEn: ['Cooperative Store', 'Stationery Corner', 'Nutritional Snacks'],
+      area: '45 ตร.ม.',
+      areaEn: '45 sq.m.'
     },
     restroom1: {
       id: 'restroom1',
@@ -123,16 +176,26 @@ export default function CampusMap() {
       name: 'อาคารสุขา (โซนร้านค้าสวัสดิการ)',
       nameEn: 'Sanitary Restroom Zone A',
       type: 'อาคารสุขอนามัย',
+      typeEn: 'Hygiene Restroom Complex A',
       color: '#ea580c',
       badgeText: 'สุขา โซน 1',
+      badgeTextEn: 'Restrooms A',
       desc: 'อาคารสุขาสำหรับนักเรียนระดับปฐมวัยและผู้มาติดต่อราชการ แยกสัดส่วนชาย-หญิง สะอาด ปลอดภัย และถูกสุขลักษณะ',
+      descEn: 'Sanitary restrooms for kindergarten students and official visitors, gender-segregated, clean, and safe.',
       highlights: [
         'แยกสัดส่วนห้องน้ำชาย-หญิงชัดเจน ปลอดภัย',
         'สุขภัณฑ์สำหรับเด็กปฐมวัยเพื่อความสะดวกสบาย',
         'เจ้าหน้าที่ดูแลทำความสะอาดสม่ำเสมอ'
       ],
+      highlightsEn: [
+        'Clearly separated, safe male/female facilities',
+        'Child-sized fixtures for kindergarten convenience',
+        'Regular cleaning and sanitization regimen'
+      ],
       facilities: ['ห้องน้ำชาย', 'ห้องน้ำหญิง', 'อ่างล้างมือพร้อมสบู่'],
-      area: '35 ตร.ม.'
+      facilitiesEn: ['Male Restrooms', 'Female Restrooms', 'Soap Dispensers & Sinks'],
+      area: '35 ตร.ม.',
+      areaEn: '35 sq.m.'
     },
     restroom2: {
       id: 'restroom2',
@@ -141,16 +204,26 @@ export default function CampusMap() {
       name: 'อาคารสุขา (โซนอาคารเรียน 2)',
       nameEn: 'Sanitary Restroom Zone B',
       type: 'อาคารสุขอนามัย',
+      typeEn: 'Hygiene Restroom Complex B',
       color: '#0284c7',
       badgeText: 'สุขา โซน 2',
+      badgeTextEn: 'Restrooms B',
       desc: 'อาคารสุขาหลักสำหรับนักเรียนระดับประถมศึกษาและข้าราชการครู ตั้งอยู่ทางทิศตะวันออกติดกับอาคารเรียน 2',
+      descEn: 'Main sanitary restroom building for primary students and faculty, located on the eastern side adjacent to Building 2.',
       highlights: [
         'ห้องสุขามาตรฐานและจุดชำระร่างกายหลังกิจกรรมพลศึกษา',
         'ระบบประหยัดน้ำและสุขภัณฑ์ประหยัดพลังงาน',
         'รองรับการใช้งานช่วงพักกลางวันได้อย่างมีประสิทธิภาพ'
       ],
+      highlightsEn: [
+        'Hygienic restrooms and shower facilities for physical education',
+        'Water-saving sanitary fixtures',
+        'High-capacity design accommodating lunch-hour volume'
+      ],
       facilities: ['ห้องสุขาประถม', 'จุดอาบน้ำนักกีฬา', 'อ่างล้างมือสุขอนามัย'],
-      area: '50 ตร.ม.'
+      facilitiesEn: ['Primary Restrooms', 'Athlete Showers', 'Sanitary Washbasins'],
+      area: '50 ตร.ม.',
+      areaEn: '50 sq.m.'
     },
     parking: {
       id: 'parking',
@@ -159,16 +232,26 @@ export default function CampusMap() {
       name: 'ลานจอดรถสถานศึกษา',
       nameEn: 'Official Parking Complex',
       type: 'พื้นที่จอดรถยนต์และจักรยานยนต์',
+      typeEn: 'Vehicle & Motorcycle Parking',
       color: '#db2777',
       badgeText: 'ลานจอดรถ',
+      badgeTextEn: 'Parking Lot',
       desc: 'พื้นที่จอดรถยนต์และจักรยานยนต์ สำหรับข้าราชการครู บุคลากรทางการศึกษา และผู้เดินทางมาติดต่อราชการ',
+      descEn: 'Designated parking for faculty, administrative staff, and official visitors to the school.',
       highlights: [
         'ช่องจอดรถยนต์และช่องจอดรถจักรยานยนต์เป็นระเบียบเรียบร้อย',
         'เส้นทางสัญจรสะดวก เชื่อมต่อกับถนนภายในสถานศึกษา',
         'ระบบไฟส่องสว่างเวลากลางคืนเพื่อความปลอดภัย'
       ],
+      highlightsEn: [
+        'Marked car parking bays and motorcycle parking stalls',
+        'Convenient access roads connecting internal campus pathways',
+        'Night-time security lighting for campus safety'
+      ],
       facilities: ['ช่องจอดรถยนต์บุคลากร', 'ช่องจอดรถผู้มาติดต่อราชการ', 'ที่จอดรถจักรยานยนต์'],
-      area: '180 ตร.ม.'
+      facilitiesEn: ['Faculty Parking', 'Visitor Parking', 'Motorcycle Bays'],
+      area: '180 ตร.ม.',
+      areaEn: '180 sq.m.'
     },
     football: {
       id: 'football',
@@ -177,16 +260,26 @@ export default function CampusMap() {
       name: 'สนามฟุตบอลสถานศึกษา (สนามหญ้ามาตรฐาน)',
       nameEn: 'Main Football Field',
       type: 'สนามกีฬากลางแจ้งขนาดใหญ่',
+      typeEn: 'Outdoor Turf Athletic Field',
       color: '#22c55e',
       badgeText: 'สนามบอล',
+      badgeTextEn: 'Football Field',
       desc: 'สนามฟุตบอลหญ้าธรรมชาติขนาดมาตรฐาน ศูนย์กลางการจัดกิจกรรมกลางแจ้ง การแข่งขันกีฬา และการส่งเสริมสุขภาพพลานามัย',
+      descEn: 'Natural turf football field serving as the central venue for outdoor sports, morning athletics, and health education.',
       highlights: [
         'สนามหญ้าตัดแต่งเรียบสม่ำเสมอ พร้อมเส้นเขตสนามชัดเจน',
         'ประตูฟุตบอลมาตรฐานพร้อมตาข่าย ปลอดภัย',
         'ใช้ในการจัดการเรียนรู้กลุ่มสาระสุขศึกษาและพลศึกษา'
       ],
+      highlightsEn: [
+        'Evenly trimmed grass field with official pitch boundary markings',
+        'Standardized goalposts with durable safety nets',
+        'Used for physical education curriculum and team sports'
+      ],
       facilities: ['สนามหญ้ามาตรฐาน', 'ประตูฟุตบอล 2 ฝั่ง', 'เส้นเขตสนามฟุตบอล'],
-      area: '1,200 ตร.ม.'
+      facilitiesEn: ['Standard Grass Pitch', 'Dual Goalposts', 'Boundary Markings'],
+      area: '1,200 ตร.ม.',
+      areaEn: '1,200 sq.m.'
     },
     volleyball: {
       id: 'volleyball',
@@ -195,16 +288,26 @@ export default function CampusMap() {
       name: 'สนามวอลเลย์บอล & ลานกีฬาอเนกประสงค์',
       nameEn: 'Volleyball & Takraw Arena',
       type: 'สนามกีฬากลางแจ้งคอนกรีตมาตรฐาน',
+      typeEn: 'Standard Concrete Multipurpose Court',
       color: '#10b981',
       badgeText: 'สนามวอลเลย์',
+      badgeTextEn: 'Volleyball Arena',
       desc: 'สนามวอลเลย์บอลคอนกรีตมาตรฐาน ตั้งอยู่ด้านหน้าติดแนวรั้วโรงเรียน ใช้ฝึกซ้อมกีฬาวอลเลย์บอล ตะกร้อ และกิจกรรมนันทนาการ',
+      descEn: 'Multipurpose concrete sports court fronting the campus fence, used for volleyball, sepak takraw, and recreation.',
       highlights: [
         'พื้นคอนกรีตทาสีกันลื่น พร้อมเส้นสนามมาตรฐาน',
         'เสาและตาข่ายวอลเลย์บอลที่ได้มาตรฐานความปลอดภัย',
         'สภาพแวดล้อมร่มรื่นด้วยทิวทัศน์ธรรมชาติ'
       ],
+      highlightsEn: [
+        'Non-slip coated concrete surface with official court lines',
+        'Safety-certified volleyball posts and tension net',
+        'Shaded green backdrop along the school boundary'
+      ],
       facilities: ['สนามคอนกรีตมาตรฐาน', 'เสาและตาข่ายวอลเลย์บอล', 'เส้นเขตตะกร้อ'],
-      area: '162 ตร.ม.'
+      facilitiesEn: ['Concrete Court', 'Volleyball Net & Posts', 'Takraw Lines'],
+      area: '162 ตร.ม.',
+      areaEn: '162 sq.m.'
     },
     playground: {
       id: 'playground',
@@ -213,16 +316,26 @@ export default function CampusMap() {
       name: 'สนามเด็กเล่นสร้างสรรค์ (BBL) & พื้นที่ร่มรื่น',
       nameEn: 'BBL Creative Playground',
       type: 'พื้นที่เรียนรู้กลางแจ้งและเครื่องเล่นพัฒนาการ',
+      typeEn: 'Outdoor Brain-Based Learning Playground',
       color: '#a855f7',
       badgeText: 'สนามเด็กเล่น',
+      badgeTextEn: 'BBL Playground',
       desc: 'สนามเด็กเล่นแนวยาวขนานถนนหลัก ร่มรื่นด้วยแมกไม้ธรรมชาติ พร้อมเครื่องเล่นส่งเสริมพัฒนาการสมอง (Brain-based Learning: BBL)',
+      descEn: 'Linear outdoor creative playground with lush natural trees and brain-based learning (BBL) physical equipment.',
       highlights: [
         'เครื่องเล่นเสริมทักษะ: สไลเดอร์, ชิงช้า, กระดานกระดก, บาร์โหนทรงตัว',
         'ลานกระโดดและภาพวาดลายพื้นพัฒนาทักษะสมอง (BBL Floor Games)',
         'ภูมิทัศน์ร่มรื่น ให้ร่มเงาตลอดวันสำหรับการจัดกิจกรรมกลางแจ้ง'
       ],
+      highlightsEn: [
+        'Developmental play sets: slides, swings, see-saws, balancing bars',
+        'BBL floor games and jumping patterns for cognitive agility',
+        'Full-day tree shade ideal for outdoor activities'
+      ],
       facilities: ['สไลเดอร์', 'ชุดชิงช้า', 'บาร์โหนทรงตัว', 'พื้นที่ร่มรื่นธรรมชาติ'],
-      area: '220 ตร.ม.'
+      facilitiesEn: ['Slides', 'Swing Sets', 'Balance Bars', 'Natural Tree Canopy'],
+      area: '220 ตร.ม.',
+      areaEn: '220 sq.m.'
     },
     flagpole_shrine: {
       id: 'flagpole_shrine',
@@ -231,16 +344,26 @@ export default function CampusMap() {
       name: 'ลานเสาธงชาติและซุ้มพระพุทธรูปประจำสถานศึกษา',
       nameEn: 'Flagpole Plaza & Buddha Shrine',
       type: 'ลานพิธีการเคารพธงชาติและศูนย์รวมจิตใจ',
+      typeEn: 'Ceremonial Flagpole Plaza & Sacred Shrine',
       color: '#d97706',
       badgeText: 'เสาธง / พระพุทธรูป',
+      badgeTextEn: 'Flagpole & Shrine',
       desc: 'ศูนย์รวมจิตใจของสถานศึกษา ใช้ประกอบกิจกรรมเข้าแถวเคารพธงชาติ สวดมนต์ไหว้พระ และรับฟังโอวาทในยามเช้าของทุกวันเปิดทำการเรียนการสอน',
+      descEn: 'Spiritual and ceremonial heart of the campus for the morning national anthem ceremony, Buddhist prayers, and assembly.',
       highlights: [
         'เสาธงชาติมาตรฐาน บริเวณด้านหน้าอาคารเรียนหลัก',
         'ซุ้มประดิษฐานพระพุทธรูปประจำโรงเรียนบ้านวังหัวแหวนพัฒนา',
         'ลานคอนกรีตสำหรับกิจกรรมหน้าเสาธงอย่างเป็นระเบียบเรียบร้อย'
       ],
+      highlightsEn: [
+        'Standard national flagpole positioned in front of Building 1',
+        'Sacred Buddha shrine of Ban Wang Hua Waen Phatthana School',
+        'Paved concrete assembly plaza for disciplined morning lineups'
+      ],
       facilities: ['เสาธงชาติมาตรฐาน', 'ซุ้มพระพุทธรูป', 'ลานเข้าแถวเคารพธงชาติ'],
-      area: '80 ตร.ม.'
+      facilitiesEn: ['National Flagpole', 'Sacred Buddha Shrine', 'Assembly Plaza'],
+      area: '80 ตร.ม.',
+      areaEn: '80 sq.m.'
     },
     teachers_housing: {
       id: 'teachers_housing',
@@ -249,16 +372,26 @@ export default function CampusMap() {
       name: 'กลุ่มบ้านพักข้าราชการครูและบุคลากร (5 หลัง)',
       nameEn: 'Teachers Residential Cottages (5 Houses)',
       type: 'เขตที่พักอาศัยของคณะครูและบุคลากร',
+      typeEn: 'Faculty & Staff Residential Cottages',
       color: '#b45309',
       badgeText: 'บ้านพักครู',
+      badgeTextEn: 'Teachers Housing',
       desc: 'บ้านพักสำหรับข้าราชการครูและบุคลากรทางการศึกษา จำนวน 5 หลัง มีครูเวรปฏิบัติหน้าที่รักษาความปลอดภัยของสถานศึกษาตลอด 24 ชั่วโมง',
+      descEn: 'Five residential cottages for teaching and administrative personnel, ensuring 24-hour campus security and care.',
       highlights: [
         'บ้านพักครูจำนวน 5 หลังพร้อมระบบสาธารณูปโภคครบถ้วน',
         'มีครูเวรปฏิบัติหน้าที่ดูแลรักษาความปลอดภัยของสถานศึกษาตลอด 24 ชั่วโมง',
         'สภาพแวดล้อมร่มรื่น ปลอดภัย และใกล้ชิดธรรมชาติ'
       ],
+      highlightsEn: [
+        '5 independent teacher cottages with full utility infrastructure',
+        '24/7 on-duty faculty safeguarding campus security',
+        'Tranquil, safe, and natural residential environment'
+      ],
       facilities: ['บ้านพักครู 5 หลัง', 'พื้นที่พักผ่อน', 'ระบบความปลอดภัยสถานศึกษา'],
-      area: '450 ตร.ม.'
+      facilitiesEn: ['5 Residential Units', 'Garden Lounge Area', '24-Hour Security'],
+      area: '450 ตร.ม.',
+      areaEn: '450 sq.m.'
     },
     gate_fence: {
       id: 'gate_fence',
@@ -267,22 +400,38 @@ export default function CampusMap() {
       name: 'ซุ้มประตูทางเข้า ป้ายชื่อสถานศึกษา และแนวรั้วมาตรฐาน',
       nameEn: 'School Gate, Plaque & Boundary Fence',
       type: 'ทางเข้าหลักและระบบรักษาความปลอดภัย',
+      typeEn: 'Main School Entrance & Perimeter Fence',
       color: '#334155',
       badgeText: 'ประตู & รั้ว',
+      badgeTextEn: 'Gate & Fence',
       desc: 'ทางเข้าหลักของโรงเรียนบ้านวังหัวแหวนพัฒนา ประดับป้ายหินสลักชื่อสถานศึกษา พร้อมระบบรักษาความปลอดภัย',
+      descEn: 'Main entrance of Ban Wang Hua Waen Phatthana School featuring the official stone name plaque and security gates.',
       highlights: [
         'ป้ายชื่อโรงเรียนบ้านวังหัวแหวนพัฒนา สง่างามริมทางหลวงชนบท',
         'ประตูรั้วเหล็กเปิด-ปิดตามระเบียบเวลาปฏิบัติราชการเพื่อความปลอดภัย',
         'แนวรั้วรอบบริเวณสถานศึกษาเพื่อความปลอดภัยของผู้เรียน'
       ],
+      highlightsEn: [
+        'Dignified stone nameplate facing Rural Road KP.4005',
+        'Gated metal entrance operating according to school safety regulations',
+        'Full perimeter safety fencing safeguarding all learners'
+      ],
       facilities: ['ป้ายหินสลักทางการ', 'ประตูรั้วเหล็ก', 'แนวรั้วความปลอดภัย'],
-      area: 'ตลอดแนวหน้าสถานศึกษา'
+      facilitiesEn: ['Carved School Plaque', 'Gated Entrance', 'Safety Perimeter Fence'],
+      area: 'ตลอดแนวหน้าสถานศึกษา',
+      areaEn: 'Full Campus Frontage'
     }
   };
 
   const currentZone = campusZones[selectedZone] || campusZones.b1;
 
-  const categories = [
+  const categories = isEn ? [
+    { id: 'all', label: 'All (14 Zones)', icon: Compass },
+    { id: 'academic', label: 'Academic & Learning', icon: Building2 },
+    { id: 'sports', label: 'Sports & Playgrounds', icon: Trophy },
+    { id: 'service', label: 'Dining & Restrooms', icon: Coffee },
+    { id: 'facility', label: 'Facilities & Housing', icon: Home }
+  ] : [
     { id: 'all', label: 'ทั้งหมด (14 เขตพื้นที่)', icon: Compass },
     { id: 'academic', label: 'อาคารเรียนและแหล่งเรียนรู้', icon: Building2 },
     { id: 'sports', label: 'สนามกีฬาและลานกิจกรรม', icon: Trophy },
@@ -305,13 +454,15 @@ export default function CampusMap() {
             <span className="section-tag-gold">CAMPUS MASTER PLAN</span>
           </div>
           <h2 className="master-title">
-            แผนผังบริเวณและอาคารสถานที่ โรงเรียนบ้านวังหัวแหวนพัฒนา
+            {isEn ? 'Campus Master Plan & Facilities' : 'แผนผังบริเวณและอาคารสถานที่ โรงเรียนบ้านวังหัวแหวนพัฒนา'}
           </h2>
           <div className="school-divider">
             <span className="school-divider-dot"></span>
           </div>
           <p className="master-subtitle">
-            แผนผังแสดงตำแหน่งอาคารเรียน อาคารประกอบการ ลานกิจกรรม และระบบสาธารณูปโภคภายในสถานศึกษา จัดวางตามผังแม่บทจริงอย่างเป็นระเบียบ
+            {isEn 
+              ? 'Interactive master blueprint detailing academic buildings, sports facilities, service areas, and grounds.' 
+              : 'แผนผังแสดงตำแหน่งอาคารเรียน อาคารประกอบการ ลานกิจกรรม และระบบสาธารณูปโภคภายในสถานศึกษา จัดวางตามผังแม่บทจริงอย่างเป็นระเบียบ'}
           </p>
         </div>
 
@@ -339,17 +490,17 @@ export default function CampusMap() {
             <button 
               className={`ambience-toggle-btn ${isNightMode ? 'night' : 'day'}`}
               onClick={() => setIsNightMode(!isNightMode)}
-              title={isNightMode ? "เปลี่ยนเป็นโหมดกลางวัน" : "เปลี่ยนเป็นโหมดพลบค่ำ/ราตรี"}
+              title={isEn ? (isNightMode ? "Switch to Day Mode" : "Switch to Night Mode") : (isNightMode ? "เปลี่ยนเป็นโหมดกลางวัน" : "เปลี่ยนเป็นโหมดพลบค่ำ/ราตรี")}
             >
               {isNightMode ? (
                 <>
                   <Moon size={16} className="text-warning" />
-                  <span>โหมดราตรี</span>
+                  <span>{isEn ? 'Night Mode' : 'โหมดราตรี'}</span>
                 </>
               ) : (
                 <>
                   <Sun size={16} className="text-warning" />
-                  <span>โหมดกลางวัน</span>
+                  <span>{isEn ? 'Day Mode' : 'โหมดกลางวัน'}</span>
                 </>
               )}
             </button>
@@ -358,10 +509,10 @@ export default function CampusMap() {
             <button 
               className={`label-toggle-btn ${showLabels ? 'active' : ''}`}
               onClick={() => setShowLabels(!showLabels)}
-              title="เปิด/ปิดป้ายชื่ออาคาร"
+              title={isEn ? "Toggle Building Labels" : "เปิด/ปิดป้ายชื่ออาคาร"}
             >
               <Tag size={15} />
-              <span>{showLabels ? 'ซ่อนป้ายชื่อ' : 'แสดงป้ายชื่อ'}</span>
+              <span>{isEn ? (showLabels ? 'Hide Labels' : 'Show Labels') : (showLabels ? 'ซ่อนป้ายชื่อ' : 'แสดงป้ายชื่อ')}</span>
             </button>
           </div>
         </div>
@@ -374,10 +525,12 @@ export default function CampusMap() {
             <div className="canvas-header-bar">
               <div className="d-flex align-items-center gap-2">
                 <Layers size={18} className="text-secondary" />
-                <span className="fw-semibold">แผนผังบริเวณสถานศึกษา (เลือกอาคารหรือพื้นที่เพื่อดูรายละเอียด)</span>
+                <span className="fw-semibold">
+                  {isEn ? 'Campus Map Blueprint (Click any building to view details)' : 'แผนผังบริเวณสถานศึกษา (เลือกอาคารหรือพื้นที่เพื่อดูรายละเอียด)'}
+                </span>
               </div>
               <div className="selected-indicator">
-                <Footprints size={14} /> เลือกดู: <strong>{currentZone.name.split(' (')[0]}</strong>
+                <Footprints size={14} /> {isEn ? 'Selected: ' : 'เลือกดู: '}<strong>{isEn ? currentZone.nameEn : currentZone.name.split(' (')[0]}</strong>
               </div>
             </div>
 
@@ -415,8 +568,12 @@ export default function CampusMap() {
                     <text x="0" y="-18" textAnchor="middle" fill="#dc2626" fontSize="10" fontWeight="900">N</text>
                   </g>
                   {/* Map Orientation Tag */}
-                  <text x="96" y="50" fill={isNightMode ? "#cbd5e1" : "#1e293b"} fontSize="12" fontWeight="800" fontFamily="Prompt">แผนผังแม่บทสถานศึกษา</text>
-                  <text x="96" y="66" fill={isNightMode ? "#64748b" : "#94a3b8"} fontSize="10" fontWeight="600" fontFamily="Prompt">รร.บ้านวังหัวแหวนพัฒนา</text>
+                  <text x="96" y="50" fill={isNightMode ? "#cbd5e1" : "#1e293b"} fontSize="12" fontWeight="800" fontFamily="Prompt">
+                    {isEn ? 'Campus Master Blueprint' : 'แผนผังแม่บทสถานศึกษา'}
+                  </text>
+                  <text x="96" y="66" fill={isNightMode ? "#64748b" : "#94a3b8"} fontSize="10" fontWeight="600" fontFamily="Prompt">
+                    {isEn ? 'Ban Wang Hua Waen Phatthana' : 'รร.บ้านวังหัวแหวนพัฒนา'}
+                  </text>
                 </g>
 
                 {/* ---------------------------------------------------- */}
@@ -455,18 +612,24 @@ export default function CampusMap() {
                   filter={selectedZone === 'welfare' ? 'url(#clean-glow)' : 'none'}
                 >
                   <rect x="360" y="55" width="55" height="74" fill={isNightMode ? "#4c1d95" : "#e9d5ff"} rx="6" stroke="#9333ea" strokeWidth="2" />
-                  <text x="387" y="90" textAnchor="middle" fill="#581c87" fontSize="12" fontWeight="700" fontFamily="Prompt">ร้านค้า</text>
-                  <text x="387" y="108" textAnchor="middle" fill="#581c87" fontSize="11" fontWeight="700" fontFamily="Prompt">สวัสดิการ</text>
+                  <text x="387" y="90" textAnchor="middle" fill="#581c87" fontSize="12" fontWeight="700" fontFamily="Prompt">
+                    {isEn ? 'Welfare' : 'ร้านค้า'}
+                  </text>
+                  <text x="387" y="108" textAnchor="middle" fill="#581c87" fontSize={isEn ? "10" : "11"} fontWeight="700" fontFamily="Prompt">
+                    {isEn ? 'Store' : 'สวัสดิการ'}
+                  </text>
                 </g>
 
-                {/* 3.2 Restroom 1 (ห้องน้ำ โซนร้านสวัสดิการ - วางซ้อนด้านบนตามภาพสเก็ตช์) */}
+                {/* 3.2 Restroom 1 (ห้องน้ำ โซนร้านสวัสดิการ) */}
                 <g 
                   className={`zone-item ${selectedZone === 'restroom1' ? 'active-zone' : ''}`}
                   onClick={() => setSelectedZone('restroom1')}
                   filter={selectedZone === 'restroom1' ? 'url(#clean-glow)' : 'none'}
                 >
                   <rect x="362" y="15" width="51" height="35" fill={isNightMode ? "#7c2d12" : "#fed7aa"} rx="5" stroke="#ea580c" strokeWidth="2" />
-                  <text x="387" y="37" textAnchor="middle" fill="#c2410c" fontSize="11" fontWeight="700" fontFamily="Prompt">ห้องน้ำ</text>
+                  <text x="387" y="37" textAnchor="middle" fill="#c2410c" fontSize={isEn ? "9" : "11"} fontWeight="700" fontFamily="Prompt">
+                    {isEn ? 'Restroom A' : 'ห้องน้ำ'}
+                  </text>
                 </g>
 
                 {/* 3.3 Canteen (โรงอาหาร) */}
@@ -476,8 +639,12 @@ export default function CampusMap() {
                   filter={selectedZone === 'canteen' ? 'url(#clean-glow)' : 'none'}
                 >
                   <rect x="425" y="44" width="70" height="85" fill={isNightMode ? "#7c2d12" : "#fed7aa"} rx="6" stroke="#ea580c" strokeWidth="2.5" />
-                  <text x="460" y="82" textAnchor="middle" fill="#9a3412" fontSize="14" fontWeight="800" fontFamily="Prompt">โรง</text>
-                  <text x="460" y="102" textAnchor="middle" fill="#9a3412" fontSize="14" fontWeight="800" fontFamily="Prompt">อาหาร</text>
+                  <text x="460" y="82" textAnchor="middle" fill="#9a3412" fontSize={isEn ? "12" : "14"} fontWeight="800" fontFamily="Prompt">
+                    {isEn ? 'Dining' : 'โรง'}
+                  </text>
+                  <text x="460" y="102" textAnchor="middle" fill="#9a3412" fontSize={isEn ? "12" : "14"} fontWeight="800" fontFamily="Prompt">
+                    {isEn ? 'Hall' : 'อาหาร'}
+                  </text>
                 </g>
 
                 {/* 3.4 Building 1 (อาคาร 1 - อาคารเรียนหลักหลังใหญ่) */}
@@ -496,7 +663,9 @@ export default function CampusMap() {
                     <rect x="631" y="42" width="18" height="12" rx="2" />
                     <rect x="647" y="42" width="16" height="12" rx="2" />
                   </g>
-                  <text x="587" y="94" textAnchor="middle" fill={isNightMode ? "#f5d0fe" : "#581c87"} fontSize="20" fontWeight="900" fontFamily="Prompt">อาคาร 1</text>
+                  <text x="587" y="94" textAnchor="middle" fill={isNightMode ? "#f5d0fe" : "#581c87"} fontSize={isEn ? "18" : "20"} fontWeight="900" fontFamily="Prompt">
+                    {isEn ? 'Building 1' : 'อาคาร 1'}
+                  </text>
                 </g>
 
                 {/* 3.5 Building 2 (อาคาร 2) */}
@@ -508,7 +677,9 @@ export default function CampusMap() {
                   <rect x="680" y="44" width="90" height="85" fill={isNightMode ? "#4c0519" : "#fca5a5"} rx="7" stroke="#dc2626" strokeWidth="2.5" />
                   <rect x="692" y="54" width="22" height="12" rx="2" fill={isNightMode ? "#fef08a" : "#fee2e2"} opacity="0.8" />
                   <rect x="736" y="54" width="22" height="12" rx="2" fill={isNightMode ? "#fef08a" : "#fee2e2"} opacity="0.8" />
-                  <text x="725" y="96" textAnchor="middle" fill={isNightMode ? "#fecdd3" : "#991b1b"} fontSize="16" fontWeight="800" fontFamily="Prompt">อาคาร 2</text>
+                  <text x="725" y="96" textAnchor="middle" fill={isNightMode ? "#fecdd3" : "#991b1b"} fontSize={isEn ? "15" : "16"} fontWeight="800" fontFamily="Prompt">
+                    {isEn ? 'Building 2' : 'อาคาร 2'}
+                  </text>
                 </g>
 
                 {/* 3.6 Restroom 2 (ห้องน้ำ โซนอาคาร 2) */}
@@ -518,8 +689,12 @@ export default function CampusMap() {
                   filter={selectedZone === 'restroom2' ? 'url(#clean-glow)' : 'none'}
                 >
                   <rect x="780" y="44" width="50" height="85" fill={isNightMode ? "#075985" : "#bae6fd"} rx="6" stroke="#0284c7" strokeWidth="2" />
-                  <text x="805" y="82" textAnchor="middle" fill="#0369a1" fontSize="13" fontWeight="800" fontFamily="Prompt">ห้อง</text>
-                  <text x="805" y="102" textAnchor="middle" fill="#0369a1" fontSize="13" fontWeight="800" fontFamily="Prompt">น้ำ</text>
+                  <text x="805" y="82" textAnchor="middle" fill="#0369a1" fontSize={isEn ? "10" : "13"} fontWeight="800" fontFamily="Prompt">
+                    {isEn ? 'Restroom' : 'ห้อง'}
+                  </text>
+                  <text x="805" y="102" textAnchor="middle" fill="#0369a1" fontSize={isEn ? "10" : "13"} fontWeight="800" fontFamily="Prompt">
+                    {isEn ? 'B' : 'น้ำ'}
+                  </text>
                 </g>
 
                 {/* 3.7 Parking Lot (ลานจอดรถ) */}
@@ -533,7 +708,9 @@ export default function CampusMap() {
                   <line x1="848" y1="60" x2="897" y2="60" stroke="#db2777" strokeWidth="1.5" />
                   <line x1="848" y1="80" x2="897" y2="80" stroke="#db2777" strokeWidth="1.5" />
                   <line x1="848" y1="100" x2="897" y2="100" stroke="#db2777" strokeWidth="1.5" />
-                  <text x="872" y="122" textAnchor="middle" fill="#9d174d" fontSize="11" fontWeight="800" fontFamily="Prompt">ลานจอดรถ</text>
+                  <text x="872" y="122" textAnchor="middle" fill="#9d174d" fontSize="11" fontWeight="800" fontFamily="Prompt">
+                    {isEn ? 'Parking' : 'ลานจอดรถ'}
+                  </text>
                 </g>
 
 
@@ -559,7 +736,9 @@ export default function CampusMap() {
 
                     <path d="M 545 218 L 545 208 M 545 208 L 541 212 M 545 208 L 549 212" stroke={isNightMode ? "#cbd5e1" : "#1e293b"} strokeWidth="1.5" fill="none" />
                     {showLabels && (
-                      <text x="545" y="230" textAnchor="middle" fill={isNightMode ? "#f8fafc" : "#1e293b"} fontSize="12" fontWeight="700" fontFamily="Prompt">เสาธง</text>
+                      <text x="545" y="230" textAnchor="middle" fill={isNightMode ? "#f8fafc" : "#1e293b"} fontSize="12" fontWeight="700" fontFamily="Prompt">
+                        {isEn ? 'Flagpole' : 'เสาธง'}
+                      </text>
                     )}
                   </g>
 
@@ -571,7 +750,9 @@ export default function CampusMap() {
 
                     <path d="M 620 218 L 620 208 M 620 208 L 616 212 M 620 208 L 624 212" stroke={isNightMode ? "#cbd5e1" : "#1e293b"} strokeWidth="1.5" fill="none" />
                     {showLabels && (
-                      <text x="620" y="230" textAnchor="middle" fill={isNightMode ? "#f8fafc" : "#1e293b"} fontSize="12" fontWeight="700" fontFamily="Prompt">พระพุทธรูป</text>
+                      <text x="620" y="230" textAnchor="middle" fill={isNightMode ? "#f8fafc" : "#1e293b"} fontSize="12" fontWeight="700" fontFamily="Prompt">
+                        {isEn ? 'Shrine' : 'พระพุทธรูป'}
+                      </text>
                     )}
                   </g>
                 </g>
@@ -616,7 +797,7 @@ export default function CampusMap() {
                     fontFamily="Prompt"
                     filter="drop-shadow(0 2px 4px rgba(0,0,0,0.4))"
                   >
-                    สนามบอล
+                    {isEn ? 'Football Field' : 'สนามบอล'}
                   </text>
                 </g>
 
@@ -654,7 +835,7 @@ export default function CampusMap() {
                       fontFamily="Prompt"
                       transform="rotate(-90 391 350)"
                     >
-                      สนามเด็กเล่น
+                      {isEn ? 'Playground' : 'สนามเด็กเล่น'}
                     </text>
                   )}
                 </g>
@@ -670,7 +851,6 @@ export default function CampusMap() {
                   onClick={() => setSelectedZone('kindergarten')}
                   filter={selectedZone === 'kindergarten' ? 'url(#clean-glow)' : 'none'}
                 >
-                  {/* Tree at x=235, y=165 (เอาข้อความป้ายออกตามที่ผู้ใช้สั่ง) */}
                   <g>
                     <rect x="231" y="175" width="8" height="26" fill="#78350f" rx="2" />
                     <circle cx="235" cy="160" r="24" fill="#16a34a" />
@@ -681,7 +861,9 @@ export default function CampusMap() {
                   {/* Kindergarten Building (อนุบาล) */}
                   <rect x="65" y="105" width="115" height="80" fill={isNightMode ? "#450a0a" : "#fca5a5"} rx="6" stroke="#dc2626" strokeWidth="2.5" />
                   <rect x="75" y="113" width="95" height="22" fill={isNightMode ? "#7f1d1d" : "#fee2e2"} rx="3" />
-                  <text x="122" y="162" textAnchor="middle" fill="#991b1b" fontSize="16" fontWeight="800" fontFamily="Prompt">อนุบาล</text>
+                  <text x="122" y="162" textAnchor="middle" fill="#991b1b" fontSize={isEn ? "14" : "16"} fontWeight="800" fontFamily="Prompt">
+                    {isEn ? 'Kindergarten' : 'อนุบาล'}
+                  </text>
 
                   {/* Director Office Structure (ห้องผู้อำนวยการสถานศึกษา) */}
                   <rect x="68" y="195" width="110" height="54" fill={isNightMode ? "#1e293b" : "#ffffff"} rx="6" stroke="#475569" strokeWidth="2" />
@@ -689,8 +871,12 @@ export default function CampusMap() {
                   
                   {showLabels && (
                     <>
-                      <text x="123" y="213" textAnchor="middle" fill={isNightMode ? "#cbd5e1" : "#1e293b"} fontSize="11" fontWeight="700" fontFamily="Prompt">ห้อง</text>
-                      <text x="123" y="238" textAnchor="middle" fill={isNightMode ? "#cbd5e1" : "#1e293b"} fontSize="11" fontWeight="700" fontFamily="Prompt">ผู้อำนวยการ</text>
+                      <text x="123" y="213" textAnchor="middle" fill={isNightMode ? "#cbd5e1" : "#1e293b"} fontSize="11" fontWeight="700" fontFamily="Prompt">
+                        {isEn ? 'Director' : 'ห้อง'}
+                      </text>
+                      <text x="123" y="238" textAnchor="middle" fill={isNightMode ? "#cbd5e1" : "#1e293b"} fontSize="11" fontWeight="700" fontFamily="Prompt">
+                        {isEn ? 'Office' : 'ผู้อำนวยการ'}
+                      </text>
                     </>
                   )}
                 </g>
@@ -718,8 +904,12 @@ export default function CampusMap() {
 
                   {showLabels && (
                     <>
-                      <text x="115" y="375" textAnchor="middle" fill="#b45309" fontSize="13" fontWeight="800" fontFamily="Prompt">บ้านพักครู</text>
-                      <text x="115" y="575" textAnchor="middle" fill="#b45309" fontSize="13" fontWeight="800" fontFamily="Prompt">บ้านพักครู (5 หลัง)</text>
+                      <text x="115" y="375" textAnchor="middle" fill="#b45309" fontSize="13" fontWeight="800" fontFamily="Prompt">
+                        {isEn ? 'Teachers Cottages' : 'บ้านพักครู'}
+                      </text>
+                      <text x="115" y="575" textAnchor="middle" fill="#b45309" fontSize="13" fontWeight="800" fontFamily="Prompt">
+                        {isEn ? 'Faculty Cottages (5 Houses)' : 'บ้านพักครู (5 หลัง)'}
+                      </text>
                     </>
                   )}
                 </g>
@@ -741,9 +931,15 @@ export default function CampusMap() {
 
                   {showLabels && (
                     <>
-                      <text x="480" y="515" textAnchor="middle" fill="#065f46" fontSize="10" fontWeight="700" fontFamily="Prompt" transform="rotate(-90 480 515)">สนาม</text>
-                      <text x="502" y="515" textAnchor="middle" fill="#047857" fontSize="10" fontWeight="700" fontFamily="Prompt" transform="rotate(-90 502 515)">วอลเลย์</text>
-                      <text x="524" y="515" textAnchor="middle" fill="#065f46" fontSize="10" fontWeight="700" fontFamily="Prompt" transform="rotate(-90 524 515)">บอล</text>
+                      <text x="480" y="515" textAnchor="middle" fill="#065f46" fontSize="10" fontWeight="700" fontFamily="Prompt" transform="rotate(-90 480 515)">
+                        {isEn ? 'Volley' : 'สนาม'}
+                      </text>
+                      <text x="502" y="515" textAnchor="middle" fill="#047857" fontSize="10" fontWeight="700" fontFamily="Prompt" transform="rotate(-90 502 515)">
+                        {isEn ? 'ball' : 'วอลเลย์'}
+                      </text>
+                      <text x="524" y="515" textAnchor="middle" fill="#065f46" fontSize="10" fontWeight="700" fontFamily="Prompt" transform="rotate(-90 524 515)">
+                        {isEn ? 'Court' : 'บอล'}
+                      </text>
                     </>
                   )}
                 </g>
@@ -760,7 +956,9 @@ export default function CampusMap() {
 
                   {/* School Sign (ป้าย รร.) */}
                   <rect x="360" y="602" width="75" height="28" fill="#0b2545" rx="4" stroke="#e5b326" strokeWidth="2" />
-                  <text x="397" y="620" textAnchor="middle" fill="#e5b326" fontSize="11" fontWeight="800" fontFamily="Prompt">ป้าย รร.</text>
+                  <text x="397" y="620" textAnchor="middle" fill="#e5b326" fontSize="11" fontWeight="800" fontFamily="Prompt">
+                    {isEn ? 'School Sign' : 'ป้าย รร.'}
+                  </text>
 
                   {/* Boundary Fence */}
                   <line x1="445" y1="616" x2="905" y2="616" stroke="#94a3b8" strokeWidth="4" strokeLinecap="round" />
@@ -779,9 +977,15 @@ export default function CampusMap() {
 
                   {showLabels && (
                     <>
-                      <text x="322.5" y="650" textAnchor="middle" fill={isNightMode ? "#f8fafc" : "#1e293b"} fontSize="13" fontWeight="700" fontFamily="Prompt">ประตู</text>
-                      <text x="397" y="650" textAnchor="middle" fill="#0b2545" fontSize="13" fontWeight="700" fontFamily="Prompt">ป้าย รร.</text>
-                      <text x="730" y="650" textAnchor="middle" fill="#64748b" fontSize="13" fontWeight="700" fontFamily="Prompt">แนวรั้วสถานศึกษา</text>
+                      <text x="322.5" y="650" textAnchor="middle" fill={isNightMode ? "#f8fafc" : "#1e293b"} fontSize="13" fontWeight="700" fontFamily="Prompt">
+                        {isEn ? 'Main Gate' : 'ประตู'}
+                      </text>
+                      <text x="397" y="650" textAnchor="middle" fill="#0b2545" fontSize="13" fontWeight="700" fontFamily="Prompt">
+                        {isEn ? 'Plaque' : 'ป้าย รร.'}
+                      </text>
+                      <text x="730" y="650" textAnchor="middle" fill="#64748b" fontSize="13" fontWeight="700" fontFamily="Prompt">
+                        {isEn ? 'Perimeter Boundary Fence' : 'แนวรั้วสถานศึกษา'}
+                      </text>
                     </>
                   )}
                 </g>
@@ -791,7 +995,7 @@ export default function CampusMap() {
 
             {/* Quick Campus Zone Jump Ribbon */}
             <div className="campus-jump-ribbon">
-              <span className="ribbon-label"><MapPin size={15} /> เลือกเขตพื้นที่:</span>
+              <span className="ribbon-label"><MapPin size={15} /> {isEn ? 'Select Zone:' : 'เลือกเขตพื้นที่:'}</span>
               <div className="ribbon-scroll">
                 {filteredZoneKeys.map(key => {
                   const z = campusZones[key];
@@ -803,7 +1007,7 @@ export default function CampusMap() {
                       onClick={() => setSelectedZone(key)}
                     >
                       <span className="chip-indicator" style={{ backgroundColor: z.color }}></span>
-                      <span>{z.name.split(' (')[0]}</span>
+                      <span>{isEn ? (z.nameEn.split(' (')[0]) : (z.name.split(' (')[0])}</span>
                     </button>
                   );
                 })}
@@ -817,16 +1021,16 @@ export default function CampusMap() {
             <div className="drawer-header" style={{ borderTopColor: currentZone.color }}>
               <div className="drawer-meta-row">
                 <span className="drawer-badge" style={{ backgroundColor: `${currentZone.color}20`, color: currentZone.color, borderColor: currentZone.color }}>
-                  {currentZone.badgeText}
+                  {isEn ? (currentZone.badgeTextEn || currentZone.badgeText) : currentZone.badgeText}
                 </span>
                 <span className="drawer-area-badge">
-                  ขนาดพื้นที่: <strong>{currentZone.area}</strong>
+                  {isEn ? 'Area: ' : 'ขนาดพื้นที่: '}<strong>{isEn && currentZone.areaEn ? currentZone.areaEn : currentZone.area}</strong>
                 </span>
               </div>
-              <h3 className="drawer-title">{currentZone.name}</h3>
-              <p className="drawer-subtitle">{currentZone.nameEn}</p>
+              <h3 className="drawer-title">{isEn ? currentZone.nameEn : currentZone.name}</h3>
+              <p className="drawer-subtitle">{isEn ? currentZone.name : currentZone.nameEn}</p>
               <div className="drawer-type-pill">
-                <Building2 size={14} /> {currentZone.type}
+                <Building2 size={14} /> {isEn ? (currentZone.typeEn || currentZone.type) : currentZone.type}
               </div>
             </div>
 
@@ -834,17 +1038,17 @@ export default function CampusMap() {
             <div className="drawer-body">
               <div className="content-segment">
                 <h5 className="segment-heading">
-                  <Sparkles size={16} className="text-secondary" /> ข้อมูลลักษณะอาคารและการใช้สอย:
+                  <Sparkles size={16} className="text-secondary" /> {isEn ? 'Building Specifications & Usage:' : 'ข้อมูลลักษณะอาคารและการใช้สอย:'}
                 </h5>
-                <p className="segment-desc">{currentZone.desc}</p>
+                <p className="segment-desc">{isEn ? (currentZone.descEn || currentZone.desc) : currentZone.desc}</p>
               </div>
 
               <div className="content-segment mt-4">
                 <h5 className="segment-heading">
-                  <CheckCircle2 size={16} className="text-secondary" /> ลักษณะเด่นและระบบสนับสนุนการเรียนรู้:
+                  <CheckCircle2 size={16} className="text-secondary" /> {isEn ? 'Key Features & Learning Support:' : 'ลักษณะเด่นและระบบสนับสนุนการเรียนรู้:'}
                 </h5>
                 <ul className="drawer-checklist">
-                  {currentZone.highlights.map((h, i) => (
+                  {(isEn && currentZone.highlightsEn ? currentZone.highlightsEn : currentZone.highlights).map((h, i) => (
                     <li key={i}>
                       <ArrowRight size={14} className="bullet-gold" />
                       <span>{h}</span>
@@ -855,10 +1059,10 @@ export default function CampusMap() {
 
               <div className="content-segment mt-4">
                 <h5 className="segment-heading">
-                  <Layers size={16} className="text-secondary" /> สิ่งอำนวยความสะดวกและอุปกรณ์ประจำอาคาร:
+                  <Layers size={16} className="text-secondary" /> {isEn ? 'Facilities & Equipment:' : 'สิ่งอำนวยความสะดวกและอุปกรณ์ประจำอาคาร:'}
                 </h5>
                 <div className="facilities-chips-grid">
-                  {currentZone.facilities.map((fac, i) => (
+                  {(isEn && currentZone.facilitiesEn ? currentZone.facilitiesEn : currentZone.facilities).map((fac, i) => (
                     <span key={i} className="facility-chip">
                       {fac}
                     </span>
@@ -872,8 +1076,12 @@ export default function CampusMap() {
                   <Trophy size={20} className="text-warning" />
                 </div>
                 <div className="guarantee-text">
-                  <strong>โรงเรียนบ้านวังหัวแหวนพัฒนา</strong>
-                  <p>สังกัดสำนักงานเขตพื้นที่การศึกษาประถมศึกษากำแพงเพชร เขต 2 มุ่งมั่นบริหารจัดการสภาพแวดล้อมที่ปลอดภัยและเอื้อต่อการจัดการเรียนรู้อย่างมีคุณภาพ</p>
+                  <strong>{isEn ? 'Ban Wang Hua Waen Phatthana School' : 'โรงเรียนบ้านวังหัวแหวนพัฒนา'}</strong>
+                  <p>
+                    {isEn 
+                      ? 'Under Kamphaeng Phet Primary Educational Service Area Office 2, dedicated to managing a secure, modern, and inspiring environment for holistic educational quality.' 
+                      : 'สังกัดสำนักงานเขตพื้นที่การศึกษาประถมศึกษากำแพงเพชร เขต 2 มุ่งมั่นบริหารจัดการสภาพแวดล้อมที่ปลอดภัยและเอื้อต่อการจัดการเรียนรู้อย่างมีคุณภาพ'}
+                  </p>
                 </div>
               </div>
             </div>

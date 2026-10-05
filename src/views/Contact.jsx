@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { MapPin, Phone, Mail, Clock, Send, CheckCircle } from 'lucide-react';
 import { dbService } from '../services/db';
 
-export default function Contact({ schoolInfo }) {
+export default function Contact({ schoolInfo, lang = 'th' }) {
+  const isEn = lang === 'en';
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    subject: 'ทั่วไป',
+    subject: isEn ? 'General' : 'ทั่วไป',
     message: ''
   });
   const [submitted, setSubmitted] = useState(false);
@@ -20,7 +21,7 @@ export default function Contact({ schoolInfo }) {
     dbService.saveMessage(formData);
 
     setSubmitted(true);
-    setFormData({ name: '', email: '', phone: '', subject: 'ทั่วไป', message: '' });
+    setFormData({ name: '', email: '', phone: '', subject: isEn ? 'General' : 'ทั่วไป', message: '' });
     
     setTimeout(() => {
       setSubmitted(false);
@@ -36,12 +37,16 @@ export default function Contact({ schoolInfo }) {
     <div className="contact-view container section-padding animate-fade-in">
       {/* Header */}
       <div className="page-header text-center">
-        <span className="section-tag">OFFICIAL CONTACT</span>
-        <h2 className="section-title">ข้อมูลการติดต่อราชการ</h2>
+        <span className="section-tag">{isEn ? 'OFFICIAL CONTACT' : 'OFFICIAL CONTACT'}</span>
+        <h2 className="section-title">{isEn ? 'Official Contact & Inquiries' : 'ข้อมูลการติดต่อราชการ'}</h2>
         <div className="school-divider">
           <span className="school-divider-dot"></span>
         </div>
-        <p className="section-subtitle">ช่องทางการติดต่อราชการ การประสานงาน และแบบฟอร์มสอบถามข้อมูล โรงเรียนบ้านวังหัวแหวนพัฒนา</p>
+        <p className="section-subtitle">
+          {isEn 
+            ? 'Official contact channels, communication details, and general inquiry form for Ban Wang Hua Waen Phatthana School' 
+            : 'ช่องทางการติดต่อราชการ การประสานงาน และแบบฟอร์มสอบถามข้อมูล โรงเรียนบ้านวังหัวแหวนพัฒนา'}
+        </p>
       </div>
 
       <div className="grid-2 contact-grid">
@@ -52,8 +57,8 @@ export default function Contact({ schoolInfo }) {
               <MapPin size={24} />
             </div>
             <div className="content">
-              <h4>ที่ตั้งสถานศึกษา</h4>
-              <p>{schoolInfo.address}</p>
+              <h4>{isEn ? 'School Location' : 'ที่ตั้งสถานศึกษา'}</h4>
+              <p>{isEn ? (schoolInfo?.addressEn || 'Moo 6, Wang Ham Hae Subdistrict, Khanu Woralaksaburi District, Kamphaeng Phet Province 62140, Thailand') : schoolInfo?.address}</p>
             </div>
           </div>
 
@@ -62,9 +67,9 @@ export default function Contact({ schoolInfo }) {
               <Phone size={24} />
             </div>
             <div className="content">
-              <h4>หมายเลขโทรศัพท์ติดต่อราชการ</h4>
-              <p><a href={`tel:${schoolInfo.phone}`}>{schoolInfo.phone}</a></p>
-              <span className="muted-note">ในวันและเวลาราชการ (08.30 น. - 16.30 น.)</span>
+              <h4>{isEn ? 'Official Telephone' : 'หมายเลขโทรศัพท์ติดต่อราชการ'}</h4>
+              <p><a href={`tel:${schoolInfo?.phone}`}>{schoolInfo?.phone}</a></p>
+              <span className="muted-note">{isEn ? 'During official office hours (08:30 - 16:30)' : 'ในวันและเวลาราชการ (08.30 น. - 16.30 น.)'}</span>
             </div>
           </div>
 
@@ -73,8 +78,8 @@ export default function Contact({ schoolInfo }) {
               <Mail size={24} />
             </div>
             <div className="content">
-              <h4>ไปรษณีย์อิเล็กทรอนิกส์ (อีเมล)</h4>
-              <p><a href={`mailto:${schoolInfo.email}`}>{schoolInfo.email}</a></p>
+              <h4>{isEn ? 'Electronic Mail (Email)' : 'ไปรษณีย์อิเล็กทรอนิกส์ (อีเมล)'}</h4>
+              <p><a href={`mailto:${schoolInfo?.email}`}>{schoolInfo?.email}</a></p>
             </div>
           </div>
 
@@ -83,38 +88,42 @@ export default function Contact({ schoolInfo }) {
               <Clock size={24} />
             </div>
             <div className="content">
-              <h4>วันและเวลาปฏิบัติราชการ</h4>
-              <p>วันจันทร์ - วันศุกร์ (เว้นวันหยุดราชการและวันหยุดนักขัตฤกษ์)</p>
-              <p>เวลา 08.30 น. - 16.30 น.</p>
+              <h4>{isEn ? 'Official Working Hours' : 'วันและเวลาปฏิบัติราชการ'}</h4>
+              <p>{isEn ? 'Monday - Friday (Closed on official public holidays)' : 'วันจันทร์ - วันศุกร์ (เว้นวันหยุดราชการและวันหยุดนักขัตฤกษ์)'}</p>
+              <p>{isEn ? 'Office Hours: 08:30 AM - 04:30 PM' : 'เวลา 08.30 น. - 16.30 น.'}</p>
             </div>
           </div>
         </div>
 
         {/* Right: Contact Form */}
         <div className="contact-form-card">
-          <h3 className="form-card-title">แบบฟอร์มติดต่อราชการและสอบถามข้อมูล</h3>
+          <h3 className="form-card-title">{isEn ? 'Official Inquiry & Coordination Form' : 'แบบฟอร์มติดต่อราชการและสอบถามข้อมูล'}</h3>
           <div className="title-underline text-left"></div>
           
           {submitted ? (
             <div className="submit-success-alert animate-fade-in">
               <CheckCircle size={36} className="success-icon" />
               <div>
-                <h4>ส่งข้อความประสานงานสำเร็จ</h4>
-                <p>ทางสถานศึกษาได้รับข้อมูลของท่านเรียบร้อยแล้ว เจ้าหน้าที่ผู้เกี่ยวข้องจะดำเนินการติดต่อกลับโดยเร็ว</p>
+                <h4>{isEn ? 'Message Sent Successfully' : 'ส่งข้อความประสานงานสำเร็จ'}</h4>
+                <p>
+                  {isEn 
+                    ? 'Your inquiry has been received. Our administrative staff will follow up with you promptly.' 
+                    : 'ทางสถานศึกษาได้รับข้อมูลของท่านเรียบร้อยแล้ว เจ้าหน้าที่ผู้เกี่ยวข้องจะดำเนินการติดต่อกลับโดยเร็ว'}
+                </p>
               </div>
             </div>
           ) : null}
 
           <form onSubmit={handleSubmit} className="contact-form">
             <div className="form-group">
-              <label htmlFor="name" className="form-label">ชื่อ-นามสกุล ผู้ติดต่อ</label>
+              <label htmlFor="name" className="form-label">{isEn ? 'Full Name' : 'ชื่อ-นามสกุล ผู้ติดต่อ'}</label>
               <input 
                 type="text" 
                 id="name" 
                 name="name" 
                 className="form-input" 
                 required 
-                placeholder="ระบุชื่อและนามสกุล"
+                placeholder={isEn ? "Enter your full name" : "ระบุชื่อและนามสกุล"}
                 value={formData.name}
                 onChange={handleChange}
               />
@@ -122,7 +131,7 @@ export default function Contact({ schoolInfo }) {
 
             <div className="form-row-2">
               <div className="form-group">
-                <label htmlFor="email" className="form-label">ไปรษณีย์อิเล็กทรอนิกส์ (อีเมล)</label>
+                <label htmlFor="email" className="form-label">{isEn ? 'Email Address' : 'ไปรษณีย์อิเล็กทรอนิกส์ (อีเมล)'}</label>
                 <input 
                   type="email" 
                   id="email" 
@@ -134,7 +143,7 @@ export default function Contact({ schoolInfo }) {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="phone" className="form-label">หมายเลขโทรศัพท์ติดต่อ</label>
+                <label htmlFor="phone" className="form-label">{isEn ? 'Telephone Number' : 'หมายเลขโทรศัพท์ติดต่อ'}</label>
                 <input 
                   type="tel" 
                   id="phone" 
@@ -149,7 +158,7 @@ export default function Contact({ schoolInfo }) {
             </div>
 
             <div className="form-group">
-              <label htmlFor="subject" className="form-label">เรื่องที่ประสงค์ติดต่อราชการ</label>
+              <label htmlFor="subject" className="form-label">{isEn ? 'Inquiry Subject' : 'เรื่องที่ประสงค์ติดต่อราชการ'}</label>
               <select 
                 id="subject" 
                 name="subject" 
@@ -157,27 +166,33 @@ export default function Contact({ schoolInfo }) {
                 value={formData.subject}
                 onChange={handleChange}
               >
-                <option value="ทั่วไป">สอบถามข้อมูลทั่วไปและการประสานงาน</option>
-                <option value="สมัครเรียน">สอบถามข้อมูลการรับสมัครและเข้าศึกษาต่อ</option>
-                <option value="เสนอแนะ">ข้อเสนอแนะเพื่อการพัฒนาสถานศึกษา</option>
+                <option value={isEn ? "General" : "ทั่วไป"}>
+                  {isEn ? "General Inquiry & Administrative Coordination" : "สอบถามข้อมูลทั่วไปและการประสานงาน"}
+                </option>
+                <option value={isEn ? "Admissions" : "สมัครเรียน"}>
+                  {isEn ? "Student Admissions & Enrollment Information" : "สอบถามข้อมูลการรับสมัครและเข้าศึกษาต่อ"}
+                </option>
+                <option value={isEn ? "Feedback" : "เสนอแนะ"}>
+                  {isEn ? "Feedback & Institutional Development Suggestions" : "ข้อเสนอแนะเพื่อการพัฒนาสถานศึกษา"}
+                </option>
               </select>
             </div>
 
             <div className="form-group">
-              <label htmlFor="message" className="form-label">รายละเอียดข้อความที่ประสงค์ติดต่อ</label>
+              <label htmlFor="message" className="form-label">{isEn ? 'Message Details' : 'รายละเอียดข้อความที่ประสงค์ติดต่อ'}</label>
               <textarea 
                 id="message" 
                 name="message" 
                 className="form-input" 
                 required 
-                placeholder="ระบุข้อความรายละเอียดที่ประสงค์ติดต่อราชการหรือสอบถามข้อมูลที่นี่..."
+                placeholder={isEn ? "Please describe your inquiry or official coordination details here..." : "ระบุข้อความรายละเอียดที่ประสงค์ติดต่อราชการหรือสอบถามข้อมูลที่นี่..."}
                 value={formData.message}
                 onChange={handleChange}
               />
             </div>
 
             <button type="submit" className="btn btn-primary w-100">
-              <Send size={16} /> ส่งข้อความติดต่อราชการ
+              <Send size={16} /> {isEn ? 'Send Official Message' : 'ส่งข้อความติดต่อราชการ'}
             </button>
           </form>
         </div>
@@ -185,20 +200,20 @@ export default function Contact({ schoolInfo }) {
 
       {/* Google Maps Map Area */}
       <section className="map-embed-section mt-5">
-        <h3 className="map-title text-center">แผนที่และพิกัดที่ตั้งสถานศึกษา</h3>
+        <h3 className="map-title text-center">{isEn ? 'School Location & Coordinates' : 'แผนที่และพิกัดที่ตั้งสถานศึกษา'}</h3>
         <div className="school-divider">
           <span className="school-divider-dot"></span>
         </div>
         <div className="map-frame-container">
           <iframe 
-            src={schoolInfo.googleMapsUrl} 
+            src={schoolInfo?.googleMapsUrl} 
             width="100%" 
             height="450" 
             style={{ border: 0 }} 
             allowFullScreen="" 
             loading="lazy" 
             referrerPolicy="no-referrer-when-downgrade"
-            title="แผนที่โรงเรียนบ้านวังหัวแหวนพัฒนา"
+            title={isEn ? "Ban Wang Hua Waen Phatthana School Map" : "แผนที่โรงเรียนบ้านวังหัวแหวนพัฒนา"}
             className="map-iframe"
           ></iframe>
         </div>

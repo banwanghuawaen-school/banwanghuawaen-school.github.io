@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { authService } from '../services/auth';
 import { Shield, KeyRound, User, AlertCircle, Eye, EyeOff } from 'lucide-react';
 
-export default function Login({ setView, setUser }) {
+export default function Login({ setView, setUser, lang = 'th' }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const isEn = lang === 'en';
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -23,7 +25,7 @@ export default function Login({ setView, setUser }) {
         setUser(result.user);
         setView('admin');
       } else {
-        setError(result.message);
+        setError(isEn ? 'Invalid username or password. Please try again.' : result.message);
       }
     }, 600);
   };
@@ -36,8 +38,12 @@ export default function Login({ setView, setUser }) {
           <div className="shield-icon-wrapper">
             <Shield size={36} />
           </div>
-          <h3>ระบบบริหารจัดการข้อมูลสถานศึกษา</h3>
-          <p className="text-muted">เข้าสู่ระบบสำหรับเจ้าหน้าที่ผู้ดูแลระบบและบุคลากรทางการศึกษา</p>
+          <h3>{isEn ? 'School Information Management System' : 'ระบบบริหารจัดการข้อมูลสถานศึกษา'}</h3>
+          <p className="text-muted">
+            {isEn 
+              ? 'Administrative login for authorized school staff and system administrators' 
+              : 'เข้าสู่ระบบสำหรับเจ้าหน้าที่ผู้ดูแลระบบและบุคลากรทางการศึกษา'}
+          </p>
           <div className="school-divider">
             <span className="school-divider-dot"></span>
           </div>
@@ -54,14 +60,14 @@ export default function Login({ setView, setUser }) {
         {/* Login Form */}
         <form onSubmit={handleLogin} className="login-form">
           <div className="form-group">
-            <label className="form-label" htmlFor="username">ชื่อผู้ใช้งาน</label>
+            <label className="form-label" htmlFor="username">{isEn ? 'Username' : 'ชื่อผู้ใช้งาน'}</label>
             <div className="input-with-icon-wrapper">
               <User size={18} className="input-icon" />
               <input 
                 type="text" 
                 id="username" 
                 className="form-input with-icon" 
-                placeholder="ระบุชื่อผู้ใช้งาน" 
+                placeholder={isEn ? "Enter your username" : "ระบุชื่อผู้ใช้งาน"} 
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -70,14 +76,14 @@ export default function Login({ setView, setUser }) {
           </div>
 
           <div className="form-group">
-            <label className="form-label" htmlFor="password">รหัสผ่าน</label>
+            <label className="form-label" htmlFor="password">{isEn ? 'Password' : 'รหัสผ่าน'}</label>
             <div className="input-with-icon-wrapper">
               <KeyRound size={18} className="input-icon" />
               <input 
                 type={showPassword ? "text" : "password"} 
                 id="password" 
                 className="form-input with-icon" 
-                placeholder="ระบุรหัสผ่าน" 
+                placeholder={isEn ? "Enter your password" : "ระบุรหัสผ่าน"} 
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -87,6 +93,7 @@ export default function Login({ setView, setUser }) {
                 className="password-toggle-btn"
                 onClick={() => setShowPassword(!showPassword)}
                 tabIndex="-1"
+                aria-label={showPassword ? (isEn ? "Hide password" : "ซ่อนรหัสผ่าน") : (isEn ? "Show password" : "แสดงรหัสผ่าน")}
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
@@ -94,7 +101,9 @@ export default function Login({ setView, setUser }) {
           </div>
 
           <button type="submit" className="btn btn-primary w-100 mt-2" disabled={loading}>
-            {loading ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบบริหารจัดการ'}
+            {loading 
+              ? (isEn ? 'Signing in to Portal...' : 'กำลังเข้าสู่ระบบ...') 
+              : (isEn ? 'Sign In to Management Portal' : 'เข้าสู่ระบบบริหารจัดการ')}
           </button>
         </form>
 

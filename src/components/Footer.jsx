@@ -30,8 +30,8 @@ export default function Footer({ schoolInfo, setView, lang = 'th' }) {
                 <p className="footer-school-sub">{isEn ? 'Kamphaeng Phet Primary Educational Service Area Office 2' : schoolInfo?.nameEn}</p>
               </div>
             </div>
-            <p className="school-motto-text">“{schoolInfo?.slogan}”</p>
-            <p className="school-office-text">{schoolInfo?.region}</p>
+            <p className="school-motto-text">“{isEn ? (schoolInfo?.sloganEn || "Good Education, Disciplined, Eager to Learn, High Morals") : schoolInfo?.slogan}”</p>
+            <p className="school-office-text">{isEn ? (schoolInfo?.regionEn || 'Kamphaeng Phet Primary Educational Service Area Office 2') : schoolInfo?.region}</p>
           </div>
 
           {/* Contact Info Column */}
@@ -40,7 +40,7 @@ export default function Footer({ schoolInfo, setView, lang = 'th' }) {
             <ul className="footer-contact-list">
               <li>
                 <MapPin size={18} className="footer-icon" />
-                <span>{schoolInfo?.address}</span>
+                <span>{isEn ? (schoolInfo?.addressEn || 'Moo 2, Wang Ham Hae Subdistrict, Khaunuwaralaksaburi District, Kamphaeng Phet Province 62180') : schoolInfo?.address}</span>
               </li>
               <li>
                 <Phone size={18} className="footer-icon" />
@@ -92,7 +92,7 @@ export default function Footer({ schoolInfo, setView, lang = 'th' }) {
       {/* Footer Bottom bar */}
       <div className="footer-bottom">
         <div className="container footer-bottom-content">
-          <p>© {isEn ? `Copyright ${currentYearCe}` : `พ.ศ. ${currentYearBe}`} {schoolInfo?.name}. {isEn ? 'All rights reserved.' : 'สงวนลิขสิทธิ์ข้อมูลตามพระราชบัญญัติลิขสิทธิ์'}</p>
+          <p>© {isEn ? `Copyright ${currentYearCe}` : `พ.ศ. ${currentYearBe}`} {isEn ? (schoolInfo?.nameEn || 'Ban Wang Hua Waen Phatthana School') : schoolInfo?.name}. {isEn ? 'All rights reserved.' : 'สงวนลิขสิทธิ์ข้อมูลตามพระราชบัญญัติลิขสิทธิ์'}</p>
           <div className="footer-credits-admin" style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
             <p>{isEn ? 'Maintained by Ban Wang Hua Waen Phatthana School' : 'กลุ่มงานสารสนเทศและเทคโนโลยีทางการศึกษา โรงเรียนบ้านวังหัวแหวนพัฒนา'}</p>
             <button 
