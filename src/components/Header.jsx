@@ -10,13 +10,9 @@ import {
   Layers, 
   PhoneCall, 
   Search,
-  Phone,
-  RotateCw,
-  CheckCircle2,
-  AlertCircle
+  Phone
 } from 'lucide-react';
 import { authService } from '../services/auth';
-import { dbService } from '../services/db';
 
 export default function Header({ currentView, setView, user, setUser, schoolInfo, setSearchQuery, lang = 'th', setLang }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,10 +20,6 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
   const [fontSize, setFontSize] = useState('normal'); // 'small', 'normal', 'large'
   const [contrastMode, setContrastMode] = useState('normal'); // 'normal', 'yellow-black', 'white-black'
   const [headerSearch, setHeaderSearch] = useState('');
-  
-  // Real-time Sync State
-  const [syncState, setSyncState] = useState(() => dbService.getSyncStatus());
-  const [syncFeedback, setSyncFeedback] = useState('');
 
   const isEn = lang === 'en';
 
@@ -38,29 +30,6 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  // Listen to sync status changes
-  useEffect(() => {
-    const handleSyncStatus = (e) => {
-      if (e.detail) {
-        setSyncState(e.detail);
-      }
-    };
-    window.addEventListener('school_sync_status_updated', handleSyncStatus);
-    return () => window.removeEventListener('school_sync_status_updated', handleSyncStatus);
-  }, []);
-
-  const handleManualSync = async () => {
-    setSyncFeedback(isEn ? 'Syncing...' : 'กำลังดึงข้อมูล...');
-    const ok = await dbService.triggerManualSync();
-    if (ok) {
-      setSyncFeedback(isEn ? 'Synced!' : 'อัปเดตเรียบร้อย');
-      setTimeout(() => setSyncFeedback(''), 3000);
-    } else {
-      setSyncFeedback(isEn ? 'Sync Error' : 'เกิดข้อผิดพลาด');
-      setTimeout(() => setSyncFeedback(''), 4000);
-    }
-  };
 
   const changeFontSize = (size) => {
     setFontSize(size);
@@ -114,28 +83,17 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
   return (
     <header className={`portal-school-header ${scrolled ? 'scrolled' : ''}`}>
       
-      {/* 1. TOP UTILITY BAR (Deep Midnight Navy with Live Sync Pill & Accessibility) */}
+      {/* 1. TOP UTILITY BAR (Deep Royal Navy with Accessibility, Language, Phone & Social) */}
       <div className="portal-top-bar">
         <div className="container portal-top-content">
           
-          {/* Left: Real-time Auto-Sync Status & One-Click Trigger */}
-          <div className="portal-sync-status-group">
-            <button 
-              type="button" 
-              className={`sync-status-pill ${syncState.isSyncing ? 'syncing' : ''}`}
-              onClick={handleManualSync}
-              title={isEn ? "Click to sync data with Facebook & Cloud" : "คลิกเพื่อสั่งซิงค์ข้อมูลกับ Facebook และคลาวด์"}
-            >
-              <span className={`sync-dot ${syncState.isSyncing ? 'pulsing' : ''}`}></span>
-              <span className="sync-text">
-                {syncFeedback || (
-                  syncState.isSyncing 
-                    ? (isEn ? 'Syncing...' : 'กำลังดึงข้อมูล...') 
-                    : (isEn ? 'Auto-Sync: Live' : 'ซิงค์ข้อมูลอัตโนมัติ')
-                )}
-              </span>
-              <RotateCw size={12} className={`sync-refresh-icon ${syncState.isSyncing ? 'spin-anim' : ''}`} />
-            </button>
+          {/* Left: Official Regional Identifier */}
+          <div className="portal-top-left-info">
+            <span className="top-org-badge">
+              {isEn 
+                ? 'Ban Wang Hua Waen Phatthana School • Kamphaeng Phet Primary ESAO 2' 
+                : 'โรงเรียนบ้านวังหัวแหวนพัฒนา • สพป.กำแพงเพชร เขต 2'}
+            </span>
           </div>
 
           {/* Right: Accessibility Controls, Language, Phone & Social */}
@@ -295,7 +253,7 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
         </div>
       </div>
 
-      {/* 3. PRIMARY NAVIGATION BAR (Sleek Rounded Navigation with Dynamic Indicator) */}
+      {/* 3. PRIMARY NAVIGATION BAR (Signature Royal Navy with Radiant School Gold Tab) */}
       <nav className="portal-main-navbar">
         <div className="container nav-row-container">
           
@@ -350,18 +308,6 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
       {isOpen && (
         <div className="portal-mobile-drawer animate-fade-in">
           
-          {/* Mobile Auto-Sync Trigger */}
-          <div className="mobile-sync-row mb-3">
-            <button 
-              type="button" 
-              className="mobile-sync-btn"
-              onClick={handleManualSync}
-            >
-              <RotateCw size={15} className={syncState.isSyncing ? 'spin-anim' : ''} />
-              <span>{syncFeedback || (isEn ? 'Sync Facebook & Cloud' : 'ซิงค์ข้อมูลกับ Facebook และระบบคลาวด์')}</span>
-            </button>
-          </div>
-
           {/* Mobile Search Form */}
           <form className="mobile-search-form mb-3" onSubmit={handleSearchSubmit}>
             <input 
@@ -408,7 +354,7 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
         </div>
       )}
 
-      {/* Scoped CSS for Bespoke Modern Header */}
+      {/* Scoped CSS for Bespoke Modern School Colors (เหลือง - กรม) */}
       <style>{`
         .portal-school-header {
           position: sticky;
@@ -422,11 +368,11 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
 
         /* 1. Top Bar */
         .portal-top-bar {
-          background-color: #08192e;
+          background-color: #07172b; /* Deep Obsidian Navy */
           color: #ffffff;
           font-size: 0.8rem;
-          padding: 7px 0;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+          padding: 8px 0;
+          border-bottom: 1px solid rgba(245, 158, 11, 0.25); /* Subtle Golden Accent Line */
         }
 
         .portal-top-content {
@@ -436,65 +382,16 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
           gap: 16px;
         }
 
-        /* Sync Status Pill */
-        .portal-sync-status-group {
+        .portal-top-left-info {
           display: flex;
           align-items: center;
         }
 
-        .sync-status-pill {
-          display: inline-flex;
-          align-items: center;
-          gap: 7px;
-          background: rgba(37, 99, 235, 0.2);
-          border: 1px solid rgba(96, 165, 250, 0.35);
-          color: #bfdbfe;
-          padding: 3px 10px;
-          border-radius: 9999px;
-          font-size: 0.76rem;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          outline: none;
-        }
-
-        .sync-status-pill:hover {
-          background: rgba(37, 99, 235, 0.35);
-          border-color: #60a5fa;
-          color: #ffffff;
-        }
-
-        .sync-dot {
-          width: 7px;
-          height: 7px;
-          border-radius: 50%;
-          background: #10b981;
-          box-shadow: 0 0 6px #10b981;
-        }
-
-        .sync-dot.pulsing {
-          background: #38bdf8;
-          box-shadow: 0 0 8px #38bdf8;
-          animation: pulseGlow 1.5s infinite;
-        }
-
-        .sync-refresh-icon {
-          opacity: 0.8;
-          transition: transform 0.2s ease;
-        }
-
-        .sync-status-pill:hover .sync-refresh-icon {
-          opacity: 1;
-          transform: rotate(45deg);
-        }
-
-        .spin-anim {
-          animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
+        .top-org-badge {
+          font-size: 0.82rem;
+          font-weight: 500;
+          color: #cbd5e1;
+          letter-spacing: 0.3px;
         }
 
         /* Top Right Group */
@@ -533,9 +430,9 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
         }
 
         .font-pill:hover, .font-pill.active {
-          background: #2563eb;
-          color: #ffffff;
-          border-color: #60a5fa;
+          background: #f59e0b;
+          color: #07172b;
+          border-color: #f59e0b;
         }
 
         .contrast-pill {
@@ -551,12 +448,12 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
           transition: all 0.15s ease;
         }
 
-        .c-default { background: #ffffff; color: #0f172a; border: 1px solid #cbd5e1; }
+        .c-default { background: #ffffff; color: #07172b; border: 1px solid #cbd5e1; }
         .c-wb { background: #000000; color: #ffffff; border: 1px solid #ffffff; }
         .c-yb { background: #000000; color: #fde047; border: 1px solid #fde047; }
 
         .contrast-pill.active {
-          box-shadow: 0 0 0 2px #38bdf8;
+          box-shadow: 0 0 0 2px #f59e0b;
         }
 
         /* Language Switcher */
@@ -582,8 +479,8 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
         }
 
         .lang-btn.active {
-          background: #2563eb;
-          color: #ffffff;
+          background: #f59e0b;
+          color: #07172b;
         }
 
         .top-social-group {
@@ -620,7 +517,7 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
         }
 
         .top-phone-link:hover {
-          color: #38bdf8;
+          color: #fde047;
         }
 
         /* 2. Middle Branding Row */
@@ -648,8 +545,8 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
           border-radius: 14px;
           overflow: hidden;
           background: #ffffff;
-          border: 1px solid #e2e8f0;
-          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+          border: 2px solid #f59e0b; /* Signature School Gold Rim */
+          box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -665,7 +562,7 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
         .school-main-name {
           font-size: 1.45rem;
           font-weight: 800;
-          color: #0c2340;
+          color: #0b2545; /* Deep Royal Navy */
           line-height: 1.2;
           margin-bottom: 2px;
           letter-spacing: -0.3px;
@@ -689,15 +586,16 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
           display: none;
           background: transparent;
           border: none;
-          color: #0c2340;
+          color: #0b2545;
           cursor: pointer;
         }
 
-        /* 3. Main Navbar */
+        /* 3. Main Navbar: Deep Royal Navy with Radiant School Yellow Active Tab */
         .portal-main-navbar {
-          background: #0c2340;
-          padding: 4px 0;
-          box-shadow: 0 4px 14px rgba(12, 35, 64, 0.15);
+          background: #08192e; /* Signature Deep Royal Navy */
+          border-bottom: 3px solid #f59e0b; /* Signature Gold Border */
+          padding: 5px 0;
+          box-shadow: 0 4px 16px rgba(7, 23, 43, 0.2);
         }
 
         .nav-row-container {
@@ -729,14 +627,16 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
         }
 
         .nav-tab:hover {
-          color: #ffffff;
+          color: #fde047;
           background: rgba(255, 255, 255, 0.08);
         }
 
+        /* Active Tab in School Gold with Deep Navy Text */
         .active-portal-tab {
-          background: #2563eb !important;
-          color: #ffffff !important;
-          box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+          background: linear-gradient(135deg, #f59e0b 0%, #eab308 100%) !important;
+          color: #07172b !important;
+          font-weight: 700 !important;
+          box-shadow: 0 4px 14px rgba(245, 158, 11, 0.45) !important;
         }
 
         .admin-chip-group {
@@ -791,7 +691,8 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
 
         .header-search-input:focus {
           background: rgba(255, 255, 255, 0.18);
-          border-color: #38bdf8;
+          border-color: #f59e0b;
+          box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
           width: 250px;
         }
 
@@ -802,7 +703,7 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
           transform: translateY(-50%);
           background: transparent;
           border: none;
-          color: #94a3b8;
+          color: #f59e0b;
           cursor: pointer;
           display: flex;
           align-items: center;
@@ -810,33 +711,17 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
         }
 
         .header-search-btn:hover {
-          color: #ffffff;
+          color: #fbbf24;
         }
 
         /* Mobile Drawer */
         .portal-mobile-drawer {
-          background: #08192e;
+          background: #07172b;
           padding: 20px;
-          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          border-top: 1px solid rgba(245, 158, 11, 0.3);
           display: flex;
           flex-direction: column;
           gap: 6px;
-        }
-
-        .mobile-sync-btn {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
-          width: 100%;
-          background: rgba(37, 99, 235, 0.25);
-          border: 1px solid rgba(96, 165, 250, 0.4);
-          color: #bfdbfe;
-          padding: 10px;
-          border-radius: 8px;
-          font-weight: 600;
-          font-size: 0.88rem;
-          cursor: pointer;
         }
 
         .portal-mobile-drawer .nav-tab {
@@ -862,12 +747,12 @@ export default function Header({ currentView, setView, user, setUser, schoolInfo
           display: flex;
           align-items: center;
           gap: 8px;
-          background: #2563eb;
-          color: #ffffff;
+          background: linear-gradient(135deg, #f59e0b 0%, #eab308 100%);
+          color: #07172b;
           border: none;
           padding: 10px;
           border-radius: 8px;
-          font-weight: 600;
+          font-weight: 700;
           cursor: pointer;
         }
 

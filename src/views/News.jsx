@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { dbService } from '../services/db';
 import NewsCard from '../components/NewsCard';
-import { Search, AlertCircle, RotateCw, Newspaper, Sparkles } from 'lucide-react';
+import { Search, AlertCircle, Newspaper } from 'lucide-react';
 
 export default function News({ setView, setCurrentNewsItem, searchQuery: propSearchQuery, setSearchQuery: propSetSearchQuery, lang = 'th' }) {
   const [localSearchQuery, setLocalSearchQuery] = useState('');
@@ -9,8 +9,6 @@ export default function News({ setView, setCurrentNewsItem, searchQuery: propSea
   const setSearchQuery = propSetSearchQuery || setLocalSearchQuery;
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [newsList, setNewsList] = useState([]);
-  const [isSyncing, setIsSyncing] = useState(false);
-  const [syncFeedback, setSyncFeedback] = useState('');
 
   const isEn = lang === 'en';
 
@@ -24,20 +22,6 @@ export default function News({ setView, setCurrentNewsItem, searchQuery: propSea
     window.addEventListener('school_db_updated', loadNews);
     return () => window.removeEventListener('school_db_updated', loadNews);
   }, []);
-
-  const handleManualSync = async () => {
-    setIsSyncing(true);
-    setSyncFeedback(isEn ? 'Syncing news from Facebook & Cloud...' : 'กำลังดึงข้อมูลข่าวสารล่าสุดจาก Facebook...');
-    const ok = await dbService.triggerManualSync();
-    setIsSyncing(false);
-    if (ok) {
-      setSyncFeedback(isEn ? 'Data updated successfully!' : 'อัปเดตข้อมูลข่าวสารสำเร็จ!');
-      setTimeout(() => setSyncFeedback(''), 3500);
-    } else {
-      setSyncFeedback(isEn ? 'Sync failed. Please try again.' : 'ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง');
-      setTimeout(() => setSyncFeedback(''), 4000);
-    }
-  };
 
   // Categories list
   const categories = isEn ? [
@@ -81,28 +65,6 @@ export default function News({ setView, setCurrentNewsItem, searchQuery: propSea
             ? 'Stay informed about school admissions, academic awards, student nutrition, and community collaboration.' 
             : 'ติดตามข้อมูลข่าวสาร ประกาศทางการ เกียรติประวัติสถานศึกษา และภาพกิจกรรมการเรียนรู้'}
         </p>
-      </div>
-
-      {/* Auto-Sync Banner Strip */}
-      <div className="news-sync-banner">
-        <div className="sync-banner-left">
-          <span className="live-dot-indicator"></span>
-          <span className="sync-banner-text">
-            {syncFeedback || (isEn 
-              ? 'Synchronized with official Facebook page of Ban Wang Hua Waen Phatthana School' 
-              : 'เชื่อมโยงข้อมูลอัตโนมัติกับเพจ Facebook ทางการ โรงเรียนบ้านวังหัวแหวนพัฒนา (รูปภาพจริงตรงตามเนื้อข่าว 100%)')}
-          </span>
-        </div>
-        <button 
-          type="button" 
-          className="btn-sync-trigger" 
-          onClick={handleManualSync}
-          disabled={isSyncing}
-          title={isEn ? "Fetch latest news now" : "ดึงข้อมูลข่าวสารล่าสุดเดี๋ยวนี้"}
-        >
-          <RotateCw size={14} className={isSyncing ? 'spin-anim' : ''} />
-          <span>{isSyncing ? (isEn ? 'Syncing...' : 'กำลังดึงข้อมูล...') : (isEn ? 'Sync Now' : 'ดึงข้อมูลเดี๋ยวนี้')}</span>
-        </button>
       </div>
 
       {/* Search & Filter Toolbar */}
@@ -160,73 +122,44 @@ export default function News({ setView, setCurrentNewsItem, searchQuery: propSea
       )}
 
       <style>{`
-        .news-sync-banner {
-          background: #0c2340;
-          color: #ffffff;
-          padding: 12px 20px;
-          border-radius: 14px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 16px;
-          margin-bottom: 24px;
-          box-shadow: 0 4px 14px rgba(12, 35, 64, 0.1);
-        }
-
-        .sync-banner-left {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-        }
-
-        .live-dot-indicator {
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          background: #10b981;
-          box-shadow: 0 0 8px #10b981;
-          flex-shrink: 0;
-        }
-
-        .sync-banner-text {
-          font-size: 0.88rem;
-          color: #e2e8f0;
-          font-weight: 500;
-        }
-
-        .btn-sync-trigger {
+        .section-pill-tag {
           display: inline-flex;
           align-items: center;
           gap: 6px;
-          background: #2563eb;
-          color: #ffffff;
-          border: none;
-          padding: 6px 14px;
-          border-radius: 8px;
+          padding: 6px 16px;
+          background: rgba(245, 158, 11, 0.12);
+          border: 1px solid rgba(245, 158, 11, 0.35);
+          color: #b45309;
+          border-radius: 9999px;
           font-size: 0.82rem;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          flex-shrink: 0;
+          font-weight: 700;
+          letter-spacing: 0.5px;
+          margin-bottom: 12px;
         }
 
-        .btn-sync-trigger:hover:not(:disabled) {
-          background: #1d4ed8;
-          transform: translateY(-1px);
+        .section-heading-modern {
+          font-size: 2.3rem;
+          font-weight: 800;
+          color: #0b2545; /* Deep Royal Navy */
+          line-height: 1.3;
+          margin-bottom: 10px;
         }
 
-        .btn-sync-trigger:disabled {
-          opacity: 0.7;
-          cursor: not-allowed;
+        .section-sub-modern {
+          font-size: 1.05rem;
+          color: #64748b;
+          line-height: 1.6;
+          max-width: 680px;
+          margin: 0 auto;
         }
 
         .toolbar-section {
           background-color: white;
-          padding: 20px;
-          border-radius: 16px;
+          padding: 22px 24px;
+          border-radius: 18px;
           border: 1px solid #e2e8f0;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-          margin-bottom: 30px;
+          box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+          margin-bottom: 32px;
           display: flex;
           flex-direction: column;
           gap: 18px;
@@ -242,14 +175,14 @@ export default function News({ setView, setCurrentNewsItem, searchQuery: propSea
           left: 16px;
           top: 50%;
           transform: translateY(-50%);
-          color: #94a3b8;
+          color: #f59e0b;
         }
 
         .search-input {
           width: 100%;
           padding: 12px 16px 12px 48px;
           border: 1px solid #e2e8f0;
-          border-radius: 10px;
+          border-radius: 12px;
           font-family: var(--font-body);
           font-size: 0.96rem;
           background-color: #f8fafc;
@@ -259,8 +192,8 @@ export default function News({ setView, setCurrentNewsItem, searchQuery: propSea
         .search-input:focus {
           outline: none;
           background-color: white;
-          border-color: #2563eb;
-          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+          border-color: #f59e0b;
+          box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
         }
 
         .filter-tabs-wrapper {
@@ -272,7 +205,7 @@ export default function News({ setView, setCurrentNewsItem, searchQuery: propSea
         .filter-tab-btn {
           background: #f8fafc;
           border: 1px solid #e2e8f0;
-          padding: 7px 16px;
+          padding: 8px 18px;
           font-family: var(--font-heading);
           font-size: 0.88rem;
           font-weight: 600;
@@ -284,15 +217,15 @@ export default function News({ setView, setCurrentNewsItem, searchQuery: propSea
 
         .filter-tab-btn:hover {
           background-color: #f1f5f9;
-          color: #0f172a;
-          border-color: #cbd5e1;
+          color: #0b2545;
+          border-color: #f59e0b;
         }
 
         .filter-tab-btn.active {
-          background-color: #2563eb;
-          border-color: #2563eb;
-          color: white;
-          box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+          background: #0b2545; /* Deep Royal Navy */
+          border-color: #f59e0b;
+          color: #fde047; /* Yellow Accent */
+          box-shadow: 0 4px 12px rgba(11, 37, 69, 0.25);
         }
 
         .news-grid-list {
@@ -302,9 +235,9 @@ export default function News({ setView, setCurrentNewsItem, searchQuery: propSea
         .empty-results-state {
           padding: 60px 20px;
           background-color: white;
-          border-radius: 16px;
+          border-radius: 18px;
           border: 1px solid #e2e8f0;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+          box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
         }
 
         .empty-icon {
@@ -314,7 +247,7 @@ export default function News({ setView, setCurrentNewsItem, searchQuery: propSea
 
         .empty-results-state h4 {
           font-size: 1.25rem;
-          color: #0c2340;
+          color: #0b2545;
           margin-bottom: 8px;
           font-weight: 700;
         }
@@ -322,17 +255,6 @@ export default function News({ setView, setCurrentNewsItem, searchQuery: propSea
         .empty-results-state p {
           max-width: 440px;
           margin: 0 auto;
-        }
-
-        @media (max-width: 768px) {
-          .news-sync-banner {
-            flex-direction: column;
-            align-items: flex-start;
-          }
-          .btn-sync-trigger {
-            width: 100%;
-            justify-content: center;
-          }
         }
       `}</style>
     </div>

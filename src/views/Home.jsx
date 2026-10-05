@@ -627,7 +627,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
         /* Hero Section Styling */
         .bespoke-hero-section {
           position: relative;
-          background: #08192e;
+          background: #07172b;
           padding: 24px 0 32px;
           overflow: hidden;
         }
@@ -637,8 +637,8 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
           min-height: 540px;
           border-radius: 24px;
           overflow: hidden;
-          background: #051324;
-          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+          background: #040e1b;
+          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
           margin: 0 auto;
           max-width: 1240px;
         }
@@ -665,9 +665,9 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
           inset: 0;
           background: linear-gradient(
             90deg, 
-            rgba(5, 19, 36, 0.94) 0%, 
-            rgba(5, 19, 36, 0.82) 48%, 
-            rgba(5, 19, 36, 0.38) 100%
+            rgba(4, 14, 27, 0.94) 0%, 
+            rgba(4, 14, 27, 0.82) 48%, 
+            rgba(4, 14, 27, 0.38) 100%
           );
         }
 
@@ -690,13 +690,13 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
           display: inline-flex;
           align-items: center;
           gap: 10px;
-          background: rgba(37, 99, 235, 0.25);
-          border: 1px solid rgba(96, 165, 250, 0.5);
-          color: #93c5fd;
+          background: rgba(245, 158, 11, 0.18);
+          border: 1px solid rgba(245, 158, 11, 0.45);
+          color: #fde047;
           padding: 6px 16px;
           border-radius: 9999px;
           font-size: 0.84rem;
-          font-weight: 600;
+          font-weight: 700;
           letter-spacing: 0.5px;
           margin-bottom: 20px;
           backdrop-filter: blur(12px);
@@ -706,8 +706,8 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
           width: 8px;
           height: 8px;
           border-radius: 50%;
-          background-color: #38bdf8;
-          box-shadow: 0 0 10px #38bdf8;
+          background-color: #f59e0b;
+          box-shadow: 0 0 10px #f59e0b;
           animation: beaconWave 2s infinite ease-out;
         }
 
@@ -730,15 +730,15 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
         }
 
         .hero-quote-card {
-          background: rgba(15, 23, 42, 0.45);
-          border-left: 4px solid #38bdf8;
+          background: rgba(7, 23, 43, 0.65);
+          border-left: 4px solid #f59e0b;
           padding: 14px 20px;
           border-radius: 0 12px 12px 0;
           margin-bottom: 28px;
           backdrop-filter: blur(12px);
-          border-top: 1px solid rgba(255, 255, 255, 0.08);
-          border-right: 1px solid rgba(255, 255, 255, 0.08);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+          border-top: 1px solid rgba(245, 158, 11, 0.2);
+          border-right: 1px solid rgba(245, 158, 11, 0.2);
+          border-bottom: 1px solid rgba(245, 158, 11, 0.2);
         }
 
         .hero-quote-text {
@@ -760,22 +760,22 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
           display: inline-flex;
           align-items: center;
           gap: 10px;
-          background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-          color: #ffffff;
+          background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+          color: #07172b;
           padding: 13px 26px;
           border-radius: 10px;
-          font-weight: 600;
+          font-weight: 700;
           font-size: 1rem;
           border: none;
           cursor: pointer;
           transition: all 0.25s ease;
-          box-shadow: 0 8px 24px -4px rgba(37, 99, 235, 0.5);
+          box-shadow: 0 8px 24px -4px rgba(245, 158, 11, 0.5);
         }
 
         .btn-hero-primary:hover {
-          background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+          background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
           transform: translateY(-2px);
-          box-shadow: 0 12px 28px -4px rgba(37, 99, 235, 0.7);
+          box-shadow: 0 12px 28px -4px rgba(245, 158, 11, 0.7);
         }
 
         .btn-hero-secondary {
@@ -814,7 +814,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
           width: 44px;
           height: 44px;
           border-radius: 50%;
-          background: rgba(15, 23, 42, 0.6);
+          background: rgba(7, 23, 43, 0.7);
           border: 1px solid rgba(255, 255, 255, 0.2);
           color: #ffffff;
           display: flex;
@@ -826,8 +826,9 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
         }
 
         .hero-arrow-btn:hover {
-          background: #2563eb;
-          border-color: #2563eb;
+          background: #f59e0b;
+          border-color: #f59e0b;
+          color: #07172b;
           transform: scale(1.08);
         }
 
@@ -850,8 +851,8 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
 
         .hero-progress-pill.active {
           width: 38px;
-          background: #38bdf8;
-          box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+          background: #f59e0b;
+          box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
         }
 
         /* Section Headings */
@@ -865,10 +866,10 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
           display: inline-flex;
           align-items: center;
           gap: 6px;
-          padding: 5px 14px;
-          background: rgba(37, 99, 235, 0.08);
-          border: 1px solid rgba(37, 99, 235, 0.2);
-          color: #2563eb;
+          padding: 6px 16px;
+          background: rgba(245, 158, 11, 0.12);
+          border: 1px solid rgba(245, 158, 11, 0.35);
+          color: #b45309;
           border-radius: 9999px;
           font-size: 0.82rem;
           font-weight: 700;
@@ -879,7 +880,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
         .section-heading-modern {
           font-size: 2.2rem;
           font-weight: 800;
-          color: #0c2340;
+          color: #0b2545;
           line-height: 1.3;
           margin-bottom: 10px;
         }
@@ -923,8 +924,8 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
 
         .bento-card:hover {
           transform: translateY(-6px);
-          box-shadow: 0 20px 35px -8px rgba(12, 35, 64, 0.12);
-          border-color: #93c5fd;
+          box-shadow: 0 20px 35px -8px rgba(11, 37, 69, 0.12);
+          border-color: #f59e0b;
         }
 
         .bento-bg-accent {
@@ -976,16 +977,16 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
           transform: scale(1.1) rotate(-3deg);
         }
 
-        .icon-blue { background: #eff6ff; color: #2563eb; }
+        .icon-blue { background: #fef3c7; color: #b45309; }
         .icon-emerald { background: #ecfdf5; color: #059669; }
         .icon-amber { background: #fffbeb; color: #d97706; }
-        .icon-indigo { background: #eef2ff; color: #4f46e5; }
+        .icon-indigo { background: #eff6ff; color: #0b2545; }
 
         .bento-kicker {
           display: block;
           font-size: 0.76rem;
           font-weight: 700;
-          color: #64748b;
+          color: #b45309;
           letter-spacing: 1px;
           margin-bottom: 6px;
         }
@@ -1010,14 +1011,14 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
           align-items: center;
           gap: 6px;
           font-size: 0.92rem;
-          font-weight: 600;
-          color: #2563eb;
-          transition: gap 0.2s ease;
+          font-weight: 700;
+          color: #0b2545;
+          transition: gap 0.2s ease, color 0.2s ease;
         }
 
         .bento-card:hover .bento-btn-link {
           gap: 10px;
-          color: #1d4ed8;
+          color: #d97706;
         }
 
         /* Metrics Section */
@@ -1061,8 +1062,8 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
           filter: blur(15px);
         }
 
-        .ring-blue { background: #2563eb; }
-        .ring-gold { background: #f59e0b; }
+        .ring-blue { background: #f59e0b; }
+        .ring-gold { background: #fbbf24; }
         .ring-emerald { background: #10b981; }
 
         .metric-icon-box {
@@ -1070,7 +1071,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
           height: 60px;
           border-radius: 16px;
           background: #f1f5f9;
-          color: #0f172a;
+          color: #0b2545;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -1087,7 +1088,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
         .metric-number {
           font-size: 2.8rem;
           font-weight: 800;
-          color: #0c2340;
+          color: #0b2545;
           line-height: 1;
           font-family: var(--font-heading);
         }
@@ -1095,7 +1096,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
         .metric-plus {
           font-size: 1.8rem;
           font-weight: 700;
-          color: #2563eb;
+          color: #f59e0b;
         }
 
         .metric-unit {
@@ -1124,11 +1125,12 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
         }
 
         .editorial-wrapper {
-          background: linear-gradient(135deg, #091b33 0%, #0c2340 100%);
+          background: linear-gradient(135deg, #07172b 0%, #0b2545 100%);
+          border-top: 4px solid #f59e0b;
           border-radius: 28px;
           padding: 60px;
           color: #ffffff;
-          box-shadow: 0 25px 60px -15px rgba(12, 35, 64, 0.35);
+          box-shadow: 0 25px 60px -15px rgba(7, 23, 43, 0.4);
           position: relative;
           overflow: hidden;
         }
@@ -1144,8 +1146,8 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
           position: relative;
           border-radius: 20px;
           overflow: hidden;
-          background: #0f2746;
-          border: 1px solid rgba(255, 255, 255, 0.15);
+          background: #040e1b;
+          border: 2px solid #f59e0b;
           box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
           aspect-ratio: 4 / 4.8;
           display: flex;
@@ -1169,13 +1171,13 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
           width: 80px;
           height: 80px;
           border-radius: 50%;
-          background: rgba(37, 99, 235, 0.25);
-          border: 1px solid rgba(147, 197, 253, 0.4);
+          background: rgba(245, 158, 11, 0.2);
+          border: 1px solid rgba(245, 158, 11, 0.4);
           display: flex;
           align-items: center;
           justify-content: center;
           margin: 0 auto 16px;
-          color: #93c5fd;
+          color: #fbbf24;
         }
 
         .director-seal-text {
@@ -1194,8 +1196,8 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
           bottom: 14px;
           left: 14px;
           right: 14px;
-          background: rgba(15, 23, 42, 0.85);
-          border: 1px solid rgba(255, 255, 255, 0.15);
+          background: rgba(7, 23, 43, 0.9);
+          border: 1px solid rgba(245, 158, 11, 0.35);
           padding: 8px 14px;
           border-radius: 10px;
           display: flex;
@@ -1203,7 +1205,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
           gap: 8px;
           font-size: 0.82rem;
           font-weight: 600;
-          color: #93c5fd;
+          color: #fbbf24;
           backdrop-filter: blur(8px);
         }
 
@@ -1221,7 +1223,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
 
         .editorial-position {
           font-size: 0.92rem;
-          color: #38bdf8;
+          color: #fbbf24;
           font-weight: 500;
           margin-bottom: 2px;
         }
@@ -1238,7 +1240,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
           gap: 12px;
           font-size: 0.82rem;
           font-weight: 700;
-          color: #38bdf8;
+          color: #f59e0b;
           letter-spacing: 1.5px;
           margin-bottom: 12px;
         }
@@ -1246,7 +1248,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
         .kicker-line {
           width: 30px;
           height: 2px;
-          background: #38bdf8;
+          background: #f59e0b;
         }
 
         .editorial-heading {
@@ -1268,7 +1270,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
           left: -14px;
           font-size: 5rem;
           line-height: 1;
-          color: rgba(56, 189, 248, 0.15);
+          color: rgba(245, 158, 11, 0.2);
           font-family: Georgia, serif;
           pointer-events: none;
         }
@@ -1294,7 +1296,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
 
         .director-sign-title {
           font-size: 0.9rem;
-          color: #38bdf8;
+          color: #fbbf24;
           margin: 4px 0 2px;
         }
 
@@ -1322,7 +1324,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
 
         .pillar-glass-card:hover {
           transform: translateY(-6px);
-          box-shadow: 0 20px 35px -8px rgba(12, 35, 64, 0.1);
+          box-shadow: 0 20px 35px -8px rgba(11, 37, 69, 0.1);
         }
 
         .pillar-card-top {
@@ -1341,8 +1343,8 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
           justify-content: center;
         }
 
-        .pillar-vision .pillar-icon-box { background: #eff6ff; color: #2563eb; }
-        .pillar-mission .pillar-icon-box { background: #fffbeb; color: #d97706; }
+        .pillar-vision .pillar-icon-box { background: #fef3c7; color: #b45309; }
+        .pillar-mission .pillar-icon-box { background: #eff6ff; color: #0b2545; }
         .pillar-identity .pillar-icon-box { background: #ecfdf5; color: #059669; }
 
         .pillar-tag {
@@ -1355,7 +1357,7 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
         .pillar-title {
           font-size: 1.35rem;
           font-weight: 800;
-          color: #0c2340;
+          color: #0b2545;
           margin-bottom: 12px;
         }
 
@@ -1383,22 +1385,24 @@ export default function Home({ schoolInfo, setView, setCurrentNewsItem, lang = '
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          background: #f1f5f9;
-          color: #0f172a;
+          background: #0b2545;
+          color: #fde047;
           padding: 11px 22px;
           border-radius: 10px;
-          font-weight: 600;
+          font-weight: 700;
           font-size: 0.95rem;
-          border: 1px solid #e2e8f0;
+          border: 1px solid #f59e0b;
           cursor: pointer;
           transition: all 0.2s ease;
+          box-shadow: 0 4px 12px rgba(11, 37, 69, 0.15);
         }
 
         .btn-explore-news:hover {
-          background: #0c2340;
-          color: #ffffff;
-          border-color: #0c2340;
+          background: #f59e0b;
+          color: #07172b;
+          border-color: #f59e0b;
           transform: translateY(-2px);
+          box-shadow: 0 6px 18px rgba(245, 158, 11, 0.35);
         }
 
         /* Responsive Breakpoints */
