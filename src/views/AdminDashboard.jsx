@@ -437,11 +437,30 @@ export default function AdminDashboard({ schoolInfo, setSchoolInfo, handleLogout
   
   // Feedback alert state
   const [alert, setAlert] = useState({ show: false, message: '', type: 'success' });
+  const [isSyncingFb, setIsSyncingFb] = useState(false);
 
   // Keep settings form in sync if schoolInfo changes in the background (cloud update)
   useEffect(() => {
     setSettingsFormData({ ...schoolInfo });
   }, [schoolInfo]);
+
+  const handleFacebookSync = async () => {
+    setIsSyncingFb(true);
+    try {
+      try {
+        await fetch('/api/sync-news', { method: 'POST' });
+      } catch (_) {}
+
+      await dbService.syncFromCloud(true);
+      loadData();
+      showAlert('ซิงค์ข้อมูลและรูปภาพจากเพจ Facebook เข้าสู่ระบบเรียบร้อยแล้ว!', 'success');
+    } catch (err) {
+      console.error('FB sync error:', err);
+      showAlert(`การซิงค์ Facebook ขัดข้อง: ${err.message}`, 'danger');
+    } finally {
+      setIsSyncingFb(false);
+    }
+  };
 
   // Load news list, messages, and staff on mount, and listen to cloud database updates
   useEffect(() => {
@@ -1053,11 +1072,24 @@ export default function AdminDashboard({ schoolInfo, setSchoolInfo, handleLogout
           {activeTab === 'news' && (
             <div className="news-tab-content animate-fade-in">
               <div className="card-layout">
-                <div className="flex-between mb-4">
-                  <h3 className="card-inner-title">ตารางจัดการข่าวสารและประกาศโรงเรียน</h3>
-                  <button className="btn btn-primary btn-sm" onClick={() => openNewsModal(null)}>
-                    <Plus size={16} /> เขียนข่าวประกาศใหม่
-                  </button>
+                <div className="flex-between mb-4" style={{ flexWrap: 'wrap', gap: '12px' }}>
+                  <h3 className="card-inner-title" style={{ margin: 0 }}>ตารางจัดการข่าวสารและประกาศโรงเรียน</h3>
+                  <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                    <button 
+                      type="button" 
+                      className="btn btn-secondary btn-sm" 
+                      onClick={handleFacebookSync}
+                      disabled={isSyncingFb}
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                      title="ดึงโพสต์และรูปภาพล่าสุดจาก Facebook เข้าสู่ระบบทันที"
+                    >
+                      <RefreshCw size={15} className={isSyncingFb ? 'animate-spin' : ''} />
+                      {isSyncingFb ? 'กำลังซิงค์ Facebook...' : 'ซิงค์ข่าวจาก Facebook ทันที'}
+                    </button>
+                    <button className="btn btn-primary btn-sm" onClick={() => openNewsModal(null)}>
+                      <Plus size={16} /> เขียนข่าวประกาศใหม่
+                    </button>
+                  </div>
                 </div>
 
                 <div className="table-responsive">

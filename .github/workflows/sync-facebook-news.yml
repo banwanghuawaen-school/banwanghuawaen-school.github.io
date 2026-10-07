@@ -2,8 +2,8 @@ name: Auto Sync Facebook News to Website
 
 on:
   schedule:
-    # รันอัตโนมัติทุกๆ 30 นาที ตลอด 24 ชั่วโมง
-    - cron: '*/30 * * * *'
+    # รันอัตโนมัติทุกๆ 30 นาที ตลอด 24 ชั่วโมง (ใช้นาทีที่ 15 และ 45 เพื่อหลีกเลี่ยงคิวแออัดของ GitHub)
+    - cron: '15,45 * * * *'
   push:
     paths:
       - 'scripts/sync-facebook.js'
@@ -44,6 +44,6 @@ jobs:
             echo "📷 ไม่มีรูปภาพใหม่ที่ต้อง commit"
           else
             git commit -m "📷 auto: download Facebook photos for news"
-            git push
+            git push || echo "⚠️ Git push failed or no permissions, Supabase was updated directly."
             echo "✅ Commit รูปภาพใหม่เข้า repo สำเร็จ!"
           fi

@@ -48,6 +48,26 @@ const DEFAULT_SCHOOL_INFO = {
 
 const DEFAULT_NEWS = [
   {
+    id: "fb_1564072225519505",
+    title: "🚌✨ กิจกรรมทัศนศึกษา 2569✨🚌",
+    titleEn: "🚌✨ Annual Educational Field Trip 2026✨🚌",
+    subtitle: "🎦🍿เปิดโลกกว้างให้นักเรียนพานักเรียนไปดูหนังกันจ้า 🕸️🕷️ สไปเดอร์แมน หนังที่เด็กๆชอบ เมเจอร์ Big C กำแพงเพชร",
+    subtitleEn: "Inspiring active learning with cinema visit at Major Cineplex Big C Kamphaeng Phet and wildlife park",
+    category: "activity",
+    content: "🚌✨ กิจกรรมทัศนศึกษา 2569✨🚌\n\n🎦🍿เปิดโลกกว้างให้นักเรียนพานักเรียนไปดูหนังกันจ้า 🕸️🕷️ สไปเดอร์แมน หนังที่เด็กๆชอบ เมเจอร์ Big C กำแพงเพชร\n🐦🐐🐇 พานักเรียนให้อาหารสัตว์ ศึกษาแหล่งเรียนรู้ตามธรรมชาติ ณหับเผย@กำแพงเพชร\n🏛️🙏สักการะศาลหลักเมืองเพื่อเป็นสิริมงคล\n#เรียนรู้นอกห้องเรียน #กำแพงเพชรบ้านเรา",
+    contentEn: "🚌✨ Annual Educational Field Trip 2026✨🚌\n\n🎦🍿 Inspiring students with an engaging cinema screening of Spider-Man at Major Cineplex, Big C Kamphaeng Phet.\n🐦🐐🐇 Experiential learning and feeding farm animals at Nahubpei @ Kamphaeng Phet nature discovery park.\n🏛️🙏 Paying homage at Kamphaeng Phet City Pillar Shrine for prosperity and cultural appreciation.\n#ExperientialLearning #BeyondTheClassroom #KamphaengPhet",
+    date: "2026-10-06",
+    author: "เพจโรงเรียนบ้านวังหัวแหวนพัฒนา",
+    imageUrl: "news/fb_1564072225519505.jpg",
+    isPinned: false,
+    status: "published",
+    views: 45,
+    attachmentName: "",
+    attachmentUrl: "",
+    galleryUrls: "news/fb_1564072225519505_g1.jpg,news/fb_1564072225519505_g2.jpg,news/fb_1564072225519505_g3.jpg,news/fb_1564072225519505_g4.jpg",
+    fbUrl: "https://www.facebook.com/100057502268064/posts/1564072225519505"
+  },
+  {
     id: "fb_1560176759242385",
     title: "ขอขอบคุณองค์การบริหารส่วนตำบลวังหามแห นำรถน้ำมาอนุเคราะห์ช่วยเหลือสถานศึกษา",
     titleEn: "Gratitude to Wang Ham Hae SAO for Water Truck Assistance",

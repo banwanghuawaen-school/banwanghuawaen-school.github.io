@@ -55,8 +55,8 @@ export default function NewsCard({ item, onClick, lang = 'th' }) {
   };
 
   // Check gallery count
-  const galleryList = item.galleryUrls ? item.galleryUrls.split(',').map(s => s.trim()).filter(Boolean) : [];
-  const rawImage = item.imageUrl || (galleryList.length > 0 ? galleryList[0] : '');
+  const galleryList = (item.galleryUrls || item.fbGalleryUrls) ? (item.galleryUrls || item.fbGalleryUrls).split(',').map(s => s.trim()).filter(Boolean) : [];
+  const rawImage = item.imageUrl || item.fbImageUrl || (galleryList.length > 0 ? galleryList[0] : '');
   const displayImage = resolveImageUrl(rawImage);
 
   // Helper to clean raw HTML, markdown symbols, and Facebook scraped footer metadata
@@ -89,8 +89,12 @@ export default function NewsCard({ item, onClick, lang = 'th' }) {
             alt={currentTitle} 
             className="card-image"
             onError={(e) => {
-              // If image fails, switch to text-only mode
-              e.currentTarget.parentElement.style.display = 'none';
+              if (item.fbImageUrl && e.currentTarget.src !== item.fbImageUrl) {
+                e.currentTarget.src = item.fbImageUrl;
+              } else {
+                // If image fails, switch to text-only mode
+                e.currentTarget.parentElement.style.display = 'none';
+              }
             }} 
           />
           <div className="card-category-floating">

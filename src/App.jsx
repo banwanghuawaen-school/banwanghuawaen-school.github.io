@@ -83,6 +83,27 @@ export default function App() {
       await dbService.syncFromCloud();
     };
 
+    // Lightweight background check to trigger Facebook scraping if >25 mins
+    const maybeSyncFacebook = async () => {
+      try {
+        const lastSync = localStorage.getItem('last_fb_api_sync_ts');
+        const now = Date.now();
+        if (!lastSync || (now - parseInt(lastSync, 10)) > 25 * 60 * 1000) {
+          localStorage.setItem('last_fb_api_sync_ts', String(now));
+          fetch('/api/sync-news', { method: 'POST' })
+            .then(res => res.json())
+            .then(data => {
+              if (data && data.changesMade) {
+                dbService.syncFromCloud(true);
+              }
+            })
+            .catch(() => {});
+        }
+      } catch (_) {}
+    };
+
+    maybeSyncFacebook();
+
     // Poll every 15 seconds
     const interval = setInterval(sync, 15000);
 
@@ -91,6 +112,7 @@ export default function App() {
       if (document.visibilityState === 'visible') {
         console.log('App focused: Syncing cloud database...');
         sync();
+        maybeSyncFacebook();
       }
     };
 

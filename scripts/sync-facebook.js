@@ -350,6 +350,7 @@ async function syncPostsToSupabase(posts) {
       date: post.created_time || new Date().toISOString().split('T')[0],
       category: 'activity',
       imageUrl: localImagePath,  // ใช้ path ของไฟล์ local แทน CDN link
+      fbImageUrl: post.image_url || '',
       author: 'เพจโรงเรียนบ้านวังหัวแหวนพัฒนา',
       isPinned: false,
       status: 'published',
@@ -357,6 +358,7 @@ async function syncPostsToSupabase(posts) {
       attachmentName: '',
       attachmentUrl: '',
       galleryUrls: galleryPaths.join(','),
+      fbGalleryUrls: post.gallery_urls.join(','),
       fbUrl: post.permalink
     };
 
@@ -377,7 +379,9 @@ async function syncPostsToSupabase(posts) {
         content: content,
         contentEn: existing.contentEn || content,
         imageUrl: bestImage,
+        fbImageUrl: post.image_url || existing.fbImageUrl || '',
         galleryUrls: bestGallery,
+        fbGalleryUrls: post.gallery_urls.join(',') || existing.fbGalleryUrls || '',
         fbUrl: post.permalink
       };
       changesMade = true;

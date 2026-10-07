@@ -39,8 +39,9 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem, lang
     return `${base}${clean}`;
   };
 
-  const galleryImages = parseGalleryUrls(newsItem?.galleryUrls).map(resolveImageUrl);
-  const coverImage = resolveImageUrl(newsItem?.imageUrl);
+  const rawGalleryStr = newsItem?.galleryUrls || newsItem?.fbGalleryUrls || '';
+  const galleryImages = parseGalleryUrls(rawGalleryStr).map(resolveImageUrl);
+  const coverImage = resolveImageUrl(newsItem?.imageUrl || newsItem?.fbImageUrl);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -161,6 +162,11 @@ export default function NewsDetail({ newsItem, setView, setCurrentNewsItem, lang
                 src={coverImage || galleryImages[0]} 
                 alt={currentTitle} 
                 className="article-cover-img" 
+                onError={(e) => {
+                  if (newsItem?.fbImageUrl && e.currentTarget.src !== newsItem.fbImageUrl) {
+                    e.currentTarget.src = newsItem.fbImageUrl;
+                  }
+                }}
               />
             </div>
           ) : (
