@@ -162,7 +162,7 @@ export default function App() {
   useEffect(() => {
     const isEn = lang === 'en';
     const titlesTh = {
-      home: 'หน้าหลัก | โรงเรียนบ้านวังหัวแหวนพัฒนา',
+      home: 'โรงเรียนบ้านวังหัวแหวนพัฒนา | เว็บไซต์ทางการ สพป.กำแพงเพชร เขต 2',
       news: 'ข่าวประชาสัมพันธ์และกิจกรรม | โรงเรียนบ้านวังหัวแหวนพัฒนา',
       'news-detail': currentNewsItem ? `${currentNewsItem.title} | โรงเรียนบ้านวังหัวแหวนพัฒนา` : 'รายละเอียดข่าวประชาสัมพันธ์ | โรงเรียนบ้านวังหัวแหวนพัฒนา',
       staff: 'ทำเนียบข้าราชการครูและบุคลากรทางการศึกษา | โรงเรียนบ้านวังหัวแหวนพัฒนา',
@@ -172,7 +172,7 @@ export default function App() {
       admin: 'ระบบบริหารจัดการข้อมูลสถานศึกษา | โรงเรียนบ้านวังหัวแหวนพัฒนา'
     };
     const titlesEn = {
-      home: 'Home | Ban Wang Hua Waen Phatthana School',
+      home: 'Ban Wang Hua Waen Phatthana School | Official Website',
       news: 'News & Activities | Ban Wang Hua Waen Phatthana School',
       'news-detail': currentNewsItem ? `${currentNewsItem.title} | Ban Wang Hua Waen Phatthana School` : 'News Detail | Ban Wang Hua Waen Phatthana School',
       staff: 'Staff Directory | Ban Wang Hua Waen Phatthana School',
@@ -182,7 +182,7 @@ export default function App() {
       admin: 'Admin Portal | Ban Wang Hua Waen Phatthana School'
     };
     const titles = isEn ? titlesEn : titlesTh;
-    document.title = titles[view] || (isEn ? 'Ban Wang Hua Waen Phatthana School' : 'โรงเรียนบ้านวังหัวแหวนพัฒนา - สพป.กำแพงเพชร เขต 2');
+    document.title = titles[view] || (isEn ? 'Ban Wang Hua Waen Phatthana School | Official Website' : 'โรงเรียนบ้านวังหัวแหวนพัฒนา | เว็บไซต์ทางการ สพป.กำแพงเพชร เขต 2');
   }, [view, currentNewsItem, lang]);
 
   const handleLogout = () => {
